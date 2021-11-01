@@ -1,7 +1,7 @@
 # FnGoBot
 A simple, stupid command-line-like Telegram chatbot for tracking financial market quotes written in Go
 
-The bot is made possible with [this amazing Go Telegram bot library](https://gopkg.in/tucnak/telebot.v2). It fetches quotes from Yahoo! Finance (via [finance-go](https://github.com/piquette/finance-go)), [Satang](https://satangcorp.com), and [Bitkub](https://bitkub.com).
+The bot is made possible with [this amazing Go Telegram bot library](https://gopkg.in/tucnak/telebot.v3). It fetches quotes from Yahoo! Finance (via [finance-go](https://github.com/piquette/finance-go)), [Satang](https://satangcorp.com), and [Bitkub](https://bitkub.com).
 
 I try to keep the code small *and the user interface command-line-like*.
 
@@ -48,7 +48,7 @@ Or change the default filename in `cmd/main.go` to your desired file extension.
 
 ## External dependencies
 
-- `gopkg.in/tucnak/telebot.v2` Telegram bot framework
+- `gopkg.in/tucnak/telebot.v3` Telegram bot framework
 
 - `github.com/piquette/finance-go` Yahoo! Finance data library
 
