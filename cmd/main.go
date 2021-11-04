@@ -121,10 +121,12 @@ func main() {
 
 	// Stop a tracking or alerting handler
 	b.Handle("/stop", func(m *tb.Message) {
-		uuid := strings.Split(m.Text, " ")[1]
-		i, ok := handlers.Stop(uuid)
-		if ok {
-			handlers = append(handlers[:i], handlers[i+1:]...)
+		uuids := strings.Split(m.Text, " ")[1:]
+		for _, uuid := range uuids {
+			i, ok := handlers.Stop(uuid)
+			if ok {
+				handlers = append(handlers[:i], handlers[i+1:]...)
+			}
 		}
 	})
 
