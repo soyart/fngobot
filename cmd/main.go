@@ -75,45 +75,45 @@ func main() {
 	})
 
 	b.Handle("/quote", func(c tb.Context) error {
-		h := handler.NewHandler(b, c.Message())
 		cmd, parseError := parse.UserCommand{
 			Command: parse.QuoteCmd,
 			Chat:    c.Text(),
 		}.Parse()
+		h := handler.NewHandler(b, c.Message(), conf.BotConfig, &cmd)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
-			h.SendQuote(cmd.Quote.Securities)
+			h.Handle(handler.QUOTEBOT)
 		}
 		return nil
 	})
 
 	b.Handle("/track", func(c tb.Context) error {
-		h := handler.NewHandler(b, c.Message())
-		handlers = append(handlers, h)
 		cmd, parseError := parse.UserCommand{
 			Command: parse.TrackCmd,
 			Chat:    c.Text(),
 		}.Parse()
+		h := handler.NewHandler(b, c.Message(), conf.BotConfig, &cmd)
+		handlers = append(handlers, h)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
-			h.Track(cmd.Track.Securities, cmd.Track.TrackTimes, conf.BotConfig)
+			h.Handle(handler.TRACKBOT)
 		}
 		return nil
 	})
 
 	b.Handle("/alert", func(c tb.Context) error {
-		h := handler.NewHandler(b, c.Message())
-		handlers = append(handlers, h)
 		cmd, parseError := parse.UserCommand{
 			Command: parse.AlertCmd,
 			Chat:    c.Text(),
 		}.Parse()
+		h := handler.NewHandler(b, c.Message(), conf.BotConfig, &cmd)
+		handlers = append(handlers, h)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
-			h.PriceAlert(cmd.Alert, conf.BotConfig)
+			h.Handle(handler.ALERTBOT)
 		}
 		return nil
 	})
