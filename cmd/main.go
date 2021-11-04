@@ -121,8 +121,11 @@ func main() {
 
 	// Stop a tracking or alerting handler
 	b.Handle("/stop", func(m *tb.Message) {
-		chat := strings.Split(m.Text, " ")
-		handlers.Stop(chat[1])
+		uuid := strings.Split(m.Text, " ")[1]
+		i, ok := handlers.Stop(uuid)
+		if ok {
+			handlers = append(handlers[:i], handlers[i+1:]...)
+		}
 	})
 
 	/* Catch-all help message for unhandled text */
