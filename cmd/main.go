@@ -127,8 +127,11 @@ func main() {
 
 	// Stop a tracking or alerting handler
 	b.Handle("/stop", func(c tb.Context) error {
-		chat := strings.Split(c.Text(), " ")
-		handlers.Stop(chat[1])
+		uuid := strings.Split(c.Text(), " ")[1]
+		i, ok := handlers.Stop(uuid)
+		if ok {
+			handlers = append(handlers[:i], handlers[i+1:]...)
+		}
 		return nil
 	})
 
