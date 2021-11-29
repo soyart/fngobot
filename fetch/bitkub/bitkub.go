@@ -43,11 +43,7 @@ package bitkub
 import (
 	"log"
 
-	"encoding/json"
-	"io/ioutil"
-	"net/http"
-
-	fetch "github.com/artnoi43/fngobot/fetch"
+	"github.com/artnoi43/fngobot/fetch"
 )
 
 type Quote struct {
@@ -64,34 +60,14 @@ func Get(tick string) (*Quote, error) {
 	/* Documentation for Bitkub:
 	 * https://github.com/bitkub/bitkub-official fetch-docs */
 
-	resp, err := http.Get("https://bitkub.com/api/market/ticker/")
+	data, err := fetch.Fetch("https://bitkub.com/api/market/ticker/")
 	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	/* Since the JSON key is arbitary,
-	 * we first unmarshal it into empty interface f */
-
-	var f interface{}
-	err = json.Unmarshal(body, &f)
-	if err != nil {
-		log.Println("Error parsing JSON: ", err)
 		return nil, err
 	}
 
 	var found bool
 	var q Quote
-
-	/* Range over the map[string]interface{}
-	 * so that we can destructure data into our struct */
-
-	for key0, val0 := range f.(map[string]interface{}) {
+	for key0, val0 := range data.(map[string]interface{}) {
 		switch key0 {
 		case "data":
 			/* Inner keys and values */

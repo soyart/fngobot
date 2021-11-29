@@ -44,10 +44,6 @@ import (
 	"log"
 	"strconv"
 
-	"encoding/json"
-	"io/ioutil"
-	"net/http"
-
 	"github.com/artnoi43/fngobot/fetch"
 )
 
@@ -86,34 +82,14 @@ func Get(tick string) (*Quote, error) {
 	/* Documentation for Satang:
 	 * https://docs.satangcorp.com/apis/public/orders */
 
-	resp, err := http.Get("https://satangcorp.com/api/orderbook-tickers/")
+	data, err := fetch.Fetch("https://satangcorp.com/api/orderbook-tickers/")
 	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	/* Since the JSON key is arbitary,
-	 * we first unmarshal it into empty interface f */
-
-	var f interface{}
-	err = json.Unmarshal(body, &f)
-	if err != nil {
-		log.Println("Error parsing JSON: ", err)
 		return nil, err
 	}
 
 	var q Quote
 	var found bool
-
-	/* Range over the map[string]interface{}
-	 * so that we can destructure our data into our struct */
-
-	for key, val := range f.(map[string]interface{}) {
+	for key, val := range data.(map[string]interface{}) {
 		/* Filter ticker */
 		switch key {
 		case tick + "_THB":
