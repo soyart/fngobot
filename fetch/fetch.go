@@ -13,10 +13,6 @@ var (
 )
 
 func Fetch(url string) (interface{}, error) {
-
-	/* Documentation for Bitkub:
-	 * https://github.com/bitkub/bitkub-official fetch-docs */
-
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -27,15 +23,13 @@ func Fetch(url string) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	/* Since the JSON key is arbitary,
 	 * we first unmarshal it into empty interface f */
-
 	var f interface{}
 	err = json.Unmarshal(body, &f)
 	if err != nil {
 		log.Println("Error parsing JSON: ", err)
 		return nil, err
 	}
-	return &f, nil
+	return f, nil
 }
