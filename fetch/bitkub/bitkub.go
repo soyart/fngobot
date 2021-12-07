@@ -44,17 +44,21 @@ import (
 	"log"
 
 	"github.com/artnoi43/fngobot/fetch"
+	"github.com/pkg/errors"
 )
 
+// Quote struct for Bitkub
 type Quote struct {
-	Last   float64
-	Bid    float64
-	Ask    float64
-	High   float64
-	Low    float64
-	Change float64
+	Last   float64 `json:"last"`
+	Bid    float64 `json:"bid"`
+	Ask    float64 `json:"ask"`
+	High   float64 `json:"high"`
+	Low    float64 `json:"low"`
+	Change float64 `json:"change"`
 }
 
+// Get fetches data from Bitkub JSON API,
+// and parses the fetched JSON into Quote struct
 func Get(tick string) (*Quote, error) {
 
 	/* Documentation for Bitkub:
@@ -75,20 +79,40 @@ func Get(tick string) (*Quote, error) {
 				/* Filter ticker */
 				switch key1 {
 				case "THB_" + tick:
+					var ok bool
+					var err error = errors.New("failed to parse float")
 					for k, v := range val1.(map[string]interface{}) {
 						switch k {
 						case "last":
-							q.Last = v.(float64)
+							q.Last, ok = v.(float64)
+							if !ok {
+								return nil, errors.Wrap(err, "last")
+							}
 						case "highestBid":
-							q.Bid = v.(float64)
+							q.Bid, ok = v.(float64)
+							if !ok {
+								return nil, errors.Wrap(err, "bid")
+							}
 						case "lowestAsk":
-							q.Ask = v.(float64)
+							q.Ask, ok = v.(float64)
+							if !ok {
+								return nil, errors.Wrap(err, "ask")
+							}
 						case "high24hr":
-							q.High = v.(float64)
+							q.High, ok = v.(float64)
+							if !ok {
+								return nil, errors.Wrap(err, "high")
+							}
 						case "low24hr":
-							q.Low = v.(float64)
+							q.Low, ok = v.(float64)
+							if !ok {
+								return nil, errors.Wrap(err, "low")
+							}
 						case "percentageChange":
-							q.Change = v.(float64)
+							q.Change, ok = v.(float64)
+							if !ok {
+								return nil, errors.Wrap(err, "change")
+							}
 						}
 					}
 					found = true
@@ -96,10 +120,9 @@ func Get(tick string) (*Quote, error) {
 			}
 		}
 	}
-	if found {
-		return &q, nil
-	} else {
+	if !found {
 		log.Printf("%s not found in Bitkub JSON", tick)
 		return nil, fetch.NotFound
 	}
+	return &q, nil
 }

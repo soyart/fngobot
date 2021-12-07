@@ -50,7 +50,7 @@ func getQuote(tick string) (*fn.Quote, error) {
 		return nil, err
 
 	} else if q.RegularMarketPrice == 0 {
-		return nil, yahooError
+		return nil, errYahoo
 
 	} else {
 		/* Caller will usually use q.Bid or q.Ask */
@@ -63,7 +63,7 @@ func getCrypto(tick string) (*fn.CryptoPair, error) {
 		return nil, err
 
 	} else if c.RegularMarketPrice == 0 {
-		return nil, yahooError
+		return nil, errYahoo
 
 	} else {
 		/* fn.CryptoPair also contains fn.Quote */

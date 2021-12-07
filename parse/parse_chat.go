@@ -26,6 +26,8 @@ const (
 	AlertCmd
 )
 
+// UserCommand is essentially a chat message.
+// UserCommand.Chat is an int enum
 type UserCommand struct {
 	Command int
 	Chat    string
@@ -44,6 +46,9 @@ type trackCommand struct {
 	TrackTimes int
 }
 
+// BotCommand is derived from UserCommand by parsing with Parse()
+// Alerting does not need its own command struct,
+// as the bot.Alert struct already has all the info needed.
 type BotCommand struct {
 	Help  helpCommand
 	Quote quoteCommand
@@ -78,6 +83,7 @@ func (cmd *quoteCommand) appendSecurities(ticks []string, src int) {
 	}
 }
 
+// Parse parses UserCommand to BotCommand
 func (c UserCommand) Parse() (cmd BotCommand, parseError int) {
 	chat := strings.Split(c.Chat, " ")
 	lenChat := len(chat)
@@ -94,9 +100,8 @@ func (c UserCommand) Parse() (cmd BotCommand, parseError int) {
 		r, err := strconv.Atoi(chat[lenChat-1])
 		if err != nil {
 			return cmd, ErrParseInt
-		} else {
-			cmd.Track.TrackTimes = r
 		}
+		cmd.Track.TrackTimes = r
 	case AlertCmd:
 		cmd.Alert.Security.Tick = strings.ToUpper(chat[idx])
 		cmd.Alert.Security.Src = src
@@ -129,9 +134,8 @@ func (c UserCommand) Parse() (cmd BotCommand, parseError int) {
 			// Satang does not support last price
 			if cmd.Alert.Src == enums.Satang {
 				return cmd, ErrInvalidQuoteTypeLast
-			} else {
-				cmd.Alert.QuoteType = enums.Last
 			}
+			cmd.Alert.QuoteType = enums.Last
 		// Bid/ask alerts
 		default:
 			ba := strings.ToUpper(chat[idx+1])

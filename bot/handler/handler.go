@@ -17,6 +17,7 @@ const (
 	ALERTBOT
 )
 
+// Handler struct
 type Handler struct {
 	uuid string
 	quit chan bool
@@ -26,6 +27,7 @@ type Handler struct {
 	msg  *tb.Message
 }
 
+// NewHandler returns a new Handler
 func NewHandler(b *tb.Bot, m *tb.Message, conf Config, cmd *parse.BotCommand) *Handler {
 	uuid := strings.Split(uuid.NewString(), "-")[0]
 	quit := make(chan bool, 1)
@@ -40,6 +42,7 @@ func NewHandler(b *tb.Bot, m *tb.Message, conf Config, cmd *parse.BotCommand) *H
 	}
 }
 
+// Handle calls different methods on h based on its function parameter
 func (h *Handler) Handle(t int) {
 	switch t {
 	case QUOTEBOT:

@@ -9,9 +9,11 @@ import (
 )
 
 var (
+	// NotFound indicates the ticker symbol is not found in JSON data
 	NotFound error = errors.New("Ticker not found in JSON")
 )
 
+// Fetch is a generic function used to fetch HTTP response
 func Fetch(url string) (interface{}, error) {
 	resp, err := http.Get(url)
 	if err != nil {

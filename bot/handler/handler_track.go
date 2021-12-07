@@ -7,8 +7,9 @@ import (
 	"github.com/artnoi43/fngobot/bot"
 )
 
+// Track periodically calls SendQuote()
 func (h *Handler) Track(s []bot.Security, r int, conf Config) {
-	ticker := time.NewTicker(time.Duration(conf.TrackSeconds)*time.Second)
+	ticker := time.NewTicker(time.Duration(conf.TrackSeconds) * time.Second)
 	c := 0
 
 	// First quote right away

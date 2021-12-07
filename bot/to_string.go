@@ -2,6 +2,7 @@ package bot
 
 import "github.com/artnoi43/fngobot/enums"
 
+// GetSrcStr returns source in string based on s.Src
 func (s *Security) GetSrcStr() string {
 	switch s.Src {
 	case enums.YahooCrypto:
@@ -15,6 +16,7 @@ func (s *Security) GetSrcStr() string {
 	}
 }
 
+// GetCondStr returns condition in string based on a.Condition
 func (a *Alert) GetCondStr() string {
 	switch a.Condition {
 	case 0:
@@ -24,6 +26,7 @@ func (a *Alert) GetCondStr() string {
 	}
 }
 
+// GetQuoteTypeStr returns quote type in string based on a.QuoteType
 func (a *Alert) GetQuoteTypeStr() string {
 	switch a.QuoteType {
 	case enums.Bid:

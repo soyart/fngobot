@@ -47,12 +47,13 @@ import (
 	"github.com/artnoi43/fngobot/fetch"
 )
 
-/* Enum for parse() */
+// Enum for parse() */
 const (
 	bid = iota
 	ask
 )
 
+// Quote for Satang only has Bid and Ask fields
 type Quote struct {
 	Bid float64
 	Ask float64
@@ -77,6 +78,8 @@ func parse(q *Quote, val interface{}, bidAsk int) error {
 	return nil
 }
 
+// Get fetches data from Satang JSON API,
+// and parses the fetched JSON into Quote struct
 func Get(tick string) (*Quote, error) {
 
 	/* Documentation for Satang:

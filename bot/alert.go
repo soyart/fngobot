@@ -2,13 +2,16 @@ package bot
 
 import "github.com/artnoi43/fngobot/enums"
 
+// Alert struct stores info about price alerts
 type Alert struct {
 	Security
 	Condition int
 	QuoteType int
-	Target float64
+	Target    float64
 }
 
+// Match sends a truthy value into matched channel
+// if the specified market condition is matched.
 func (a *Alert) Match(matched chan<- bool) {
 	q, err := a.Security.Quote()
 	if err != nil {
