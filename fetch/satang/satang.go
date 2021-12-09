@@ -41,6 +41,7 @@
 package satang
 
 import (
+	"errors"
 	"log"
 	"strconv"
 
@@ -54,24 +55,34 @@ const (
 )
 
 // Quote for Satang only has Bid and Ask fields
-type Quote struct {
-	Bid float64
-	Ask float64
+type quote struct {
+	bid float64
+	ask float64
 }
 
-func parse(q *Quote, val interface{}, bidAsk int) error {
-	for k, v := range val.(map[string]string) {
+func (q *quote) Last() (float64, error) {
+	return 0, errors.New("satang: last price not supported")
+}
+func (q *quote) Bid() (float64, error) {
+	return q.bid, nil
+}
+func (q *quote) Ask() (float64, error) {
+	return q.ask, nil
+}
+
+func parse(q *quote, val interface{}, bidAsk int) error {
+	for k, v := range val.(map[string]interface{}) {
 		switch k {
 		case "price":
-			price, err := strconv.ParseFloat(v, 64)
+			price, err := strconv.ParseFloat(v.(string), 64)
 			if err != nil {
 				return err
 			}
 			switch bidAsk {
 			case bid:
-				q.Bid = price
+				q.bid = price
 			case ask:
-				q.Ask = price
+				q.ask = price
 			}
 		}
 	}
@@ -80,7 +91,7 @@ func parse(q *Quote, val interface{}, bidAsk int) error {
 
 // Get fetches data from Satang JSON API,
 // and parses the fetched JSON into Quote struct
-func Get(tick string) (*Quote, error) {
+func Get(tick string) (*quote, error) {
 
 	/* Documentation for Satang:
 	 * https://docs.satangcorp.com/apis/public/orders */
@@ -90,7 +101,7 @@ func Get(tick string) (*Quote, error) {
 		return nil, err
 	}
 
-	var q Quote
+	var q quote
 	var found bool
 	for key, val := range data.(map[string]interface{}) {
 		/* Filter ticker */

@@ -25,8 +25,12 @@ func (h *Handler) SendQuote(securities []bot.Security) {
 			return
 		}
 		str := "ID: %s\nQuote from %s\n%s\nBid: %f\nAsk: %f\nLast: %f\n"
+		last, _ := q.Last()
+		bid, _ := q.Bid()
+		ask, _ := q.Ask()
+
 		msg := printer.Sprintf(str,
-			h.uuid, s.GetSrcStr(), s.Tick, q.Bid, q.Ask, q.Last)
+			h.uuid, s.GetSrcStr(), s.Tick, bid, ask, last)
 		h.send(msg)
 	}
 }

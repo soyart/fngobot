@@ -21,11 +21,11 @@ func (a *Alert) Match(matched chan<- bool) {
 	var p float64
 	switch a.QuoteType {
 	case enums.Bid:
-		p = q.Bid
+		p, _ = q.Bid()
 	case enums.Ask:
-		p = q.Ask
+		p, _ = q.Ask()
 	case enums.Last:
-		p = q.Last
+		p, _ = q.Last()
 	}
 
 	switch a.Condition {

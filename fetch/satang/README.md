@@ -1,4 +1,4 @@
-## github.com/artnoi43/fngobot/api/satang
+## github.com/artnoi43/fngobot/fetch/satang
 The file `satang.go` defines `Get()` function struct `Quote`
 
 `Quote` currently has 2 `float64` fields: `Bid` and `Ask`, which are best bid and ask prices respectively.

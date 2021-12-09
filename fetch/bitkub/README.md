@@ -1,4 +1,4 @@
-## github.com/artnoi43/fngobot/api/bitkub
+## github.com/artnoi43/fngobot/fetch/bitkub
 The file `bitkub.go` defines `Get()` function and struct `Quote`.
 
 `Quote` currently has 6 fields: `Last` (JSON: last), `Bid` (JSON: highestBid), `Ask` (JSON: lowestAsk), `High` (JSON: high24hr), `Low` (JSON: low24hr), and `Change` (JSON: percentageChange).

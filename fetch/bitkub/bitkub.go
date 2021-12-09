@@ -47,19 +47,29 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Quote struct for Bitkub
-type Quote struct {
-	Last   float64 `json:"last"`
-	Bid    float64 `json:"bid"`
-	Ask    float64 `json:"ask"`
-	High   float64 `json:"high"`
-	Low    float64 `json:"low"`
-	Change float64 `json:"change"`
+// quote struct for Bitkub
+type quote struct {
+	last   float64
+	bid    float64
+	ask    float64
+	high   float64
+	low    float64
+	change float64
+}
+
+func (q *quote) Last() (float64, error) {
+	return q.last, nil
+}
+func (q *quote) Bid() (float64, error) {
+	return q.bid, nil
+}
+func (q *quote) Ask() (float64, error) {
+	return q.ask, nil
 }
 
 // Get fetches data from Bitkub JSON API,
-// and parses the fetched JSON into Quote struct
-func Get(tick string) (*Quote, error) {
+// and parses the fetched JSON into quote struct
+func Get(tick string) (*quote, error) {
 
 	/* Documentation for Bitkub:
 	 * https://github.com/bitkub/bitkub-official fetch-docs */
@@ -70,7 +80,7 @@ func Get(tick string) (*Quote, error) {
 	}
 
 	var found bool
-	var q Quote
+	var q quote
 	for key0, val0 := range data.(map[string]interface{}) {
 		switch key0 {
 		case "data":
@@ -84,32 +94,32 @@ func Get(tick string) (*Quote, error) {
 					for k, v := range val1.(map[string]interface{}) {
 						switch k {
 						case "last":
-							q.Last, ok = v.(float64)
+							q.last, ok = v.(float64)
 							if !ok {
 								return nil, errors.Wrap(err, "last")
 							}
 						case "highestBid":
-							q.Bid, ok = v.(float64)
+							q.bid, ok = v.(float64)
 							if !ok {
 								return nil, errors.Wrap(err, "bid")
 							}
 						case "lowestAsk":
-							q.Ask, ok = v.(float64)
+							q.ask, ok = v.(float64)
 							if !ok {
 								return nil, errors.Wrap(err, "ask")
 							}
 						case "high24hr":
-							q.High, ok = v.(float64)
+							q.high, ok = v.(float64)
 							if !ok {
 								return nil, errors.Wrap(err, "high")
 							}
 						case "low24hr":
-							q.Low, ok = v.(float64)
+							q.low, ok = v.(float64)
 							if !ok {
 								return nil, errors.Wrap(err, "low")
 							}
 						case "percentageChange":
-							q.Change, ok = v.(float64)
+							q.change, ok = v.(float64)
 							if !ok {
 								return nil, errors.Wrap(err, "change")
 							}
