@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	// NotFound indicates the ticker symbol is not found in JSON data
-	NotFound error = errors.New("Ticker not found in JSON")
+	// ErrNotFound indicates the ticker symbol is not found in JSON data
+	ErrNotFound error = errors.New("Ticker not found in JSON")
 )
 
 // Fetch is a generic function used to fetch HTTP response

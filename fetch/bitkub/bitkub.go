@@ -122,7 +122,7 @@ func Get(tick string) (*Quote, error) {
 	}
 	if !found {
 		log.Printf("%s not found in Bitkub JSON", tick)
-		return nil, fetch.NotFound
+		return nil, fetch.ErrNotFound
 	}
 	return &q, nil
 }

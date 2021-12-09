@@ -14,7 +14,7 @@ func (h *Handler) SendQuote(securities []bot.Security) {
 		q, err := s.Quote()
 		if err != nil {
 			var errMsg string
-			if errors.Is(err, fetch.NotFound) {
+			if errors.Is(err, fetch.ErrNotFound) {
 				errMsg = "Ticker %s not found"
 			} else {
 				errMsg = "Error getting %s quote"

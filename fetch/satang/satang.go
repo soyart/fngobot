@@ -60,10 +60,10 @@ type Quote struct {
 }
 
 func parse(q *Quote, val interface{}, bidAsk int) error {
-	for k, v := range val.(map[string]interface{}) {
+	for k, v := range val.(map[string]string) {
 		switch k {
 		case "price":
-			price, err := strconv.ParseFloat(v.(string), 64)
+			price, err := strconv.ParseFloat(v, 64)
 			if err != nil {
 				return err
 			}
@@ -114,10 +114,9 @@ func Get(tick string) (*Quote, error) {
 			found = true
 		}
 	}
-	if found {
-		return &q, nil
-	} else {
+	if !found {
 		log.Printf("%s not found in Satang JSON", tick)
-		return nil, fetch.NotFound
+		return nil, fetch.ErrNotFound
 	}
+	return &q, nil
 }
