@@ -2,6 +2,7 @@ package yahoo
 
 import (
 	"errors"
+	"log"
 
 	"github.com/artnoi43/fngobot/fetch"
 	"github.com/piquette/finance-go/crypto"
@@ -30,6 +31,7 @@ func GetCrypto(tick string) (*cryptoQuote, error) {
 		return nil, err
 	}
 	if _q == nil {
+		log.Printf("%s not found in Satang JSON", tick)
 		return nil, fetch.ErrNotFound
 	}
 

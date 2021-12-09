@@ -1,6 +1,8 @@
 package yahoo
 
 import (
+	"log"
+
 	"github.com/artnoi43/fngobot/fetch"
 	qt "github.com/piquette/finance-go/quote"
 )
@@ -30,6 +32,7 @@ func Get(tick string) (*quote, error) {
 		return nil, err
 	}
 	if _q == nil {
+		log.Printf("%s not found in Satang JSON", tick)
 		return nil, fetch.ErrNotFound
 	}
 
