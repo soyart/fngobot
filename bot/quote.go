@@ -7,22 +7,14 @@ import (
 	yh "github.com/artnoi43/fngobot/fetch/yahoo"
 )
 
-// Security is a struct storing info about how to get the quotes.
-type Security struct {
-	Tick string
-	Src  int
-}
-
-// Quoter interface specificies just 3 methods.
-// Errors get returned if the sources don't support the quote type(s).
-type Quoter interface {
+type quoter interface {
 	Last() (float64, error)
 	Bid() (float64, error)
 	Ask() (float64, error)
 }
 
-func (s *Security) Quote() (Quoter, error) {
-	var q Quoter
+func (s *Security) Quote() (quoter, error) {
+	var q quoter
 	var err error
 	switch s.Src {
 	case enums.Yahoo:
