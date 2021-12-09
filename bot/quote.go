@@ -27,24 +27,15 @@ func (s *Security) Quote() (Quoter, error) {
 	switch s.Src {
 	case enums.Yahoo:
 		q, err = yh.Get(s.Tick)
-		if err != nil {
-			return nil, err
-		}
 	case enums.YahooCrypto:
 		q, err = yh.GetCrypto(s.Tick)
-		if err != nil {
-			return nil, errYahooCryptoBidAsk
-		}
 	case enums.Satang:
 		q, err = st.Get(s.Tick)
-		if err != nil {
-			return nil, errSatangLastPrice
-		}
 	case enums.Bitkub:
 		q, err = bk.Get(s.Tick)
-		if err != nil {
-			return nil, err
-		}
+	}
+	if err != nil {
+		return nil, err
 	}
 	return q, nil
 }
