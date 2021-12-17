@@ -51,7 +51,7 @@ func main() {
 		log.Fatalf("Configuration failed\n%v", err)
 	}
 
-	/* Initializes bot b with TOKEN */
+	/* Initializes bot b with token conf.BotToken */
 	b, err := tb.NewBot(tb.Settings{
 		/* If empty defaults to "https://api.telegram.org" */
 		URL:    "",

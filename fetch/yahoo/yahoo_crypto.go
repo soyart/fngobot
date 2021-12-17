@@ -31,7 +31,7 @@ func GetCrypto(tick string) (*cryptoQuote, error) {
 		return nil, err
 	}
 	if _q == nil {
-		log.Printf("%s not found in Satang JSON", tick)
+		log.Printf("%s not found from Yahoo Finance", tick)
 		return nil, fetch.ErrNotFound
 	}
 
