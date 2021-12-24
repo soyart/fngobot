@@ -3,7 +3,7 @@ package handler
 import "log"
 
 // Handlers is a collection of handlers, used for stopping a handler
-type Handlers []*Handler
+type Handlers []*handler
 
 // Stop stops a handler with matching UUID
 func (h *Handlers) Stop(uuid string) (i int, ok bool) {

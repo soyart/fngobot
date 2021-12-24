@@ -59,7 +59,7 @@ type BotCommand struct {
 
 // getSrc gets the source from enums,
 // and also returns an index to the first ticker from the chat
-func getSrc(sw string) (idx int, src int) {
+func getSrc(sw string) (idx int, src enums.Src) {
 	switch sw {
 	case "CRYPTO":
 		idx = 2
@@ -79,7 +79,7 @@ func getSrc(sw string) (idx int, src int) {
 
 // appendSecurities receives a slice of string representing ticker
 // and appends the values in the slice to cmd.Securities
-func (cmd *quoteCommand) appendSecurities(ticks []string, src int) {
+func (cmd *quoteCommand) appendSecurities(ticks []string, src enums.Src) {
 	for _, tick := range ticks {
 		var s bot.Security
 		s.Tick = tick
@@ -127,7 +127,7 @@ func (c UserCommand) Parse() (cmd BotCommand, parseError int) {
 
 		// Determine if bid/ask or last alert
 		// bid/ask alert will have length = default length + 1
-		defLen := make(map[int]int)
+		defLen := make(map[enums.Src]int)
 		defLen[enums.YahooCrypto] = 5 /* /alert crypto btc-usd > 1 */
 		defLen[enums.Satang] = 5      /* /alert satang btc bid > 1 */
 		defLen[enums.Bitkub] = 5      /* /alert bitkub btc > 1 */

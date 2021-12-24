@@ -9,7 +9,7 @@ import (
 
 // SendQuote sends quote(s) to users via chats.
 // It is reused by tracking and alerting handlers.
-func (h *Handler) SendQuote(securities []bot.Security) {
+func (h *handler) SendQuote(securities []bot.Security) {
 	for _, s := range securities {
 		q, err := s.Quote()
 		if err != nil {

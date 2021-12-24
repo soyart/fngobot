@@ -5,8 +5,8 @@ import "github.com/artnoi43/fngobot/enums"
 // Alert struct stores info about price alerts
 type Alert struct {
 	Security
-	Condition int
-	QuoteType int
+	Condition enums.Condition
+	QuoteType enums.QuoteType
 	Target    float64
 }
 

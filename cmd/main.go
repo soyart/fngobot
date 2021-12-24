@@ -29,7 +29,6 @@ func (f *flags) parse() {
 
 var (
 	cmdFlags flags
-	handlers handler.Handlers
 )
 
 func parseConfigPath() (dir, name, ext string) {
@@ -94,7 +93,6 @@ func main() {
 			Chat:    c.Text(),
 		}.Parse()
 		h := handler.NewHandler(b, c.Message(), conf.BotConfig, &cmd)
-		handlers = append(handlers, h)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
@@ -109,7 +107,6 @@ func main() {
 			Chat:    c.Text(),
 		}.Parse()
 		h := handler.NewHandler(b, c.Message(), conf.BotConfig, &cmd)
-		handlers = append(handlers, h)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
@@ -129,9 +126,9 @@ func main() {
 	b.Handle("/stop", func(c tb.Context) error {
 		uuids := strings.Split(c.Text(), " ")[1:]
 		for _, uuid := range uuids {
-			i, ok := handlers.Stop(uuid)
+			i, ok := handler.BotHandlers.Stop(uuid)
 			if ok {
-				handlers = append(handlers[:i], handlers[i+1:]...)
+				handler.BotHandlers = append(handler.BotHandlers[:i], handler.BotHandlers[i+1:]...)
 			}
 		}
 		return nil

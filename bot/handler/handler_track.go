@@ -8,7 +8,7 @@ import (
 )
 
 // Track periodically calls SendQuote()
-func (h *Handler) Track(s []bot.Security, r int, conf Config) {
+func (h *handler) Track(s []bot.Security, r int, conf Config) {
 	ticker := time.NewTicker(time.Duration(conf.TrackSeconds) * time.Second)
 	c := 0
 

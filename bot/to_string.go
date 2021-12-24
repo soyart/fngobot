@@ -19,11 +19,10 @@ func (s *Security) GetSrcStr() string {
 // GetCondStr returns condition in string based on a.Condition
 func (a *Alert) GetCondStr() string {
 	switch a.Condition {
-	case 0:
+	case enums.Lt:
 		return "<="
-	default:
-		return ">="
 	}
+	return ">="
 }
 
 // GetQuoteTypeStr returns quote type in string based on a.QuoteType

@@ -5,20 +5,31 @@ import (
 	"log"
 	"strings"
 
+	"github.com/artnoi43/fngobot/bot"
 	"github.com/artnoi43/fngobot/parse"
 	"github.com/google/uuid"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
-// Bot types - used in Handler.Handle()
+// Bot types - used in handler.Handle()
 const (
 	QUOTEBOT = iota
 	TRACKBOT
 	ALERTBOT
 )
 
-// Handler struct
-type Handler struct {
+type Handler interface {
+	Handle(int)
+	HandleParsingError(int)
+	SendQuote([]bot.Security)
+	Track([]bot.Security, int, Config)
+	PriceAlert(bot.Alert, Config)
+}
+
+var BotHandlers Handlers
+
+// handler struct
+type handler struct {
 	uuid string
 	quit chan bool
 	conf Config
@@ -27,12 +38,12 @@ type Handler struct {
 	msg  *tb.Message
 }
 
-// NewHandler returns a new Handler
-func NewHandler(b *tb.Bot, m *tb.Message, conf Config, cmd *parse.BotCommand) *Handler {
+// NewHandler returns a new handler
+func NewHandler(b *tb.Bot, m *tb.Message, conf Config, cmd *parse.BotCommand) Handler {
 	uuid := strings.Split(uuid.NewString(), "-")[0]
 	quit := make(chan bool, 1)
 	log.Printf("[%s]: %s (from %d)\n", uuid, m.Text, m.Sender.ID)
-	return &Handler{
+	h := &handler{
 		uuid: uuid,
 		quit: quit,
 		conf: conf,
@@ -40,10 +51,12 @@ func NewHandler(b *tb.Bot, m *tb.Message, conf Config, cmd *parse.BotCommand) *H
 		bot:  b,
 		msg:  m,
 	}
+	BotHandlers = append(BotHandlers, h)
+	return h
 }
 
 // Handle calls different methods on h based on its function parameter
-func (h *Handler) Handle(t int) {
+func (h *handler) Handle(t int) {
 	switch t {
 	case QUOTEBOT:
 		h.SendQuote(h.cmd.Quote.Securities)
@@ -54,11 +67,11 @@ func (h *Handler) Handle(t int) {
 	}
 }
 
-func (h *Handler) send(s string) {
+func (h *handler) send(s string) {
 	h.bot.Send(h.msg.Sender, s)
 }
 
-func (h *Handler) notifyStop() {
+func (h *handler) notifyStop() {
 	log.Printf("[%s]: Received stop signal", h.uuid)
 	h.send(fmt.Sprintf("Stopping %s", h.uuid))
 }

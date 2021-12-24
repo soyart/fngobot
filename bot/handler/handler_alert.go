@@ -8,7 +8,7 @@ import (
 )
 
 // PriceAlert sends alerts to users if a condition is matched.
-func (h *Handler) PriceAlert(a bot.Alert, conf Config) {
+func (h *handler) PriceAlert(a bot.Alert, conf Config) {
 	// Notify user of the handler
 	startMsg := printer.Sprintf("Your alert handler ID is %s\nFrom message: %s at %v",
 		h.uuid, h.msg.Text, h.msg.Time())

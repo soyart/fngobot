@@ -3,7 +3,7 @@ package handler
 import "github.com/artnoi43/fngobot/parse"
 
 // HandleParsingError handles errors from package parse
-func (h *Handler) HandleParsingError(parseError int) {
+func (h *handler) HandleParsingError(parseError int) {
 	h.send("Failed to parse command")
 	switch parseError {
 	case parse.ErrParseInt:

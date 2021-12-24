@@ -10,7 +10,8 @@ import (
 
 func TestGetSrc(t *testing.T) {
 	type getSrcOut struct {
-		idx, src int
+		idx int
+		src enums.Src
 	}
 	tests := []struct {
 		In  string
