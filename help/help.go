@@ -19,7 +19,7 @@ func GetHelp(s string) string {
 		case "alert":
 			messg = ALERT
 		case "long", "all", "-l", "-a":
-			messg = LONG + QUOTE + TRACK + ALERT
+			messg = LONG + QUOTE + TRACK + ALERT + HANDLERS
 		default:
 			messg = SHORT
 		}
@@ -157,5 +157,9 @@ Unfortunately, Satang quotes ONLY support bid/ask
 
 /alert satang ada ask < 60
 /alert satang btc bid > 1400000`
+
+	HANDLERS = `/handlers - get active handlers in JSON
+This command does not need extra chat message,
+i.e. you can just send the bot '/handlers'`
 
 )
