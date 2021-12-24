@@ -26,6 +26,9 @@ type Handler interface {
 	PriceAlert(bot.Alert, Config)
 }
 
+// Handlers is a collection of handlers, used for stopping a handler
+type Handlers []*handler
+
 var BotHandlers Handlers
 
 // handler struct
@@ -65,6 +68,21 @@ func (h *handler) Handle(t int) {
 	case ALERTBOT:
 		h.PriceAlert(h.cmd.Alert, h.conf)
 	}
+}
+
+// Stop stops a handler with matching UUID
+func (h *Handlers) Stop(uuid string) (i int, ok bool) {
+	for idx, handler := range *h {
+		switch uuid {
+		case handler.uuid:
+			log.Printf("[%s]: Sending quit signal\n", handler.uuid)
+			handler.quit <- true
+			log.Printf("[%s]: Sent quit signal\n", handler.uuid)
+			i = idx
+			ok = true
+		}
+	}
+	return i, ok
 }
 
 func (h *handler) send(s string) {
