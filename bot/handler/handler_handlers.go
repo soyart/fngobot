@@ -9,14 +9,18 @@ import (
 
 func (h *handler) SendHandlers() {
 	var nullChecker = &parse.BotCommand{}
-	if len(BotHandlers) > 1 {
-		for _, h := range BotHandlers {
-			if !reflect.DeepEqual(h.GetCmd(), nullChecker) {
-				j, _ := json.MarshalIndent(h, "  ", "  ")
-				h.send(string(j))
-			}
+	var okHandlers = []Handler{}
+	for _, h := range BotHandlers {
+		if !reflect.DeepEqual(h.GetCmd(), nullChecker) {
+			okHandlers = append(okHandlers, h)
+		}
+	}
+	if len(okHandlers) > 0 {
+		for _, h := range okHandlers {
+			j, _ := json.MarshalIndent(h, "  ", "  ")
+			h.send(string(j))
 		}
 	} else {
-		h.send("No handlers found")
+		h.send("No active handlers found")
 	}
 }
