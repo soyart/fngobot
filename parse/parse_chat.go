@@ -47,7 +47,7 @@ type quoteCommand struct {
 }
 
 type trackCommand struct {
-	quoteCommand   `json:"securities"`
+	quoteCommand   `json:"quote"`
 	TrackTimes int `json:"track_times"`
 }
 
