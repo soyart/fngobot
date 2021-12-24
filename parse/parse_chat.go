@@ -77,7 +77,7 @@ func getSrc(sw string) (idx int, src int) {
 func (cmd *quoteCommand) appendSecurities(ticks []string, src int) {
 	for _, tick := range ticks {
 		var s bot.Security
-		s.Tick = strings.ToUpper(tick)
+		s.Tick = tick
 		s.Src = src
 		cmd.Securities = append(cmd.Securities, s)
 	}
@@ -103,7 +103,7 @@ func (c UserCommand) Parse() (cmd BotCommand, parseError int) {
 		}
 		cmd.Track.TrackTimes = r
 	case AlertCmd:
-		cmd.Alert.Security.Tick = strings.ToUpper(chat[idx])
+		cmd.Alert.Security.Tick = chat[idx]
 		cmd.Alert.Security.Src = src
 		targ, err := strconv.ParseFloat(chat[lenChat-1], 64)
 		if err != nil {
@@ -138,19 +138,19 @@ func (c UserCommand) Parse() (cmd BotCommand, parseError int) {
 			cmd.Alert.QuoteType = enums.Last
 		// Bid/ask alerts
 		default:
-			ba := strings.ToUpper(chat[idx+1])
+			bidask := strings.ToUpper(chat[idx+1])
 			switch cmd.Alert.Src {
 			// Yahoo Crypto does not support bid/ask price
 			case enums.YahooCrypto:
-				if ba == "BID" {
+				if bidask == "BID" {
 					return cmd, ErrInvalidQuoteTypeBid
-				} else if ba == "ASK" {
+				} else if bidask == "ASK" {
 					return cmd, ErrInvalidQuoteTypeAsk
 				}
 			default:
-				if ba == "BID" {
+				if bidask == "BID" {
 					cmd.Alert.QuoteType = enums.Bid
-				} else if ba == "ASK" {
+				} else if bidask == "ASK" {
 					cmd.Alert.QuoteType = enums.Ask
 				} else {
 					return cmd, ErrInvalidBidAskSwitch
