@@ -10,6 +10,7 @@ import (
 )
 
 const (
+	// These errors are non-zero
 	ErrParseInt = iota + 1
 	ErrParseFloat
 	ErrInvalidSign
@@ -56,6 +57,8 @@ type BotCommand struct {
 	Alert bot.Alert
 }
 
+// getSrc gets the source from enums,
+// and also returns an index to the first ticker from the chat
 func getSrc(sw string) (idx int, src int) {
 	switch sw {
 	case "CRYPTO":
@@ -74,6 +77,8 @@ func getSrc(sw string) (idx int, src int) {
 	return idx, src
 }
 
+// appendSecurities receives a slice of string representing ticker
+// and appends the values in the slice to cmd.Securities
 func (cmd *quoteCommand) appendSecurities(ticks []string, src int) {
 	for _, tick := range ticks {
 		var s bot.Security

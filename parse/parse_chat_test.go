@@ -16,23 +16,34 @@ func TestGetSrc(t *testing.T) {
 		In  string
 		Out getSrcOut
 	}{
-		{In: "CRYPTO", Out: getSrcOut{
-			idx: 2,
-			src: enums.YahooCrypto,
-		}},
-		{In: "SATANG", Out: getSrcOut{
-			idx: 2,
-			src: enums.Satang,
-		}},
-		{In: "BITKUB", Out: getSrcOut{
-			idx: 2,
-			src: enums.Bitkub,
-		}},
-		// Default case
-		{In: "YAHOO", Out: getSrcOut{
-			idx: 1,
-			src: enums.Yahoo,
-		}},
+		{
+			In: "CRYPTO",
+			Out: getSrcOut{
+				idx: 2,
+				src: enums.YahooCrypto,
+			},
+		},
+		{
+			In: "SATANG",
+			Out: getSrcOut{
+				idx: 2,
+				src: enums.Satang,
+			},
+		},
+		{
+			In: "BITKUB",
+			Out: getSrcOut{
+				idx: 2,
+				src: enums.Bitkub,
+			},
+		},
+		{
+			In: "YAHOO",
+			Out: getSrcOut{
+				idx: 1,
+				src: enums.Yahoo,
+			},
+		},
 	}
 	for _, test := range tests {
 		idx, src := getSrc(test.In)
