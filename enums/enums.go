@@ -4,17 +4,23 @@ type Src string
 type QuoteType string
 type Condition string
 
+// quote sources
 const (
-	// Quote sources
 	Yahoo       Src = "yahoo"
 	YahooCrypto Src = "yahooCrypto"
 	Satang      Src = "satang"
 	Bitkub      Src = "bitkub"
-	// Quote types
+)
+
+// quote types
+const (
 	Bid  QuoteType = "bid"
 	Ask  QuoteType = "ask"
 	Last QuoteType = "last"
-	// Match conditions
+)
+
+// alert condition
+const (
 	Lt Condition = "lt"
 	Gt Condition = "gt"
 )

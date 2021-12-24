@@ -9,9 +9,12 @@ import (
 	"github.com/artnoi43/fngobot/help"
 )
 
+type ParseError int
+type Command string
+
 const (
 	// These errors are non-zero
-	ErrParseInt = iota + 1
+	ErrParseInt ParseError = iota + 1
 	ErrParseFloat
 	ErrInvalidSign
 	ErrInvalidBidAskSwitch
@@ -21,40 +24,41 @@ const (
 )
 
 const (
-	HelpCmd = iota
-	QuoteCmd
-	TrackCmd
-	AlertCmd
+	HelpCmd  Command = "help"
+	QuoteCmd Command = "quote"
+	TrackCmd Command = "track"
+	AlertCmd Command = "alert"
+	HandlersCmd Command = "handlers"
 )
 
 // UserCommand is essentially a chat message.
 // UserCommand.Chat is an int enum
 type UserCommand struct {
-	Command int
+	Command Command
 	Chat    string
 }
 
 type helpCommand struct {
-	HelpMessage string
+	HelpMessage string `json:"help_msg"`
 }
 
 type quoteCommand struct {
-	Securities []bot.Security
+	Securities []bot.Security `json:"securities"`
 }
 
 type trackCommand struct {
-	quoteCommand
-	TrackTimes int
+	quoteCommand   `json:"securities"`
+	TrackTimes int `json:"track_times"`
 }
 
 // BotCommand is derived from UserCommand by parsing with Parse()
 // Alerting does not need its own command struct,
 // as the bot.Alert struct already has all the info needed.
 type BotCommand struct {
-	Help  helpCommand
-	Quote quoteCommand
-	Track trackCommand
-	Alert bot.Alert
+	Help  helpCommand  `json:"-"`
+	Quote quoteCommand `json:"quote"`
+	Track trackCommand `json:"track"`
+	Alert bot.Alert    `json:"alert"`
 }
 
 // getSrc gets the source from enums,
@@ -89,7 +93,10 @@ func (cmd *quoteCommand) appendSecurities(ticks []string, src enums.Src) {
 }
 
 // Parse parses UserCommand to BotCommand
-func (c UserCommand) Parse() (cmd BotCommand, parseError int) {
+func (c UserCommand) Parse() (cmd BotCommand, parseError ParseError) {
+	if c.Command == HandlersCmd {
+		return cmd, 0
+	}
 	chat := strings.Split(c.Chat, " ")
 	lenChat := len(chat)
 	sw := strings.ToUpper(chat[1])

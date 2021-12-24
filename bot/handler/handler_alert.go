@@ -11,7 +11,7 @@ import (
 func (h *handler) PriceAlert(a bot.Alert, conf Config) {
 	// Notify user of the handler
 	startMsg := printer.Sprintf("Your alert handler ID is %s\nFrom message: %s at %v",
-		h.uuid, h.msg.Text, h.msg.Time())
+		h.Uuid, h.msg.Text, h.msg.Time())
 	h.send(startMsg)
 
 	ticker := time.NewTicker(time.Duration(conf.AlertInterval) * time.Second)
@@ -32,7 +32,7 @@ func (h *handler) PriceAlert(a bot.Alert, conf Config) {
 			if m {
 				str := "ID: %s\nALERT!\n%s (%s) is now %s %f\non %s"
 				msg := printer.Sprintf(str,
-					h.uuid, a.Security.Tick, a.GetQuoteTypeStr(), a.GetCondStr(), a.Target, a.GetSrcStr())
+					h.Uuid, a.Security.Tick, a.GetQuoteTypeStr(), a.GetCondStr(), a.Target, a.GetSrcStr())
 				h.send(msg)
 				// Also send quote to user
 				h.SendQuote([]bot.Security{a.Security})
@@ -42,6 +42,6 @@ func (h *handler) PriceAlert(a bot.Alert, conf Config) {
 	}
 	// Alert user when done
 	doneStr := "ID: %s\nAlert done for %s"
-	h.send(printer.Sprintf(doneStr, h.uuid, a.Security.Tick))
-	log.Printf("[%s]: Alert done\n", h.uuid)
+	h.send(printer.Sprintf(doneStr, h.Uuid, a.Security.Tick))
+	log.Printf("[%s]: Alert done\n", h.Uuid)
 }

@@ -101,6 +101,12 @@ The example below will make the bot alert if BTC-USD (From Bitkub.com) bid price
 
     /alert bitkub btc-usd bid < 30000
 
-`/stop` is used to stop an unfinished `/alert` or `/track` handlers. Let's say we have an alerting handler whose UUID is cfd337b7, to stop it, send:
+## Other chat commands
+
+`/handlers` is used to get all running handlers in JSON format.
+
+    /handlers
+
+`/stop` is used to stop a running handler. Let's say we have an alerting handler whose UUID is cfd337b7, to stop it, send:
 
     /stop cfd337b7

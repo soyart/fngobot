@@ -123,6 +123,21 @@ func main() {
 	})
 
 	// Stop a tracking or alerting handler
+	b.Handle("/handlers", func(c tb.Context) error {
+		cmd, parseError := parse.UserCommand{
+			Command: parse.HandlersCmd,
+			Chat:    c.Text(),
+		}.Parse()
+		h := handler.NewHandler(b, c.Message(), conf.BotConfig, &cmd)
+		if parseError != 0 {
+			h.HandleParsingError(parseError)
+		} else {
+			h.Handle(handler.HANDLERS)
+		}
+		return nil
+	})
+
+	// Stop a tracking or alerting handler
 	b.Handle("/stop", func(c tb.Context) error {
 		uuids := strings.Split(c.Text(), " ")[1:]
 		for _, uuid := range uuids {

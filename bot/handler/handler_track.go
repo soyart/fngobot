@@ -25,5 +25,5 @@ func (h *handler) Track(s []bot.Security, r int, conf Config) {
 			c++
 		}
 	}
-	h.send(fmt.Sprintf("Tracking done for %s", h.uuid))
+	h.send(fmt.Sprintf("Tracking done for %s", h.Uuid))
 }

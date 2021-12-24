@@ -21,7 +21,7 @@ func (h *handler) SendQuote(securities []bot.Security) {
 			}
 			errMsg = "ID: %s\n" + errMsg + " from %s"
 			h.send(printer.Sprintf(errMsg,
-				h.uuid, s.Tick, s.GetSrcStr()))
+				h.Uuid, s.Tick, s.GetSrcStr()))
 			return
 		}
 		str := "ID: %s\nQuote from %s\n%s\nBid: %f\nAsk: %f\nLast: %f\n"
@@ -30,7 +30,7 @@ func (h *handler) SendQuote(securities []bot.Security) {
 		ask, _ := q.Ask()
 
 		msg := printer.Sprintf(str,
-			h.uuid, s.GetSrcStr(), s.Tick, bid, ask, last)
+			h.Uuid, s.GetSrcStr(), s.Tick, bid, ask, last)
 		h.send(msg)
 	}
 }
