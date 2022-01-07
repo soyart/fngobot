@@ -42,9 +42,9 @@ type Handlers []Handler
 var BotHandlers Handlers
 
 type handler struct {
-	Uuid   string            `json:"uuid" yaml:"uuid"`
-	Cmd    *parse.BotCommand `json:"command" yaml:"command"`
-	Start  time.Time         `json:"start" yaml:"start"`
+	Uuid   string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
+	Cmd    *parse.BotCommand `json:"command,omitempty" yaml:"command,omitempty"`
+	Start  time.Time         `json:"start,omitempty" yaml:"start,omitempty"`
 	Quit   chan bool         `json:"-" yaml:"-"`
 	IsDone bool              `json:"-" yaml:"-"`
 	Conf   Config            `json:"-" yaml:"-"`

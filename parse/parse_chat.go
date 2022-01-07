@@ -24,10 +24,10 @@ const (
 )
 
 const (
-	HelpCmd  Command = "help"
-	QuoteCmd Command = "quote"
-	TrackCmd Command = "track"
-	AlertCmd Command = "alert"
+	HelpCmd     Command = "help"
+	QuoteCmd    Command = "quote"
+	TrackCmd    Command = "track"
+	AlertCmd    Command = "alert"
 	HandlersCmd Command = "handlers"
 )
 
@@ -47,8 +47,8 @@ type quoteCommand struct {
 }
 
 type trackCommand struct {
-	quoteCommand   `json:"quote"`
-	TrackTimes int `json:"track_times"`
+	quoteCommand `json:"quote"`
+	TrackTimes   int `json:"track_times"`
 }
 
 // BotCommand is derived from UserCommand by parsing with Parse()

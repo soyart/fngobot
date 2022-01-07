@@ -33,46 +33,19 @@ func (h *handler) SendHandlers() {
 func (h *handler) yaml() string {
 	// This type is only for marshaling YAML
 	type prettyHandler struct {
-		Uuid  string `yaml:"UUID,omitempty"`
-		Start string `yaml:"Start,omitempty"`
-		//		Q     []bot.Security `yaml:"Quote,omitempty"`
-		//		T     []bot.Security `yaml:"Track,omitempty"`
-		//		A     bot.Security   `yaml:"Alert,omitempty"`
+		Uuid  string         `yaml:"UUID,omitempty"`
+		Start string         `yaml:"Start,omitempty"`
 		Quote []bot.Security `yaml:"Quote,omitempty"`
 		Track []bot.Security `yaml:"Track,omitempty"`
 		Alert bot.Security   `yaml:"Alert,omitempty"`
-		Src   string         `yaml:"Source,omitempty"`
 	}
-
-	//	var quoteStrings []string
-	//	var trackStrings []string
-	//	var alertString string
-	var src string
-
-	if len(h.Cmd.Quote.Securities) > 0 {
-		//		for _, security := range h.Cmd.Quote.Securities {
-		//			quoteStrings = append(quoteStrings, security.Yaml())
-		//		}
-		src = string(h.Cmd.Quote.Securities[0].Src)
-	}
-	if len(h.Cmd.Track.Securities) > 0 {
-		//		for _, security := range h.Cmd.Track.Securities {
-		//			trackStrings = append(trackStrings, security.Yaml())
-		//		}
-		src = string(h.Cmd.Track.Securities[0].Src)
-	}
-	if len(h.Cmd.Alert.Tick) > 0 {
-		//		alertString = h.Cmd.Alert.Yaml()
-		src = string(h.Cmd.Alert.Src)
-	}
-	prettyYaml := prettyHandler{
+	thisHandler := prettyHandler{
 		Uuid:  h.Uuid,
 		Quote: h.Cmd.Quote.Securities,
 		Track: h.Cmd.Track.Securities,
 		Alert: h.Cmd.Alert.Security,
-		Src:   src,
 		Start: h.Start.Format("2006-01-02 15:04:05"),
 	}
-	y, _ := yaml.Marshal(&prettyYaml)
+	y, _ := yaml.Marshal(&thisHandler)
 	return string(y)
 }
