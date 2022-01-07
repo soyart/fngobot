@@ -10,7 +10,7 @@ import (
 // PriceAlert sends alerts to users if a condition is matched.
 func (h *handler) PriceAlert(a bot.Alert, conf Config) {
 	// Notify user of the handler
-	startMsg := printer.Sprintf("Your alert handler ID is %s\nFrom message: %s (%v)",
+	startMsg := printer.Sprintf("Your alert handler ID is %s\nMessage: %s\nTime: %s)",
 		h.Uuid, h.Msg.Text, h.Msg.Time().Format(timeFormat))
 	h.send(startMsg)
 
