@@ -13,7 +13,6 @@ func (h *handler) SendHandlers() {
 	var runningHandlers = []Handler{}
 	for _, h := range BotHandlers {
 		if !reflect.DeepEqual(h.GetCmd(), nullChecker) {
-			// Add running handler to okHandlers
 			if h.isRunning() {
 				runningHandlers = append(runningHandlers, h)
 			}
