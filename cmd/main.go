@@ -82,6 +82,7 @@ func main() {
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
+			defer h.Done()
 			h.Handle(handler.QUOTEBOT)
 		}
 		return nil
@@ -96,6 +97,7 @@ func main() {
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
+			defer h.Done()
 			h.Handle(handler.TRACKBOT)
 		}
 		return nil
@@ -110,6 +112,7 @@ func main() {
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
+			defer h.Done()
 			h.Handle(handler.ALERTBOT)
 		}
 		return nil
@@ -132,6 +135,7 @@ func main() {
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
+			defer h.Done()
 			h.Handle(handler.HANDLERS)
 		}
 		return nil

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/artnoi43/fngobot/bot"
 	"github.com/artnoi43/fngobot/parse"
@@ -20,33 +21,48 @@ const (
 )
 
 type Handler interface {
+	// These exported methods are called from other packages
 	UUID() string
 	QuitChan() chan bool
+	Done()
 	GetCmd() *parse.BotCommand
-	send(string)
 	Handle(int)
 	HandleParsingError(parse.ParseError)
 	SendQuote([]bot.Security)
 	Track([]bot.Security, int, Config)
 	PriceAlert(bot.Alert, Config)
+	// These unexported methods are called from this package
+	send(string)
+	yaml() string
+	isRunning() bool
 }
 
 type Handlers []Handler
+
 var BotHandlers Handlers
 
 type handler struct {
-	Uuid string `json:"uuid"`
-	Cmd  *parse.BotCommand `json:"command"`
-	quit chan bool `json:"-"`
-	conf Config `json:"-"`
-	bot  *tb.Bot `json:"-"`
-	msg  *tb.Message `json:"-"`
+	Uuid   string            `json:"uuid" yaml:"uuid"`
+	Cmd    *parse.BotCommand `json:"command" yaml:"command"`
+	Start  time.Time         `json:"start" yaml:"start"`
+	Quit   chan bool         `json:"-" yaml:"-"`
+	IsDone bool              `json:"-" yaml:"-"`
+	Conf   Config            `json:"-" yaml:"-"`
+	Bot    *tb.Bot           `json:"-" yaml:"-"`
+	Msg    *tb.Message       `json:"-" yaml:"-"`
 }
+
 func (h *handler) UUID() string {
 	return h.Uuid
 }
 func (h *handler) QuitChan() chan bool {
-	return h.quit
+	return h.Quit
+}
+func (h *handler) Done() {
+	h.IsDone = true
+}
+func (h *handler) isRunning() bool {
+	return !h.IsDone
 }
 func (h *handler) GetCmd() *parse.BotCommand {
 	return h.Cmd
@@ -58,16 +74,16 @@ func (h *handler) Handle(t int) {
 	case QUOTEBOT:
 		h.SendQuote(h.Cmd.Quote.Securities)
 	case TRACKBOT:
-		h.Track(h.Cmd.Track.Securities, h.Cmd.Track.TrackTimes, h.conf)
+		h.Track(h.Cmd.Track.Securities, h.Cmd.Track.TrackTimes, h.Conf)
 	case ALERTBOT:
-		h.PriceAlert(h.Cmd.Alert, h.conf)
+		h.PriceAlert(h.Cmd.Alert, h.Conf)
 	case HANDLERS:
 		h.SendHandlers()
 	}
 }
 
 func (h *handler) send(s string) {
-	h.bot.Send(h.msg.Sender, s)
+	h.Bot.Send(h.Msg.Sender, s)
 }
 
 func (h *handler) notifyStop() {
@@ -91,18 +107,20 @@ func (h *Handlers) Stop(uuid string) (i int, ok bool) {
 	return i, ok
 }
 
-// NewHandler returns a new handler
+// NewHandler returns a new handler and appends it to BotHandlers
 func NewHandler(b *tb.Bot, m *tb.Message, conf Config, cmd *parse.BotCommand) Handler {
 	uuid := strings.Split(uuid.NewString(), "-")[0]
 	quit := make(chan bool, 1)
 	log.Printf("[%s]: %s (from %d)\n", uuid, m.Text, m.Sender.ID)
 	h := &handler{
-		Uuid: uuid,
-		Cmd:  cmd,
-		quit: quit,
-		conf: conf,
-		bot:  b,
-		msg:  m,
+		Uuid:   uuid,
+		Start:  time.Now(),
+		Cmd:    cmd,
+		Quit:   quit,
+		IsDone: false,
+		Conf:   conf,
+		Bot:    b,
+		Msg:    m,
 	}
 	BotHandlers = append(BotHandlers, h)
 	return h

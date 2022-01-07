@@ -17,7 +17,7 @@ func (h *handler) Track(s []bot.Security, r int, conf Config) {
 
 	for c < r-1 {
 		select {
-		case <-h.quit:
+		case <-h.Quit:
 			h.notifyStop()
 			return
 		case <-ticker.C:
