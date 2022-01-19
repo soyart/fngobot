@@ -4,10 +4,10 @@ import "github.com/artnoi43/fngobot/enums"
 
 // Alert struct stores info about price alerts
 type Alert struct {
-	Security
-	Condition enums.Condition
-	QuoteType enums.QuoteType
-	Target    float64
+	Security  `json:"security"`
+	Condition enums.Condition `json:"condition"`
+	QuoteType enums.QuoteType `json:"quote"`
+	Target    float64         `json:"target"`
 }
 
 // Match sends a truthy value into matched channel
