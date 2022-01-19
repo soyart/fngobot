@@ -1,6 +1,8 @@
 package bot
 
 import (
+	"strings"
+
 	"github.com/artnoi43/fngobot/enums"
 	"github.com/artnoi43/fngobot/fetch"
 	bk "github.com/artnoi43/fngobot/fetch/bitkub"
@@ -9,10 +11,8 @@ import (
 	yh "github.com/artnoi43/fngobot/fetch/yahoo"
 )
 
-func (s *Security) Quote() (fetch.Quoter, error) {
-	var q fetch.Quoter
-	var err error
-
+func (s *Security) Quote() (q fetch.Quoter, err error) {
+	s.Tick = strings.ToUpper(s.Tick)
 	switch s.Src {
 	case enums.Yahoo:
 		q, err = yh.Get(s.Tick)
@@ -23,9 +23,5 @@ func (s *Security) Quote() (fetch.Quoter, error) {
 	case enums.Bitkub:
 		q, err = bk.Get(s.Tick)
 	}
-
-	if err != nil {
-		return nil, err
-	}
-	return q, nil
+	return
 }

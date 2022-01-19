@@ -8,6 +8,7 @@ import (
 
 func TestQuote(t *testing.T) {
 	var securities = []*Security{
+		// keep them ticks lowercase or mixed-case
 		{Tick: "btc", Src: enums.Satang},
 		{Tick: "btc", Src: enums.Bitkub},
 		{Tick: "btc", Src: enums.YahooCrypto},
