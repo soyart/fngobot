@@ -143,11 +143,14 @@ func main() {
 
 	// Stop a tracking or alerting handler
 	b.Handle("/stop", func(c tb.Context) error {
+		senderId := c.Sender().ID
 		uuids := strings.Split(c.Text(), " ")[1:]
 		for _, uuid := range uuids {
-			i, ok := handler.BotHandlers.Stop(uuid)
+			// Stop is Handlers method
+			idx, ok := handler.SenderHandlers[senderId].Stop(uuid)
 			if ok {
-				handler.BotHandlers = append(handler.BotHandlers[:i], handler.BotHandlers[i+1:]...)
+				// Remove is a plain function
+				handler.Remove(senderId, idx)
 			}
 		}
 		return nil

@@ -10,8 +10,8 @@ import (
 
 func (h *handler) SendHandlers() {
 	var nullChecker = &parse.BotCommand{}
-	var runningHandlers = []Handler{}
-	for _, h := range BotHandlers {
+	var runningHandlers Handlers
+	for _, h := range SenderHandlers[h.Msg.Sender.ID] {
 		if !reflect.DeepEqual(h.GetCmd(), nullChecker) {
 			if h.isRunning() {
 				runningHandlers = append(runningHandlers, h)
