@@ -45,8 +45,8 @@ func (h *handler) yaml() string {
 	}
 	thisHandler := prettyHandler{
 		Uuid:  h.Uuid,
-		Quote: h.Cmd.Quote.Securities,
-		Track: h.Cmd.Track.Securities,
+		Quote: h.GetCmd().Quote.Securities,
+		Track: h.GetCmd().Track.Securities,
 		Alert: prettyAlert{
 			Security:  h.GetCmd().Alert.Security,
 			Condition: h.GetCmd().Alert.GetCondStr(),
