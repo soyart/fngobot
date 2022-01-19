@@ -15,20 +15,24 @@ func (h *handler) SendQuote(securities []bot.Security) {
 		if err != nil {
 			var errMsg string
 			if errors.Is(err, fetch.ErrNotFound) {
-				errMsg = "Ticker %s not found"
+				errMsg = "Ticker not found"
 			} else {
-				errMsg = "Error getting %s quote"
+				errMsg = "Error getting quote"
 			}
-			errMsg = "ID: %s\n" + errMsg + " from %s"
-			h.send(printer.Sprintf(errMsg,
-				h.UUID(), security.Tick, security.GetSrcStr()))
+			h.send(printer.Sprintf(
+				"[%s]\n%s: %s from %s",
+				h.UUID(),
+				errMsg,
+				security.Tick,
+				security.GetSrcStr(),
+			))
 			return
 		}
 		last, _ := q.Last()
 		bid, _ := q.Bid()
 		ask, _ := q.Ask()
 		msg := printer.Sprintf(
-			"ID: %s\nQuote from %s\n%s\nBid: %f\nAsk: %f\nLast: %f\n",
+			"[%s]\nQuote from %s\n%s\nBid: %f\nAsk: %f\nLast: %f\n",
 			h.UUID(),
 			security.GetSrcStr(),
 			security.Tick,

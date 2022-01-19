@@ -23,7 +23,7 @@ const (
 type Handler interface {
 	// These exported methods are called from other packages
 	UUID() string
-	QuitChan() chan bool
+	QuitChan() chan struct{}
 	Done()
 	GetCmd() *parse.BotCommand
 	Handle(int)
@@ -49,7 +49,7 @@ type handler struct {
 	Uuid   string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 	Cmd    *parse.BotCommand `json:"command,omitempty" yaml:"command,omitempty"`
 	Start  time.Time         `json:"start,omitempty" yaml:"start,omitempty"`
-	Quit   chan bool         `json:"-" yaml:"-"`
+	Quit   chan struct{}     `json:"-" yaml:"-"`
 	IsDone bool              `json:"-" yaml:"-"`
 	Conf   Config            `json:"-" yaml:"-"`
 	Bot    *tb.Bot           `json:"-" yaml:"-"`
@@ -59,7 +59,7 @@ type handler struct {
 func (h *handler) UUID() string {
 	return h.Uuid
 }
-func (h *handler) QuitChan() chan bool {
+func (h *handler) QuitChan() chan struct{} {
 	return h.Quit
 }
 func (h *handler) Done() {
@@ -86,6 +86,7 @@ func (h *handler) Handle(t int) {
 	}
 }
 
+// send sends given string to the handler's sender
 func (h *handler) send(s string) {
 	h.Bot.Send(h.Msg.Sender, s)
 }
@@ -108,7 +109,7 @@ func (h Handlers) Stop(uuid string) (i int, ok bool) {
 				handler.UUID(),
 			)
 			quit := handler.QuitChan()
-			quit <- true
+			quit <- struct{}{}
 			log.Printf(
 				"[%s]: Sent quit signal\n",
 				handler.UUID(),
@@ -134,7 +135,7 @@ func New(b *tb.Bot, m *tb.Message, conf Config, cmd *parse.BotCommand) Handler {
 		uuid.NewString(), "-",
 	)[0]
 
-	quit := make(chan bool, 1)
+	quit := make(chan struct{}, 1)
 	// Log every new handler
 	log.Printf(
 		"[%s]: %s (from %d)\n",

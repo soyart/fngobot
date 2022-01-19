@@ -12,9 +12,11 @@ type Alert struct {
 
 // Match sends a truthy value into matched channel
 // if the specified market condition is matched.
-func (a *Alert) Match(matched chan<- bool) {
+func Match(a *Alert, matched chan<- bool) {
 	q, err := a.Security.Quote()
 	if err != nil {
+		// false is sent
+		// if Quote() returns an error
 		matched <- false
 	}
 

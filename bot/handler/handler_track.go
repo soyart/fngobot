@@ -15,11 +15,14 @@ func (h *handler) Track(s []bot.Security, r int, conf Config) {
 
 	// First quote right away
 	h.SendQuote(s)
+	// r-1 bc 1st quote already sent
 	for c := 0; c < r-1; {
 		select {
+		// Quit if received signal
 		case <-h.Quit:
 			h.notifyStop()
 			return
+		// Send quotes every N second
 		case <-ticker.C:
 			h.SendQuote(s)
 			c++
