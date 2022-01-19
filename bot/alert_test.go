@@ -14,12 +14,12 @@ var (
 	someSmallNum float64 = 0.69
 	someBigNum   float64 = 200000000
 
-	someSmallQuote quote = quote{
+	someSmallQuote = quote{
 		bid:  someSmallNum,
 		ask:  someSmallNum,
 		last: someSmallNum,
 	}
-	someBigQuote quote = quote{
+	someBigQuote = quote{
 		bid:  someBigNum,
 		ask:  someBigNum,
 		last: someBigNum,
