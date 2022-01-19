@@ -85,7 +85,7 @@ func getSrc(sw string) (idx int, src enums.Src) {
 func (cmd *quoteCommand) appendSecurities(ticks []string, src enums.Src) {
 	for _, tick := range ticks {
 		var s bot.Security
-		s.Tick = tick
+		s.Tick = strings.ToUpper(tick)
 		s.Src = src
 		cmd.Securities = append(cmd.Securities, s)
 	}

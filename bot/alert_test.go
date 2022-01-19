@@ -7,11 +7,23 @@ import (
 	"time"
 
 	"github.com/artnoi43/fngobot/enums"
+	"github.com/artnoi43/fngobot/fetch"
 )
 
 var (
-	someBigNum float64 = 20000000
-	// (Should be true) Satang ETH > 0
+	someSmallNum float64 = 0.69
+	someBigNum   float64 = 200000000
+
+	someSmallQuote quote = quote{
+		bid:  someSmallNum,
+		ask:  someSmallNum,
+		last: someSmallNum,
+	}
+	someBigQuote quote = quote{
+		bid:  someBigNum,
+		ask:  someBigNum,
+		last: someBigNum,
+	}
 	ethSatangGt0 = Alert{
 		Security: Security{
 			Tick: "ETH",
@@ -21,17 +33,15 @@ var (
 		Condition: enums.Gt,
 		Target:    0,
 	}
-	// (Should be false) Satang ETH > someBigNum
-	ethSatangLtB = Alert{
+	ethSatangLt5 = Alert{
 		Security: Security{
 			Tick: "ETH",
 			Src:  enums.Satang,
 		},
 		QuoteType: enums.Bid,
 		Condition: enums.Lt,
-		Target:    someBigNum,
+		Target:    5,
 	}
-	// (Should be true) Bitkub ETH > 0
 	ethBitkubGt0 = Alert{
 		Security: Security{
 			Tick: "ETH",
@@ -41,57 +51,92 @@ var (
 		Condition: enums.Gt,
 		Target:    0,
 	}
-	// (Should be false) Bitkub ETH > someBigNum
-	ethBitkubLtB = Alert{
+	ethBitkubLt5 = Alert{
 		Security: Security{
 			Tick: "ETH",
 			Src:  enums.Bitkub,
 		},
 		QuoteType: enums.Last,
 		Condition: enums.Lt,
-		Target:    someBigNum,
+		Target:    5,
 	}
 
-	tests = map[Alert]bool{
-		// Note: Match() will send false to a channel
-		// only when there's an error when getting quotes
-		ethSatangGt0: true,
-		ethSatangLtB: true,
-		ethBitkubGt0: true,
-		ethBitkubLtB: true,
+	tests = map[Alert]map[fetch.Quoter]bool{
+		// alert if: mk > 0
+		// mk is now someBigNum
+		// -> true
+		ethSatangGt0: {
+			someBigQuote: true,
+		},
+		// alert if: mk < 5
+		// mk is now someSmallNum
+		// -> true
+		ethSatangLt5: {
+			someSmallQuote: true,
+		},
+		// alert if: mk > 0
+		// mk is now someBigNum
+		// -> true
+		ethBitkubGt0: {
+			someBigQuote: true,
+		},
+		// alert if: mk < 5
+		// mk is now someBigNum
+		// -> false
+		ethBitkubLt5: {
+			someBigQuote: true,
+		},
 	}
 )
 
 func TestMatch(t *testing.T) {
-	fail := func() {
+	fail := func(c chan bool) {
+		close(c)
 		t.Fatal("results not expected")
 	}
 	var wg sync.WaitGroup
-	for alert, expectedResult := range tests {
+	for alert, resultMap := range tests {
 		wg.Add(1)
-		go func(a Alert, b bool) {
-			go func(expected bool) {
+		go func(a Alert, rm map[fetch.Quoter]bool) {
+			defer wg.Done()
+			for q, b := range rm {
 				c := make(chan bool)
-				defer wg.Done()
-				go Match(&a, c)
-				go func(e bool) {
+				e := make(chan error)
+				go Match(&a, c, e, q)
+				go func(e bool, mk fetch.Quoter) {
+					j, _ := json.Marshal(a)
+					js := string(j)
 					for m := range c {
-						// Marshal our alert into JSON
-						j, _ := json.Marshal(a)
-						js := string(j)
+						t.Log(
+							"alert", js,
+							"market", mk,
+							"expected", e,
+							"actual", m,
+						)
 						if m != e {
-							t.Log(
-								"alert", js,
-								"expected", e,
-								"actual", m,
-							)
-							fail()
+							fail(c)
 						}
 					}
-				}(expected)
-			}(b)
-		}(alert, expectedResult)
+				}(b, q)
+			}
+		}(alert, resultMap)
 	}
-	time.Sleep(time.Second)
 	wg.Wait()
+	time.Sleep(2 * time.Second)
+}
+
+type quote struct {
+	bid  float64
+	ask  float64
+	last float64
+}
+
+func (q quote) Bid() (float64, error) {
+	return q.bid, nil
+}
+func (q quote) Ask() (float64, error) {
+	return q.ask, nil
+}
+func (q quote) Last() (float64, error) {
+	return q.last, nil
 }

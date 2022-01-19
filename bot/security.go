@@ -6,6 +6,6 @@ import (
 
 // Security is a struct storing info about how to get the quotes.
 type Security struct {
-	Tick string
-	Src  enums.Src
+	Tick string    `json:"symbol" yaml:"Symbol"`
+	Src  enums.Src `json:"source" yaml:"Source"`
 }

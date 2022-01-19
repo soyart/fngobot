@@ -31,18 +31,27 @@ func (h *handler) SendHandlers() {
 
 func (h *handler) yaml() string {
 	// This type is only for marshaling YAML
+	type prettyAlert struct {
+		Security  bot.Security `yaml:"Security,omitempty"`
+		Condition string       `yaml:"Condition,omitempty"`
+		Target    float64      `yaml:"Target,omitempty"`
+	}
 	type prettyHandler struct {
 		Uuid  string         `yaml:"UUID,omitempty"`
 		Start string         `yaml:"Start,omitempty"`
 		Quote []bot.Security `yaml:"Quote,omitempty"`
 		Track []bot.Security `yaml:"Track,omitempty"`
-		Alert bot.Security   `yaml:"Alert,omitempty"`
+		Alert prettyAlert    `yaml:"Alert,omitempty"`
 	}
 	thisHandler := prettyHandler{
 		Uuid:  h.Uuid,
 		Quote: h.Cmd.Quote.Securities,
 		Track: h.Cmd.Track.Securities,
-		Alert: h.Cmd.Alert.Security,
+		Alert: prettyAlert{
+			Security:  h.GetCmd().Alert.Security,
+			Condition: h.GetCmd().Alert.GetCondStr(),
+			Target:    h.GetCmd().Alert.Target,
+		},
 		Start: h.Start.Format(timeFormat),
 	}
 	y, _ := yaml.Marshal(&thisHandler)
