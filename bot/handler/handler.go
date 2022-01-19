@@ -123,7 +123,7 @@ func (h Handlers) Stop(uuid string) (i int, ok bool) {
 func Remove(senderId int64, idx int) {
 	SenderHandlers[senderId] = append(
 		SenderHandlers[senderId][:idx],
-		SenderHandlers[senderId][:idx+1]...,
+		SenderHandlers[senderId][idx+1:]...,
 	)
 }
 
