@@ -19,11 +19,11 @@ func (h *handler) SendHandlers() {
 		}
 	}
 	if len(runningHandlers) > 0 {
-		var s string
+		var msg string
 		for _, runningHandler := range runningHandlers {
-			s = s + runningHandler.yaml()
+			msg = msg + runningHandler.yaml()
 		}
-		h.send(s)
+		h.send(msg)
 		return
 	}
 	h.send("No active handlers found")

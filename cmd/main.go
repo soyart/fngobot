@@ -78,7 +78,7 @@ func main() {
 			Command: parse.QuoteCmd,
 			Chat:    c.Text(),
 		}.Parse()
-		h := handler.NewHandler(b, c.Message(), conf.BotConfig, &cmd)
+		h := handler.New(b, c.Message(), conf.BotConfig, &cmd)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
@@ -93,7 +93,7 @@ func main() {
 			Command: parse.TrackCmd,
 			Chat:    c.Text(),
 		}.Parse()
-		h := handler.NewHandler(b, c.Message(), conf.BotConfig, &cmd)
+		h := handler.New(b, c.Message(), conf.BotConfig, &cmd)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
@@ -108,7 +108,7 @@ func main() {
 			Command: parse.AlertCmd,
 			Chat:    c.Text(),
 		}.Parse()
-		h := handler.NewHandler(b, c.Message(), conf.BotConfig, &cmd)
+		h := handler.New(b, c.Message(), conf.BotConfig, &cmd)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
@@ -131,7 +131,7 @@ func main() {
 			Command: parse.HandlersCmd,
 			Chat:    c.Text(),
 		}.Parse()
-		h := handler.NewHandler(b, c.Message(), conf.BotConfig, &cmd)
+		h := handler.New(b, c.Message(), conf.BotConfig, &cmd)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
@@ -156,8 +156,10 @@ func main() {
 	/* Catch-all help message for unhandled text */
 	b.Handle(tb.OnText, func(c tb.Context) error {
 		log.Println(c.Text())
-		b.Send(c.Recipient(), fmt.Sprintf("wut? %s", c.Text()))
-		b.Send(c.Recipient(), "Invalid argument, see /help")
+		b.Send(
+			c.Recipient(),
+			fmt.Sprintf("wut? %s\nSee /help for help", c.Text()),
+		)
 		return nil
 	})
 

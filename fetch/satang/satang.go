@@ -91,7 +91,7 @@ func parse(q *quote, val interface{}, bidAsk int) error {
 
 // Get fetches data from Satang JSON API,
 // and parses the fetched JSON into Quote struct
-func Get(tick string) (*quote, error) {
+func Get(tick string) (fetch.Quoter, error) {
 
 	/* Documentation for Satang:
 	 * https://docs.satangcorp.com/apis/public/orders */

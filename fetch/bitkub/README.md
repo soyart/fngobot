@@ -3,33 +3,49 @@ The file `bitkub.go` defines `Get()` function and struct `Quote`.
 
 `Quote` currently has 6 fields: `Last` (JSON: last), `Bid` (JSON: highestBid), `Ask` (JSON: lowestAsk), `High` (JSON: high24hr), `Low` (JSON: low24hr), and `Change` (JSON: percentageChange).
 
-`Get()` fetches the API data from Bitkub.com in JSON, parses that JSON data into a Go object (struct `Quote`) before returning the pointer to that object *if* the given ticker symbol `tick` is valid.
+`Get()` fetches the API data from Bitkub.com in JSON, parses that JSON data into a Go object (struct `Quote`) before returning the address of that object *if* the given ticker symbol `tick` is valid.
 
 If the ticker symbol is invalid and cannot be found in the JSON data, or an error was encountered, `Get()` returns `nil` and a custom error.
 
 ## Example
+```
+package main
 
-    package main
+import (
+	"fmt"
 
-	import (
-		"fmt"
-		"github.com/artnoi43/fngobot/api"
-		"github.com/artnoi43/fngobot/api/bitkub"
-	)
+	"github.com/artnoi43/fngobot/fetch/bitkub"
+)
 
-	func main() {
-		tick := "BTC"
-		q, err := bitkub.Get(tick)
-		if err == api.NotFound {
-			fmt.Printf("Ticker not found in JSON", tick)
-			panic(err)
-		} else if err != nil {
-			panic(err)
-		}
-
-		fmt.Printf("Current quote on %s:\nLast: %f\nBid: %f\nAsk: %f\n",
-			tick, q.Last, q.Bid, q.Ask)
+func main() {
+	tick := "BTC"
+	q, err := bitkub.Get(tick)
+	if err != nil {
+		panic(err)
 	}
+
+	last, err := q.Last()
+	if err != nil {
+		panic(err)
+	}
+	bid, err := q.Bid()
+	if err != nil {
+		panic(err)
+	}
+	ask, err := q.Ask()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf(
+		"Current quote on %s:\nLast: %f\nBid: %f\nAsk: %f\n",
+		tick,
+		last,
+		bid,
+		ask,
+	)
+}
+```
 
 ## JSON API
 

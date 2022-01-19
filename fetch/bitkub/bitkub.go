@@ -69,7 +69,7 @@ func (q *quote) Ask() (float64, error) {
 
 // Get fetches data from Bitkub JSON API,
 // and parses the fetched JSON into quote struct
-func Get(tick string) (*quote, error) {
+func Get(tick string) (fetch.Quoter, error) {
 
 	/* Documentation for Bitkub:
 	 * https://github.com/bitkub/bitkub-official fetch-docs */

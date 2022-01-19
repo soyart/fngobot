@@ -45,10 +45,9 @@ type helpCommand struct {
 type quoteCommand struct {
 	Securities []bot.Security `json:"securities"`
 }
-
 type trackCommand struct {
-	quoteCommand `json:"quote"`
-	TrackTimes   int `json:"track_times"`
+	quoteCommand
+	TrackTimes int `json:"track_times"`
 }
 
 // BotCommand is derived from UserCommand by parsing with Parse()

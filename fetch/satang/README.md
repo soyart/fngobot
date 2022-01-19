@@ -8,28 +8,44 @@ The file `satang.go` defines `Get()` function struct `Quote`
 If the ticker symbol is invalid and cannot be found in the JSON data, or an error was encountered, `Get()` returns `nil` and a custom error.
 
 ## Example
+```
+package main
 
-    package main
+import (
+	"fmt"
 
-	import (
-		"fmt"
-		"github.com/artnoi43/fngobot/api"
-		"github.com/artnoi43/fngobot/api/satang"
-	)
+	"github.com/artnoi43/fngobot/fetch/satang"
+)
 
-	func main() {
-		tick := "BTC"
-		q, err := satang.Get(tick)
-		if err == api.NotFound {
-			fmt.Printf("%s not found in JSON", tick)
-			panic(err)
-		} else if err ! nil {
-			panic(err)
-		}
-
-		fmt.Printf("Current quote on %s:\nBid: %f\nAsk: %f\n",
-			tick, q.Bid, q.Ask)
+func main() {
+	tick := "BTC"
+	q, err := satang.Get(tick)
+	if err != nil {
+		panic(err)
 	}
+
+	last, err := q.Last()
+	if err != nil {
+		log.Println(err.Error())
+	}
+	bid, err := q.Bid()
+	if err != nil {
+		log.Println(err.Error())
+	}
+	ask, err := q.Ask()
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	fmt.Printf(
+		"Current quote on %s:\nLast: %f\nBid: %f\nAsk: %f\n",
+		tick,
+		last,
+		bid,
+		ask,
+	)
+}
+```
 
 ## JSON API
 

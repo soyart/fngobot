@@ -108,7 +108,7 @@ func (h *Handlers) Stop(uuid string) (i int, ok bool) {
 }
 
 // NewHandler returns a new handler and appends it to BotHandlers
-func NewHandler(b *tb.Bot, m *tb.Message, conf Config, cmd *parse.BotCommand) Handler {
+func New(b *tb.Bot, m *tb.Message, conf Config, cmd *parse.BotCommand) Handler {
 	uuid := strings.Split(uuid.NewString(), "-")[0]
 	quit := make(chan bool, 1)
 	log.Printf("[%s]: %s (from %d)\n", uuid, m.Text, m.Sender.ID)

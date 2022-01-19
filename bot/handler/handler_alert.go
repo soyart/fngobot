@@ -10,8 +10,12 @@ import (
 // PriceAlert sends alerts to users if a condition is matched.
 func (h *handler) PriceAlert(a bot.Alert, conf Config) {
 	// Notify user of the handler
-	startMsg := printer.Sprintf("Your alert handler ID is %s\nMessage: %s\nTime: %s)",
-		h.Uuid, h.Msg.Text, h.Msg.Time().Format(timeFormat))
+	startMsg := printer.Sprintf(
+		"Your alert handler ID is %s\nMessage: %s\nTime: %s)",
+		h.Uuid,
+		h.Msg.Text,
+		h.Msg.Time().Format(timeFormat),
+	)
 	h.send(startMsg)
 
 	ticker := time.NewTicker(time.Duration(conf.AlertInterval) * time.Second)
@@ -30,9 +34,15 @@ func (h *handler) PriceAlert(a bot.Alert, conf Config) {
 			a.Match(matched)
 		case m := <-matched:
 			if m {
-				str := "ID: %s\nALERT!\n%s (%s) is now %s %f\non %s"
-				msg := printer.Sprintf(str,
-					h.Uuid, a.Security.Tick, a.GetQuoteTypeStr(), a.GetCondStr(), a.Target, a.GetSrcStr())
+				msg := printer.Sprintf(
+					"ID: %s\nALERT!\n%s (%s) is now %s %f\non %s",
+					h.Uuid,
+					a.Security.Tick,
+					a.GetQuoteTypeStr(),
+					a.GetCondStr(),
+					a.Target,
+					a.GetSrcStr(),
+				)
 				h.send(msg)
 				// Also send quote to user
 				h.SendQuote([]bot.Security{a.Security})
@@ -41,7 +51,10 @@ func (h *handler) PriceAlert(a bot.Alert, conf Config) {
 		}
 	}
 	// Alert user when done
-	doneStr := "ID: %s\nAlert done for %s"
-	h.send(printer.Sprintf(doneStr, h.Uuid, a.Security.Tick))
+	h.send(printer.Sprintf(
+		"ID: %s\nAlert done for %s",
+		h.Uuid,
+		a.Security.Tick,
+	))
 	log.Printf("[%s]: Alert done\n", h.Uuid)
 }

@@ -8,6 +8,13 @@ import (
 	"net/http"
 )
 
+// Quoter is returned by all Get functions
+type Quoter interface {
+	Last() (float64, error)
+	Bid() (float64, error)
+	Ask() (float64, error)
+}
+
 var (
 	// ErrNotFound indicates the ticker symbol is not found in JSON data
 	ErrNotFound error = errors.New("Ticker not found in JSON")
