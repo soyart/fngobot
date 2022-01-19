@@ -74,6 +74,12 @@ var (
 		ethSatangLt5: {
 			someSmallQuote: true,
 		},
+		// alert if: mk < 5
+		// mk is now someBigNum
+		// -> false
+		ethBitkubLt5: {
+			someBigQuote: false,
+		},
 		// alert if: mk > 0
 		// mk is now someBigNum
 		// -> true
@@ -81,10 +87,16 @@ var (
 			someBigQuote: true,
 		},
 		// alert if: mk < 5
+		// mk is now someSmallNum
+		// -> true
+		ethBitkubLt5: {
+			someSmallQuote: true,
+		},
+		// alert if: mk < 5
 		// mk is now someBigNum
 		// -> false
 		ethBitkubLt5: {
-			someBigQuote: true,
+			someBigQuote: false,
 		},
 	}
 )
@@ -107,13 +119,13 @@ func TestMatch(t *testing.T) {
 					j, _ := json.Marshal(a)
 					js := string(j)
 					for m := range c {
-						t.Log(
-							"alert", js,
-							"market", mk,
-							"expected", e,
-							"actual", m,
-						)
 						if m != e {
+							t.Log(
+								"alert", js,
+								"market", mk,
+								"expected", e,
+								"actual", m,
+							)
 							fail(c)
 						}
 					}
@@ -121,8 +133,8 @@ func TestMatch(t *testing.T) {
 			}
 		}(alert, resultMap)
 	}
+	time.Sleep(20 * time.Millisecond)
 	wg.Wait()
-	time.Sleep(2 * time.Second)
 }
 
 type quote struct {
