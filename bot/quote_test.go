@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"sync"
 	"testing"
 
 	"github.com/artnoi43/fngobot/enums"
@@ -18,10 +19,21 @@ func TestQuote(t *testing.T) {
 		{Tick: "bbl.bk", Src: enums.Yahoo},
 		{Tick: "gc=f", Src: enums.Yahoo},
 	}
+	var wg sync.WaitGroup
 	for _, s := range securities {
-		_, err := s.Quote()
-		if err != nil {
-			t.Errorf("error getting quote for %s from %s: %v\n", s.Tick, s.GetSrcStr(), err.Error())
-		}
+		wg.Add(1)
+		go func(security *Security) {
+			defer wg.Done()
+			_, err := security.Quote()
+			if err != nil {
+				t.Errorf(
+					"error getting quote for %s from %s: %v\n",
+					security.Tick,
+					security.GetSrcStr(),
+					err.Error(),
+				)
+			}
+		}(s)
 	}
+	wg.Wait()
 }
