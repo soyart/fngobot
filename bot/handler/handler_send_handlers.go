@@ -12,6 +12,7 @@ func (h *handler) SendHandlers() {
 	var nullChecker = &parse.BotCommand{}
 	var runningHandlers Handlers
 	for _, h := range SenderHandlers[h.Msg.Sender.ID] {
+		// Discard null struct
 		if !reflect.DeepEqual(h.GetCmd(), nullChecker) {
 			if h.isRunning() {
 				runningHandlers = append(runningHandlers, h)
@@ -19,6 +20,7 @@ func (h *handler) SendHandlers() {
 		}
 	}
 	if len(runningHandlers) > 0 {
+		// Use a for loop to append YAML string
 		var msg string
 		for _, runningHandler := range runningHandlers {
 			msg = msg + runningHandler.yaml()
@@ -30,7 +32,7 @@ func (h *handler) SendHandlers() {
 }
 
 func (h *handler) yaml() string {
-	// This type is only for marshaling YAML
+	// These types are only for marshaling YAML
 	type prettyAlert struct {
 		Security  bot.Security `yaml:"Security,omitempty"`
 		Condition string       `yaml:"Condition,omitempty"`
