@@ -23,6 +23,7 @@ func (h *handler) PriceAlert(alert bot.Alert, conf Config) {
 	ticker := time.NewTicker(
 		time.Duration(conf.AlertInterval) * time.Second,
 	)
+	defer ticker.Stop()
 	// First alert right away
 	bot.GetQuoteAndAlert(&alert, matchedChan, errChan)
 	// Then we range over the channels
