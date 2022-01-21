@@ -114,7 +114,7 @@ func (c UserCommand) Parse() (cmd BotCommand, parseError ParseError) {
 		}
 		cmd.Track.TrackTimes = r
 	case AlertCmd:
-		cmd.Alert.Security.Tick = chat[idx]
+		cmd.Alert.Security.Tick = strings.ToUpper(chat[idx])
 		cmd.Alert.Security.Src = src
 		targ, err := strconv.ParseFloat(chat[lenChat-1], 64)
 		if err != nil {

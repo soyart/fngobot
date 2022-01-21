@@ -72,7 +72,7 @@ func TestParse(t *testing.T) {
 			Out: BotCommand{
 				Quote: quoteCommand{
 					Securities: []bot.Security{
-						{Tick: "gc=f", Src: enums.Yahoo},
+						{Tick: "GC=F", Src: enums.Yahoo},
 					},
 				},
 			},
@@ -85,7 +85,7 @@ func TestParse(t *testing.T) {
 			Out: BotCommand{
 				Quote: quoteCommand{
 					Securities: []bot.Security{
-						{Tick: "btc", Src: enums.Satang},
+						{Tick: "BTC", Src: enums.Satang},
 					},
 				},
 			},
@@ -98,7 +98,7 @@ func TestParse(t *testing.T) {
 			Out: BotCommand{
 				Quote: quoteCommand{
 					Securities: []bot.Security{
-						{Tick: "btc", Src: enums.Bitkub},
+						{Tick: "BTC", Src: enums.Bitkub},
 					},
 				},
 			},
@@ -112,7 +112,7 @@ func TestParse(t *testing.T) {
 				Track: trackCommand{
 					quoteCommand: quoteCommand{
 						Securities: []bot.Security{
-							{Tick: "gc=f", Src: enums.Yahoo},
+							{Tick: "GC=F", Src: enums.Yahoo},
 						},
 					},
 					TrackTimes: 2,
@@ -128,7 +128,7 @@ func TestParse(t *testing.T) {
 				Track: trackCommand{
 					quoteCommand: quoteCommand{
 						Securities: []bot.Security{
-							{Tick: "btc", Src: enums.Satang},
+							{Tick: "BTC", Src: enums.Satang},
 						},
 					},
 					TrackTimes: 69,
@@ -144,8 +144,8 @@ func TestParse(t *testing.T) {
 				Track: trackCommand{
 					quoteCommand: quoteCommand{
 						Securities: []bot.Security{
-							{Tick: "btc", Src: enums.Bitkub},
-							{Tick: "ada", Src: enums.Bitkub},
+							{Tick: "BTC", Src: enums.Bitkub},
+							{Tick: "ADA", Src: enums.Bitkub},
 						},
 					},
 					TrackTimes: 69,
@@ -159,7 +159,7 @@ func TestParse(t *testing.T) {
 			},
 			Out: BotCommand{
 				Alert: bot.Alert{
-					Security:  bot.Security{Tick: "gc=f", Src: enums.Yahoo},
+					Security:  bot.Security{Tick: "GC=F", Src: enums.Yahoo},
 					Condition: enums.Gt,
 					QuoteType: enums.Last,
 					Target:    0,
@@ -173,7 +173,7 @@ func TestParse(t *testing.T) {
 			},
 			Out: BotCommand{
 				Alert: bot.Alert{
-					Security:  bot.Security{Tick: "gc=f", Src: enums.Yahoo},
+					Security:  bot.Security{Tick: "GC=F", Src: enums.Yahoo},
 					Condition: enums.Gt,
 					QuoteType: enums.Bid,
 					Target:    0,
@@ -187,7 +187,7 @@ func TestParse(t *testing.T) {
 			},
 			Out: BotCommand{
 				Alert: bot.Alert{
-					Security:  bot.Security{Tick: "btc", Src: enums.Satang},
+					Security:  bot.Security{Tick: "BTC", Src: enums.Satang},
 					Condition: enums.Gt,
 					QuoteType: enums.Bid,
 					Target:    112,
@@ -201,7 +201,7 @@ func TestParse(t *testing.T) {
 			},
 			Out: BotCommand{
 				Alert: bot.Alert{
-					Security:  bot.Security{Tick: "btc", Src: enums.Bitkub},
+					Security:  bot.Security{Tick: "BTC", Src: enums.Bitkub},
 					Condition: enums.Lt,
 					QuoteType: enums.Last,
 					Target:    112,
@@ -215,7 +215,7 @@ func TestParse(t *testing.T) {
 			},
 			Out: BotCommand{
 				Alert: bot.Alert{
-					Security:  bot.Security{Tick: "btc", Src: enums.Bitkub},
+					Security:  bot.Security{Tick: "BTC", Src: enums.Bitkub},
 					Condition: enums.Gt,
 					QuoteType: enums.Bid,
 					Target:    112,
