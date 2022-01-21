@@ -34,20 +34,20 @@ const (
 // UserCommand is essentially a chat message.
 // UserCommand.Chat is an int enum
 type UserCommand struct {
-	Command Command
-	Chat    string
+	Command Command `json:"command,omitempty"`
+	Chat    string `json:"chat,omitempty"`
 }
 
 type helpCommand struct {
-	HelpMessage string `json:"help_msg"`
+	HelpMessage string `json:"help_msg,omitempty"`
 }
 
 type quoteCommand struct {
-	Securities []bot.Security `json:"securities"`
+	Securities []bot.Security `json:"securities,omitempty"`
 }
 type trackCommand struct {
 	quoteCommand
-	TrackTimes int `json:"track_times"`
+	TrackTimes int `json:"track_times,omitempty"`
 }
 
 // BotCommand is derived from UserCommand by parsing with Parse()
@@ -55,9 +55,9 @@ type trackCommand struct {
 // as the bot.Alert struct already has all the info needed.
 type BotCommand struct {
 	Help  helpCommand  `json:"-"`
-	Quote quoteCommand `json:"quote"`
-	Track trackCommand `json:"track"`
-	Alert bot.Alert    `json:"alert"`
+	Quote quoteCommand `json:"quote,omitempty"`
+	Track trackCommand `json:"track,omitempty"`
+	Alert bot.Alert    `json:"alert,omitempty"`
 }
 
 // getSrc gets the source from enums,
