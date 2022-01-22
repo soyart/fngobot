@@ -96,7 +96,7 @@ func Get(tick string) (fetch.Quoter, error) {
 	/* Documentation for Satang:
 	 * https://docs.satangcorp.com/apis/public/orders */
 
-	data, err := fetch.Fetch("https://satangcorp.com/api/orderbook-tickers/")
+	data, err := fetch.FetchMapStrInf("https://satangcorp.com/api/orderbook-tickers/")
 	if err != nil {
 		return nil, err
 	}

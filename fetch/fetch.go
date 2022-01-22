@@ -23,8 +23,9 @@ var (
 	ErrNotFound error = errors.New("Ticker not found in JSON")
 )
 
-// Fetch is a generic function used to fetch HTTP response
-func Fetch(url string) (map[string]interface{}, error) {
+// Fetch is a generic function used to fetch a HTTP response.
+// It simply returns the response body
+func Fetch(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -33,8 +34,16 @@ func Fetch(url string) (map[string]interface{}, error) {
 	if resp.StatusCode != http.StatusOK {
 		return nil, errors.Wrap(err, "non-200 status")
 	}
-
 	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	return body, nil
+}
+
+// FetchMapStrInf calls Fetch and return the data as map[string]interface{}
+func FetchMapStrInf(url string) (map[string]interface{}, error) {
+	body, err := Fetch(url)
 	if err != nil {
 		return nil, err
 	}

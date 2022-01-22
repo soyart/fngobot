@@ -85,7 +85,7 @@ func Get(tick string) (fetch.Quoter, error) {
 	}
 	queryString := url.QueryEscape(fmt.Sprintf("sym=%s", tick))
 	u.RawQuery = queryString
-	data, err := fetch.Fetch(u.String())
+	data, err := fetch.FetchMapStrInf(u.String())
 	if err != nil {
 		return nil, errors.Wrap(err, "fetch failed()")
 	}

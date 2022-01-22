@@ -9,7 +9,12 @@ import (
 	"github.com/pkg/errors"
 )
 
-const BASE_URL = "https://api.binance.com/api/v3"
+const BASE_URL = "https://api.binance.com"
+
+type info struct {
+	symbol string
+	url    string
+}
 
 func Get(tick string) (fetch.Quoter, error) {
 	info := info{
@@ -25,7 +30,7 @@ func Get(tick string) (fetch.Quoter, error) {
 		wg.Add(1)
 		go func(k, u string) {
 			defer wg.Done()
-			data, err := fetch.Fetch(u)
+			data, err := fetch.FetchMapStrInf(u)
 			if err != nil {
 				errChan <- err
 			}
@@ -84,9 +89,4 @@ func Get(tick string) (fetch.Quoter, error) {
 		return nil, errors.Errorf("%v", strings.Join(errs, ", "))
 	}
 	return &q, nil
-}
-
-type info struct {
-	symbol string
-	url    string
 }
