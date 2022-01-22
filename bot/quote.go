@@ -5,6 +5,7 @@ import (
 
 	"github.com/artnoi43/fngobot/enums"
 	"github.com/artnoi43/fngobot/fetch"
+	bn "github.com/artnoi43/fngobot/fetch/binance"
 	bk "github.com/artnoi43/fngobot/fetch/bitkub"
 	ct "github.com/artnoi43/fngobot/fetch/crypto"
 	st "github.com/artnoi43/fngobot/fetch/satang"
@@ -22,6 +23,8 @@ func (s *Security) Quote() (q fetch.Quoter, err error) {
 		q, err = st.Get(s.Tick)
 	case enums.Bitkub:
 		q, err = bk.Get(s.Tick)
+	case enums.Binance:
+		q, err = bn.Get(s.Tick)
 	}
 	return
 }

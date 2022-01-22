@@ -103,7 +103,7 @@ func Get(tick string) (fetch.Quoter, error) {
 
 	var q quote
 	var found bool
-	for key, val := range data.(map[string]interface{}) {
+	for key, val := range data {
 		/* Filter ticker */
 		switch key {
 		case tick + "_THB":

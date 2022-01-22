@@ -41,11 +41,15 @@
 package bitkub
 
 import (
+	"fmt"
 	"log"
+	"net/url"
 
 	"github.com/artnoi43/fngobot/fetch"
 	"github.com/pkg/errors"
 )
+
+const URL = "https://bitkub.com/api/market/ticker/"
 
 // quote struct for Bitkub
 type quote struct {
@@ -74,14 +78,21 @@ func Get(tick string) (fetch.Quoter, error) {
 	/* Documentation for Bitkub:
 	 * https://github.com/bitkub/bitkub-official fetch-docs */
 
-	data, err := fetch.Fetch("https://bitkub.com/api/market/ticker/")
+	// @NOTE: Query string for this endpoint does not seem to work
+	u, err := url.Parse(URL)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "parse url failed")
+	}
+	queryString := url.QueryEscape(fmt.Sprintf("sym=%s", tick))
+	u.RawQuery = queryString
+	data, err := fetch.Fetch(u.String())
+	if err != nil {
+		return nil, errors.Wrap(err, "fetch failed()")
 	}
 
 	var found bool
 	var q quote
-	for key0, val0 := range data.(map[string]interface{}) {
+	for key0, val0 := range data {
 		switch key0 {
 		case "data":
 			/* Inner keys and values */

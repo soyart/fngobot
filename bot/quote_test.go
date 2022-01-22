@@ -18,6 +18,7 @@ func TestQuote(t *testing.T) {
 		{Tick: "ada", Src: enums.YahooCrypto},
 		{Tick: "bbl.bk", Src: enums.Yahoo},
 		{Tick: "gc=f", Src: enums.Yahoo},
+		{Tick: "btc", Src: enums.Binance},
 	}
 	var wg sync.WaitGroup
 	for _, s := range securities {

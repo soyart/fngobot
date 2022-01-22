@@ -10,6 +10,7 @@ const (
 	YahooCrypto Src = "yahooCrypto"
 	Satang      Src = "satang"
 	Bitkub      Src = "bitkub"
+	Binance     Src = "binance"
 )
 
 // quote types

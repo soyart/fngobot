@@ -73,6 +73,9 @@ func getSrc(sw string) (idx int, src enums.Src) {
 	case "BITKUB":
 		idx = 2
 		src = enums.Bitkub
+	case "BINANCE", "BN":
+		idx = 2
+		src = enums.Binance
 	default:
 		idx = 1
 		src = enums.Yahoo
@@ -131,10 +134,13 @@ func (c UserCommand) Parse() (cmd BotCommand, parseError ParseError) {
 			cmd.Alert.Condition = enums.Gt
 		}
 
+		// @NOTE: When adding new source, also add it to defLen below
+
 		// Determine if bid/ask or last alert
 		// bid/ask alert will have length = default length + 1
 		defLen := make(map[enums.Src]int)
 		defLen[enums.YahooCrypto] = 5 /* /alert crypto btc-usd > 1 */
+		defLen[enums.Binance] = 5     /* /alert satang btc bid > 1 */
 		defLen[enums.Satang] = 5      /* /alert satang btc bid > 1 */
 		defLen[enums.Bitkub] = 5      /* /alert bitkub btc > 1 */
 		defLen[enums.Yahoo] = 4       /* /alert bbl.bk > 120 */

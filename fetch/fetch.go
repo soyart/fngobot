@@ -2,11 +2,14 @@ package fetch
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/pkg/errors"
 )
+
+type FetchFunc func(string) (interface{}, error)
 
 // Quoter is returned by all Get functions
 type Quoter interface {
@@ -21,12 +24,15 @@ var (
 )
 
 // Fetch is a generic function used to fetch HTTP response
-func Fetch(url string) (interface{}, error) {
+func Fetch(url string) (map[string]interface{}, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.Wrap(err, "non-200 status")
+	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -40,5 +46,5 @@ func Fetch(url string) (interface{}, error) {
 		log.Println("Error parsing JSON: ", err)
 		return nil, err
 	}
-	return f, nil
+	return f.(map[string]interface{}), nil
 }

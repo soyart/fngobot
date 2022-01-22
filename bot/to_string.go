@@ -11,6 +11,8 @@ func (s *Security) GetSrcStr() string {
 		return "Satang"
 	case enums.Bitkub:
 		return "Bitkub"
+	case enums.Binance:
+		return "Binance"
 	default:
 		return "Yahoo Finance"
 	}
