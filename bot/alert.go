@@ -14,6 +14,9 @@ type Alert struct {
 	Target    float64         `json:"target"`
 }
 
+// GetQuoteAndAlert is routinely called with a time.Ticker.
+// It calls Quote() to get current market price, and then
+// calls Match() to compare the target and market price.
 func GetQuoteAndAlert(
 	a *Alert,
 	matched chan<- bool,
@@ -21,15 +24,12 @@ func GetQuoteAndAlert(
 ) {
 	q, err := a.Security.Quote()
 	if err != nil {
-		// false is sent
-		// if Quote() returns an error
 		errChan <- errors.Wrapf(
 			err,
 			"failed to get quote for %v from %v",
 			a.Security.Tick, a.Src,
 		)
 	}
-	// @TODO: use errChan - now it's here for testing
 	Match(a, matched, errChan, q)
 }
 
