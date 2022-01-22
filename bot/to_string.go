@@ -1,20 +1,20 @@
 package bot
 
-import "github.com/artnoi43/fngobot/enums"
+import (
+	"strings"
+
+	"github.com/artnoi43/fngobot/enums"
+)
 
 // GetSrcStr returns source in string based on s.Src
 func (s *Security) GetSrcStr() string {
 	switch s.Src {
-	case enums.YahooCrypto:
-		return "Crypto"
-	case enums.Satang:
-		return "Satang"
-	case enums.Bitkub:
-		return "Bitkub"
-	case enums.Binance:
-		return "Binance"
-	default:
+	case enums.Yahoo:
 		return "Yahoo Finance"
+	case enums.YahooCrypto:
+		return "Yahoo Crypto"
+	default:
+		return strings.Title(string(s.Src))
 	}
 }
 

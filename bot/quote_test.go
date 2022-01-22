@@ -1,13 +1,13 @@
 package bot
 
 import (
-	"sync"
 	"testing"
 
 	"github.com/artnoi43/fngobot/enums"
 )
 
 func TestQuote(t *testing.T) {
+	guard := make(chan struct{}, 4)
 	var securities = []*Security{
 		// keep them ticks lowercase or mixed-case
 		{Tick: "btc", Src: enums.Satang},
@@ -19,12 +19,11 @@ func TestQuote(t *testing.T) {
 		{Tick: "bbl.bk", Src: enums.Yahoo},
 		{Tick: "gc=f", Src: enums.Yahoo},
 		{Tick: "btc", Src: enums.Binance},
+		{Tick: "ada", Src: enums.Coinbase},
 	}
-	var wg sync.WaitGroup
 	for _, s := range securities {
-		wg.Add(1)
+		guard <- struct{}{}
 		go func(security *Security) {
-			defer wg.Done()
 			_, err := security.Quote()
 			if err != nil {
 				t.Errorf(
@@ -34,7 +33,7 @@ func TestQuote(t *testing.T) {
 					err.Error(),
 				)
 			}
+			<-guard
 		}(s)
 	}
-	wg.Wait()
 }

@@ -16,7 +16,7 @@ func TestGetSrc(t *testing.T) {
 		src enums.Src
 	}
 	tests := []struct {
-		In  string
+		In       string
 		Expected getSrcOut
 	}{
 
@@ -55,6 +55,13 @@ func TestGetSrc(t *testing.T) {
 				src: enums.Binance,
 			},
 		},
+		{
+			In: "COINBASE",
+			Expected: getSrcOut{
+				idx: 2,
+				src: enums.Coinbase,
+			},
+		},
 	}
 	for _, test := range tests {
 		idx, src := getSrc(test.In)
@@ -69,217 +76,6 @@ func TestGetSrc(t *testing.T) {
 
 // Test parsing UserCommand into BotCommand
 func TestParse(t *testing.T) {
-	type parseTest struct {
-		In  UserCommand
-		Expected BotCommand
-	}
-	tests := []parseTest{
-		{
-			In: UserCommand{
-				Command: QuoteCmd,
-				Chat:    "/quote gc=f"},
-			Expected: BotCommand{
-				Quote: quoteCommand{
-					Securities: []bot.Security{
-						{
-							Tick: "GC=F",
-							Src: enums.Yahoo,
-						},
-					},
-				},
-			},
-		},
-		{
-			In: UserCommand{
-				Command: QuoteCmd,
-				Chat:    "/quote satang btc",
-			},
-			Expected: BotCommand{
-				Quote: quoteCommand{
-					Securities: []bot.Security{
-						{
-							Tick: "BTC",
-							Src: enums.Satang,
-						},
-					},
-				},
-			},
-		},
-		{
-			In: UserCommand{
-				Command: QuoteCmd,
-				Chat:    "/quote bitkub btc",
-			},
-			Expected: BotCommand{
-				Quote: quoteCommand{
-					Securities: []bot.Security{
-						{
-							Tick: "BTC",
-							Src: enums.Bitkub,
-						},
-					},
-				},
-			},
-		},
-		{
-			In: UserCommand{
-				Command: TrackCmd,
-				Chat:    "/track gc=f 2",
-			},
-			Expected: BotCommand{
-				Track: trackCommand{
-					quoteCommand: quoteCommand{
-						Securities: []bot.Security{
-							{
-								Tick: "GC=F",
-								Src: enums.Yahoo,
-							},
-						},
-					},
-					TrackTimes: 2,
-				},
-			},
-		},
-		{
-			In: UserCommand{
-				Command: TrackCmd,
-				Chat:    "/track satang btc 69",
-			},
-			Expected: BotCommand{
-				Track: trackCommand{
-					quoteCommand: quoteCommand{
-						Securities: []bot.Security{
-							{
-								Tick: "BTC",
-								Src: enums.Satang,
-							},
-						},
-					},
-					TrackTimes: 69,
-				},
-			},
-		},
-		{
-			In: UserCommand{
-				Command: TrackCmd,
-				Chat:    "/track bitkub btc ada 69",
-			},
-			Expected: BotCommand{
-				Track: trackCommand{
-					quoteCommand: quoteCommand{
-						Securities: []bot.Security{
-							{Tick: "BTC", Src: enums.Bitkub},
-							{Tick: "ADA", Src: enums.Bitkub},
-						},
-					},
-					TrackTimes: 69,
-				},
-			},
-		},
-		{
-			In: UserCommand{
-				Command: AlertCmd,
-				Chat:    "/alert gc=f > 0",
-			},
-			Expected: BotCommand{
-				Alert: bot.Alert{
-					Security:  bot.Security{
-						Tick: "GC=F",
-						Src: enums.Yahoo,
-					},
-					Condition: enums.Gt,
-					QuoteType: enums.Last,
-					Target:    0,
-				},
-			},
-		},
-		{
-			In: UserCommand{
-				Command: AlertCmd,
-				Chat:    "/alert gc=f bid > 0",
-			},
-			Expected: BotCommand{
-				Alert: bot.Alert{
-					Security:  bot.Security{
-						Tick: "GC=F",
-						Src: enums.Yahoo,
-					},
-					Condition: enums.Gt,
-					QuoteType: enums.Bid,
-					Target:    0,
-				},
-			},
-		},
-		{
-			In: UserCommand{
-				Command: AlertCmd,
-				Chat:    "/alert satang btc bid > 112",
-			},
-			Expected: BotCommand{
-				Alert: bot.Alert{
-					Security:  bot.Security{
-						Tick: "BTC",
-						Src: enums.Satang,
-					},
-					Condition: enums.Gt,
-					QuoteType: enums.Bid,
-					Target:    112,
-				},
-			},
-		},
-		{
-			In: UserCommand{
-				Command: AlertCmd,
-				Chat:    "/alert bitkub btc < 112",
-			},
-			Expected: BotCommand{
-				Alert: bot.Alert{
-					Security:  bot.Security{
-						Tick: "BTC",
-						Src: enums.Bitkub,
-					},
-					Condition: enums.Lt,
-					QuoteType: enums.Last,
-					Target:    112,
-				},
-			},
-		},
-		{
-			In: UserCommand{
-				Command: AlertCmd,
-				Chat:    "/alert bitkub btc bid > 112",
-			},
-			Expected: BotCommand{
-				Alert: bot.Alert{
-					Security:  bot.Security{
-						Tick: "BTC",
-						Src: enums.Bitkub,
-					},
-					Condition: enums.Gt,
-					QuoteType: enums.Bid,
-					Target:    112,
-				},
-			},
-		},
-		{
-			In: UserCommand{
-				Command: AlertCmd,
-				Chat:    "/alert binance btc bid > 112",
-			},
-			Expected: BotCommand{
-				Alert: bot.Alert{
-					Security:  bot.Security{
-						Tick: "BTC",
-						Src: enums.Binance,
-					},
-					Condition: enums.Gt,
-					QuoteType: enums.Bid,
-					Target:    112,
-				},
-			},
-		},
-	}
-
 	for _, test := range tests {
 		out, err := test.In.Parse()
 		if err != 0 {
@@ -331,3 +127,315 @@ func TestParse(t *testing.T) {
 		}
 	}
 }
+
+type parseTest struct {
+	In       UserCommand
+	Expected BotCommand
+}
+
+var (
+	tests = []parseTest{
+		{
+			In: UserCommand{
+				Command: QuoteCmd,
+				Chat:    "/quote gc=f"},
+			Expected: BotCommand{
+				Quote: quoteCommand{
+					Securities: []bot.Security{
+						{
+							Tick: "GC=F",
+							Src:  enums.Yahoo,
+						},
+					},
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: QuoteCmd,
+				Chat:    "/quote satang btc",
+			},
+			Expected: BotCommand{
+				Quote: quoteCommand{
+					Securities: []bot.Security{
+						{
+							Tick: "BTC",
+							Src:  enums.Satang,
+						},
+					},
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: QuoteCmd,
+				Chat:    "/quote bitkub btc",
+			},
+			Expected: BotCommand{
+				Quote: quoteCommand{
+					Securities: []bot.Security{
+						{
+							Tick: "BTC",
+							Src:  enums.Bitkub,
+						},
+					},
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: QuoteCmd,
+				Chat:    "/quote binance btc"},
+			Expected: BotCommand{
+				Quote: quoteCommand{
+					Securities: []bot.Security{
+						{
+							Tick: "BTC",
+							Src:  enums.Binance,
+						},
+					},
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: QuoteCmd,
+				Chat:    "/quote coinbase ada"},
+			Expected: BotCommand{
+				Quote: quoteCommand{
+					Securities: []bot.Security{
+						{
+							Tick: "ADA",
+							Src:  enums.Coinbase,
+						},
+					},
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: TrackCmd,
+				Chat:    "/track gc=f 2",
+			},
+			Expected: BotCommand{
+				Track: trackCommand{
+					quoteCommand: quoteCommand{
+						Securities: []bot.Security{
+							{
+								Tick: "GC=F",
+								Src:  enums.Yahoo,
+							},
+						},
+					},
+					TrackTimes: 2,
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: TrackCmd,
+				Chat:    "/track satang btc 69",
+			},
+			Expected: BotCommand{
+				Track: trackCommand{
+					quoteCommand: quoteCommand{
+						Securities: []bot.Security{
+							{
+								Tick: "BTC",
+								Src:  enums.Satang,
+							},
+						},
+					},
+					TrackTimes: 69,
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: TrackCmd,
+				Chat:    "/track bitkub btc ada 69",
+			},
+			Expected: BotCommand{
+				Track: trackCommand{
+					quoteCommand: quoteCommand{
+						Securities: []bot.Security{
+							{Tick: "BTC", Src: enums.Bitkub},
+							{Tick: "ADA", Src: enums.Bitkub},
+						},
+					},
+					TrackTimes: 69,
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: TrackCmd,
+				Chat:    "/track binance btc ada 69",
+			},
+			Expected: BotCommand{
+				Track: trackCommand{
+					quoteCommand: quoteCommand{
+						Securities: []bot.Security{
+							{Tick: "BTC", Src: enums.Binance},
+							{Tick: "ADA", Src: enums.Binance},
+						},
+					},
+					TrackTimes: 69,
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: TrackCmd,
+				Chat:    "/track coinbase btc ada 69",
+			},
+			Expected: BotCommand{
+				Track: trackCommand{
+					quoteCommand: quoteCommand{
+						Securities: []bot.Security{
+							{Tick: "BTC", Src: enums.Coinbase},
+							{Tick: "ADA", Src: enums.Coinbase},
+						},
+					},
+					TrackTimes: 69,
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: AlertCmd,
+				Chat:    "/alert gc=f > 0",
+			},
+			Expected: BotCommand{
+				Alert: bot.Alert{
+					Security: bot.Security{
+						Tick: "GC=F",
+						Src:  enums.Yahoo,
+					},
+					Condition: enums.Gt,
+					QuoteType: enums.Last,
+					Target:    0,
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: AlertCmd,
+				Chat:    "/alert gc=f bid > 0",
+			},
+			Expected: BotCommand{
+				Alert: bot.Alert{
+					Security: bot.Security{
+						Tick: "GC=F",
+						Src:  enums.Yahoo,
+					},
+					Condition: enums.Gt,
+					QuoteType: enums.Bid,
+					Target:    0,
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: AlertCmd,
+				Chat:    "/alert satang btc bid > 112",
+			},
+			Expected: BotCommand{
+				Alert: bot.Alert{
+					Security: bot.Security{
+						Tick: "BTC",
+						Src:  enums.Satang,
+					},
+					Condition: enums.Gt,
+					QuoteType: enums.Bid,
+					Target:    112,
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: AlertCmd,
+				Chat:    "/alert bitkub btc < 112",
+			},
+			Expected: BotCommand{
+				Alert: bot.Alert{
+					Security: bot.Security{
+						Tick: "BTC",
+						Src:  enums.Bitkub,
+					},
+					Condition: enums.Lt,
+					QuoteType: enums.Last,
+					Target:    112,
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: AlertCmd,
+				Chat:    "/alert bitkub btc bid > 112",
+			},
+			Expected: BotCommand{
+				Alert: bot.Alert{
+					Security: bot.Security{
+						Tick: "BTC",
+						Src:  enums.Bitkub,
+					},
+					Condition: enums.Gt,
+					QuoteType: enums.Bid,
+					Target:    112,
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: AlertCmd,
+				Chat:    "/alert binance btc bid > 112",
+			},
+			Expected: BotCommand{
+				Alert: bot.Alert{
+					Security: bot.Security{
+						Tick: "BTC",
+						Src:  enums.Binance,
+					},
+					Condition: enums.Gt,
+					QuoteType: enums.Bid,
+					Target:    112,
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: AlertCmd,
+				Chat:    "/alert coinbase btc bid > 112",
+			},
+			Expected: BotCommand{
+				Alert: bot.Alert{
+					Security: bot.Security{
+						Tick: "BTC",
+						Src:  enums.Coinbase,
+					},
+					Condition: enums.Gt,
+					QuoteType: enums.Bid,
+					Target:    112,
+				},
+			},
+		},
+		{
+			In: UserCommand{
+				Command: AlertCmd,
+				Chat:    "/alert coinbase btc < 112",
+			},
+			Expected: BotCommand{
+				Alert: bot.Alert{
+					Security: bot.Security{
+						Tick: "BTC",
+						Src:  enums.Coinbase,
+					},
+					Condition: enums.Lt,
+					QuoteType: enums.Last,
+					Target:    112,
+				},
+			},
+		},
+	}
+)

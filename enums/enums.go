@@ -11,6 +11,7 @@ const (
 	Satang      Src = "satang"
 	Bitkub      Src = "bitkub"
 	Binance     Src = "binance"
+	Coinbase    Src = "coinbase"
 )
 
 // quote types

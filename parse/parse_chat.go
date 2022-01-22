@@ -35,7 +35,7 @@ const (
 // UserCommand.Chat is an int enum
 type UserCommand struct {
 	Command Command `json:"command,omitempty"`
-	Chat    string `json:"chat,omitempty"`
+	Chat    string  `json:"chat,omitempty"`
 }
 
 type helpCommand struct {
@@ -76,6 +76,9 @@ func getSrc(sw string) (idx int, src enums.Src) {
 	case "BINANCE", "BN":
 		idx = 2
 		src = enums.Binance
+	case "COINBASE":
+		idx = 2
+		src = enums.Coinbase
 	default:
 		idx = 1
 		src = enums.Yahoo
@@ -140,7 +143,8 @@ func (c UserCommand) Parse() (cmd BotCommand, parseError ParseError) {
 		// bid/ask alert will have length = default length + 1
 		defLen := make(map[enums.Src]int)
 		defLen[enums.YahooCrypto] = 5 /* /alert crypto btc-usd > 1 */
-		defLen[enums.Binance] = 5     /* /alert satang btc bid > 1 */
+		defLen[enums.Coinbase] = 5    /* /alert coinbase btc bid > 1 */
+		defLen[enums.Binance] = 5     /* /alert binance btc bid > 1 */
 		defLen[enums.Satang] = 5      /* /alert satang btc bid > 1 */
 		defLen[enums.Bitkub] = 5      /* /alert bitkub btc > 1 */
 		defLen[enums.Yahoo] = 4       /* /alert bbl.bk > 120 */
