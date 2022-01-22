@@ -11,24 +11,9 @@ import (
 
 const BASE_URL = "https://api.binance.com/api/v3"
 
-type quote struct {
-	last float64
-	bid  float64
-	ask  float64
-}
-
-func (q *quote) Last() (float64, error) {
-	return q.last, nil
-}
-func (q *quote) Bid() (float64, error) {
-	return q.bid, nil
-}
-func (q *quote) Ask() (float64, error) {
-	return q.ask, nil
-}
-
 func Get(tick string) (fetch.Quoter, error) {
 	info := info{
+		// Default to USDT pair
 		symbol: tick + "USDT",
 		url:    BASE_URL,
 	}
@@ -48,29 +33,38 @@ func Get(tick string) (fetch.Quoter, error) {
 			// @TODO: figure out how to handle empty interface
 			switch k {
 			case "price":
-				for key0, val0 := range data {
-					switch key0 {
+				for key, val := range data {
+					switch key {
 					case "price":
-						last, err := strconv.ParseFloat(val0.(string), 64)
+						last, err := strconv.ParseFloat(val.(string), 64)
 						if err != nil {
-							errChan <- errors.Wrap(err, "failed to parse last to float")
+							errChan <- errors.Wrap(
+								err,
+								"failed to parse last to float",
+							)
 						}
 						q.last = last
 					}
 				}
 			case "depth":
-				for key0, val0 := range data {
-					switch key0 {
+				for key, val := range data {
+					switch key {
 					case "bidPrice":
-						bid, err := strconv.ParseFloat(val0.(string), 64)
+						bid, err := strconv.ParseFloat(val.(string), 64)
 						if err != nil {
-							errChan <- errors.Wrap(err, "failed to parse bid to float")
+							errChan <- errors.Wrap(
+								err,
+								"failed to parse bid to float",
+							)
 						}
 						q.bid = bid
 					case "askPrice":
-						ask, err := strconv.ParseFloat(val0.(string), 64)
+						ask, err := strconv.ParseFloat(val.(string), 64)
 						if err != nil {
-							errChan <- errors.Wrap(err, "failed to parse ask to float")
+							errChan <- errors.Wrap(
+								err,
+								"failed to parse ask to float",
+							)
 						}
 						q.ask = ask
 					}
