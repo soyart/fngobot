@@ -20,13 +20,13 @@ For Yahoo! Finance cryptocurrency API. This source is activated with a `crypto` 
 FnGoBot's [Binance](https://binance.com) API data fetcher. This source is activated with a `binance` switch in the command.
 
 ## `fetch/coinbase/coinbase.go`
-FnGoBot's [Coinbase](https://coinbase.com) API data fetcher. This source is activated with a `coinbase` switch in the command.
+FnGoBot's [Coinbase](https://coinbase.com) API data fetcher. This source is activated with a `coinbase` switch in the command. Coinbase quotes are currently THB denominated, although this may change in the future, perhaps with adding currency configuration.
 
 ## `fetch/satang/satang.go`
-FnGoBot's [satangcorp.com](https://satangcorp.com) API data fetcher. This source is activated with a `satang` switch in the command.
+FnGoBot's [satangcorp.com](https://satangcorp.com) API data fetcher. This source is activated with a `satang` switch in the command. Satang quotes are only THB denominated
 
 ## `fetch/bitkub/bitkub.go`
-FnGoBot's [bitkub.com](https://bitkub.com) API data fetcher. This source is activated with a `bitkub` switch in the command.
+FnGoBot's [bitkub.com](https://bitkub.com) API data fetcher. This source is activated with a `bitkub` switch in the command. Bitkub quotes are only THB denominated.
 
 ## Running your own bot
 - Clone this repository
