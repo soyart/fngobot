@@ -1,7 +1,7 @@
 # FnGoBot
 A simple, stupid command-line-like Telegram chatbot for tracking financial market quotes written in Go
 
-The bot is made possible with [this amazing Go Telegram bot library](https://gopkg.in/tucnak/telebot.v3). It fetches quotes from Yahoo! Finance (via [finance-go](https://github.com/piquette/finance-go)), [Satang](https://satangcorp.com), and [Bitkub](https://bitkub.com).
+The bot is made possible with [this amazing Go Telegram bot library](https://gopkg.in/tucnak/telebot.v3). It fetches quotes from Yahoo! Finance (via [finance-go](https://github.com/piquette/finance-go)), [Binance](https://binance.com), [Coinbase](https://coinbase.com), [Satang](https://satangcorp.com), and [Bitkub](https://bitkub.com).
 
 I try to keep the code small *and the user interface command-line-like*.
 
@@ -15,6 +15,12 @@ For Yahoo! Finance API. This is the default security quote source.
 
 ## `github.com/piquette/finance-go/crypto`
 For Yahoo! Finance cryptocurrency API. This source is activated with a `crypto` switch in the command.
+
+## `fetch/binance/binance.go`
+FnGoBot's [Binance](https://binance.com) API data fetcher. This source is activated with a `binance` switch in the command.
+
+## `fetch/coinbase/coinbase.go`
+FnGoBot's [Coinbase](https://coinbase.com) API data fetcher. This source is activated with a `coinbase` switch in the command.
 
 ## `fetch/satang/satang.go`
 FnGoBot's [satangcorp.com](https://satangcorp.com) API data fetcher. This source is activated with a `satang` switch in the command.
@@ -81,7 +87,7 @@ The example below will track BTC-USD crypto pair for 2 times, each one minute ap
 
 The general syntax for `/alert` is
 
-    /alert [source switch] <ticker> [bid/ask switch] <greater/lesser> <target price>
+    /alert [source switch] <ticker> [bid/ask switch] <greater/smaller> <target price>
 
 The two modes of `/alert` are not supported all quote sources - for example, Yahoo! Finance (crypto) does not support alert with bid/ask, while Satang source does not support alert with last price.
 
@@ -89,7 +95,7 @@ The example below will make the bot alert if BBL.BK 'last' price is greater than
 
     /alert bbl.bk > 120
 
-The example below will make the bot alert if BBL.BK 'ask' price is lesser than 115:
+The example below will make the bot alert if BBL.BK 'ask' price is smaller than 115:
 
     /alert bbl.bk ask < 115
 
@@ -97,7 +103,15 @@ The example below will make the bot alert if BTC-USD (from Yahoo! Finance crypto
 
     /alert crypto btc-usd > 30000
 
-The example below will make the bot alert if BTC-USD (From Bitkub.com) bid price is lesser than 30,000:
+The example below will make the bot alert if BTC (From Binance) last price is smaller than 30,000:
+
+    /alert binance btc < 30000
+
+The example below will make the bot alert if BTC (From Coinbase) bid price is smaller than 30,000:
+
+    /alert coinbase btc-usd bid < 30000
+
+The example below will make the bot alert if BTC (From Bitkub.com) bid price is smaller than 30,000:
 
     /alert bitkub btc-usd bid < 30000
 

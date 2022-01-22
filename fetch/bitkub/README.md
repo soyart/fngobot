@@ -1,9 +1,7 @@
 ## github.com/artnoi43/fngobot/fetch/bitkub
-The file `bitkub.go` defines `Get()` function and struct `Quote`.
+File `bitkub.go` defines `Get()` function, and a struct `quote` implementing `fetch.Quoter` interface.
 
-`Quote` currently has 6 fields: `Last` (JSON: last), `Bid` (JSON: highestBid), `Ask` (JSON: lowestAsk), `High` (JSON: high24hr), `Low` (JSON: low24hr), and `Change` (JSON: percentageChange).
-
-`Get()` fetches the API data from Bitkub.com in JSON, parses that JSON data into a Go object (struct `Quote`) before returning the address of that object *if* the given ticker symbol `tick` is valid.
+`Get()` fetches the API data from Bitkub.com in JSON, parses that JSON data into a Go object (struct `quote`) before returning the address of that object *if* the given ticker symbol `tick` is valid.
 
 If the ticker symbol is invalid and cannot be found in the JSON data, or an error was encountered, `Get()` returns `nil` and a custom error.
 
