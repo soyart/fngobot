@@ -17,12 +17,10 @@ type info struct {
 }
 
 func Get(tick string) (fetch.Quoter, error) {
-	info := info{
-		// Default to USDT pair
+	urlMap := prepareURLs(info{
 		symbol: tick + "USDT",
 		url:    BASE_URL,
-	}
-	urlMap := prepareURLs(info)
+	})
 	var q quote
 	var errChan = make(chan error)
 	var wg sync.WaitGroup

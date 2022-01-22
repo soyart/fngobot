@@ -17,11 +17,10 @@ type info struct {
 }
 
 func Get(tick string) (fetch.Quoter, error) {
-	info := info{
+	urlMap := prepareURLs(info{
 		symbol: tick,
 		url:    BASE_URL,
-	}
-	urlMap := prepareURLs(info)
+	})
 	var q quote
 	var errChan = make(chan error)
 	var wg sync.WaitGroup
