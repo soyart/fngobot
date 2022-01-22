@@ -30,7 +30,7 @@ func Get(tick string) (fetch.Quoter, error) {
 				errChan <- err
 			}
 
-			// @TODO: figure out how to handle empty interface
+			// @TODO: refactor
 			switch k {
 			case "price":
 				for key, val := range data {
