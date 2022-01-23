@@ -2,11 +2,17 @@ package enums
 
 import "fmt"
 
+// Bot types - used in handler.Handle()
+const (
+	QUOTEBOT = iota
+	TRACKBOT
+	ALERTBOT
+	HANDLERS
+)
+
 type Src string
 type QuoteType string
 type Condition string
-
-var ErrInvalidSrc = fmt.Errorf("invalid source")
 
 // quote sources - when adding new sources,
 // also add them to validSrc below
@@ -27,6 +33,8 @@ var validSrc = [6]Src{
 	Binance,
 	Coinbase,
 }
+
+var ErrInvalidSrc = fmt.Errorf("invalid source")
 
 // quote types
 const (

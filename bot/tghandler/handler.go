@@ -7,17 +7,10 @@ import (
 	"time"
 
 	"github.com/artnoi43/fngobot/bot"
+	"github.com/artnoi43/fngobot/enums"
 	"github.com/artnoi43/fngobot/parse"
 	"github.com/google/uuid"
 	tb "gopkg.in/tucnak/telebot.v3"
-)
-
-// Bot types - used in handler.Handle()
-const (
-	QUOTEBOT = iota
-	TRACKBOT
-	ALERTBOT
-	HANDLERS
 )
 
 type Handler interface {
@@ -75,13 +68,13 @@ func (h *handler) GetCmd() *parse.BotCommand {
 // Handle calls different methods on h based on its function parameter
 func (h *handler) Handle(t int) {
 	switch t {
-	case QUOTEBOT:
+	case enums.QUOTEBOT:
 		h.SendQuote(h.Cmd.Quote.Securities)
-	case TRACKBOT:
+	case enums.TRACKBOT:
 		h.Track(h.Cmd.Track.Securities, h.Cmd.Track.TrackTimes, h.Conf)
-	case ALERTBOT:
+	case enums.ALERTBOT:
 		h.PriceAlert(h.Cmd.Alert, h.Conf)
-	case HANDLERS:
+	case enums.HANDLERS:
 		h.SendHandlers()
 	}
 }

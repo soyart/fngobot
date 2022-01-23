@@ -10,6 +10,7 @@ import (
 
 	"github.com/artnoi43/fngobot/bot/tghandler"
 	"github.com/artnoi43/fngobot/config"
+	"github.com/artnoi43/fngobot/enums"
 	"github.com/artnoi43/fngobot/help"
 	"github.com/artnoi43/fngobot/parse"
 
@@ -86,7 +87,7 @@ func main() {
 			h.HandleParsingError(parseError)
 		} else {
 			defer h.Done()
-			h.Handle(tghandler.QUOTEBOT)
+			h.Handle(enums.QUOTEBOT)
 		}
 		return nil
 	})
@@ -101,7 +102,7 @@ func main() {
 			h.HandleParsingError(parseError)
 		} else {
 			defer h.Done()
-			h.Handle(tghandler.TRACKBOT)
+			h.Handle(enums.TRACKBOT)
 		}
 		return nil
 	})
@@ -116,7 +117,7 @@ func main() {
 			h.HandleParsingError(parseError)
 		} else {
 			defer h.Done()
-			h.Handle(tghandler.ALERTBOT)
+			h.Handle(enums.ALERTBOT)
 		}
 		return nil
 	})
@@ -139,7 +140,7 @@ func main() {
 			h.HandleParsingError(parseError)
 		} else {
 			defer h.Done()
-			h.Handle(tghandler.HANDLERS)
+			h.Handle(enums.HANDLERS)
 		}
 		return nil
 	})
