@@ -14,8 +14,9 @@ func (h *handler) Track(
 	conf Config,
 ) {
 	ticker := time.NewTicker(
-		time.Duration(conf.TrackSeconds) * time.Second,
+		time.Duration(conf.TrackInterval) * time.Second,
 	)
+	defer ticker.Stop()
 
 	// First quote right away
 	h.Quote(s)

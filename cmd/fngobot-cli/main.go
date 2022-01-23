@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/artnoi43/fngobot/bot/clihandler"
+	clihandler "github.com/artnoi43/fngobot/bot/handler_cli"
 	"github.com/artnoi43/fngobot/config"
 	"github.com/artnoi43/fngobot/enums"
 	"github.com/artnoi43/fngobot/parse"

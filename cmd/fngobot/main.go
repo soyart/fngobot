@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/artnoi43/fngobot/bot/tghandler"
+	tghandler "github.com/artnoi43/fngobot/bot/handler_telegram"
 	"github.com/artnoi43/fngobot/config"
 	"github.com/artnoi43/fngobot/enums"
 	"github.com/artnoi43/fngobot/help"

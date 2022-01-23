@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/artnoi43/fngobot/bot/tghandler"
+	tghandler "github.com/artnoi43/fngobot/bot/handler_telegram"
 	"github.com/spf13/viper"
 )
 
@@ -12,9 +12,9 @@ type Config struct {
 	// tghandler.Config also has TrackSeconds, AlertConf, AlertInterval
 	Telegram tghandler.Config `mapstructure:"telegram"`
 	// The rest is for CLI
-	TrackSeconds  int `mapstructure:"track_seconds"`
-	AlertTimes    int `mapstructure:"alert_times"`
+	TrackInterval int `mapstructure:"track_seconds"`
 	AlertInterval int `mapstructure:"alert_seconds_interval"`
+	AlertTimes    int `mapstructure:"alert_times"`
 }
 
 func ParseConfigPath(rawPath string) (dir, name, ext string) {

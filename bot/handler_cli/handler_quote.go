@@ -6,6 +6,7 @@ import (
 
 	"github.com/artnoi43/fngobot/bot"
 	"github.com/artnoi43/fngobot/bot/utils"
+	"github.com/artnoi43/fngobot/enums"
 	"github.com/artnoi43/fngobot/fetch"
 )
 
@@ -25,13 +26,13 @@ func (h *handler) Quote(securities []bot.Security) {
 				)
 				return
 			}
-			printQuote(s.Tick, q)
+			printQuote(s.Tick, s.Src, q)
 		}(security)
 	}
 	wg.Wait()
 }
 
-func printQuote(t string, q fetch.Quoter) {
+func printQuote(t string, s enums.Src, q fetch.Quoter) {
 	bid, err := q.Bid()
 	if err != nil {
 		bid = -1
@@ -45,8 +46,8 @@ func printQuote(t string, q fetch.Quoter) {
 		last = -1
 	}
 	utils.Printer.Printf(
-		"Ticker: %s\nBid: %f\nAsk: %f\nLast: %f\n",
-		t, bid, ask, last,
+		"Ticker: %s [%s]\nBid: %f\nAsk: %f\nLast: %f\n",
+		t, s, bid, ask, last,
 	)
 	utils.Printer.Println("===================")
 }
