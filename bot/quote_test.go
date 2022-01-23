@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/artnoi43/fngobot/enums"
@@ -8,6 +9,9 @@ import (
 
 func TestQuote(t *testing.T) {
 	guard := make(chan struct{}, 4)
+	failInvalidSource := func() {
+		t.Fatal("invalid source returned from Quote()")
+	}
 	var securities = []*Security{
 		// keep them ticks lowercase or mixed-case
 		{Tick: "btc", Src: enums.Satang},
@@ -26,12 +30,16 @@ func TestQuote(t *testing.T) {
 		go func(security *Security) {
 			_, err := security.Quote()
 			if err != nil {
-				t.Errorf(
-					"error getting quote for %s from %s: %v\n",
-					security.Tick,
-					security.GetSrcStr(),
-					err.Error(),
-				)
+				if errors.Is(enums.ErrInvalidSrc, err) {
+					failInvalidSource()
+				} else {
+					t.Errorf(
+						"error getting quote for %s from %s: %v\n",
+						security.Tick,
+						security.GetSrcStr(),
+						err.Error(),
+					)
+				}
 			}
 			<-guard
 		}(s)

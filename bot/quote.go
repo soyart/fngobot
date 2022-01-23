@@ -1,7 +1,6 @@
 package bot
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/artnoi43/fngobot/enums"
@@ -32,7 +31,7 @@ func (s *Security) Quote() (q fetch.Quoter, err error) {
 		}
 		return q, nil
 	}
-	return nil, fmt.Errorf(
-		"invalid source %s", s.Src,
-	)
+	// Should not happen
+	// since parsing defaults to Yahoo Finance
+	return nil, enums.ErrInvalidSrc
 }

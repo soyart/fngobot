@@ -1,8 +1,12 @@
 package enums
 
+import "fmt"
+
 type Src string
 type QuoteType string
 type Condition string
+
+var ErrInvalidSrc = fmt.Errorf("invalid source")
 
 // quote sources - when adding new sources,
 // also add them to validSrc below
