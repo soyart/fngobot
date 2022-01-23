@@ -74,7 +74,7 @@ const (
 	HandlersCommand Command = "/handlers"
 )
 
-var CommandMap = map[Command]BotType{
+var BotMap = map[Command]BotType{
 	QuoteCommand:    QUOTEBOT,
 	TrackCommand:    TRACKBOT,
 	AlertCommand:    ALERTBOT,

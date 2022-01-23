@@ -38,7 +38,7 @@ func main() {
 
 	args := os.Args[1:]
 	cmdStr := enums.Command(args[0])
-	targetBot, ok := enums.CommandMap[cmdStr]
+	targetBot, ok := enums.BotMap[cmdStr]
 	if !ok {
 		panic("invalid cmdStr")
 	}
