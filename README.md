@@ -10,11 +10,11 @@ The bot is made possible with [this amazing Go Telegram bot library](https://gop
 ## Running the bot
 For a Telegram chatbot, run:
 
-     go run ./cmd/tg;
+     go run ./cmd/fngobot;
 
 For a CLI program, run:
 
-     go run ./cmd/cli;
+     go run ./cmd/fngobot-cli;
 
 # Quote sources
 ## `github.com/piquette/finance-go`
