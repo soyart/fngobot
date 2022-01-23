@@ -1,13 +1,17 @@
 package config
 
 import (
-	"github.com/artnoi43/fngobot/bot/handler"
+	"github.com/artnoi43/fngobot/bot/tghandler"
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	BotToken  string         `mapstructure:"bot_token"`
-	BotConfig handler.Config `mapstructure:"bot"`
+	// tghandler.Config also has TrackSeconds, AlertConf, AlertInterval
+	Telegram tghandler.Config `mapstructure:"telegram"`
+	// The rest is for CLI
+	TrackSeconds  int `mapstructure:"track_seconds"`
+	AlertTimes    int `mapstructure:"alert_times"`
+	AlertInterval int `mapstructure:"alert_seconds_interval"`
 }
 
 func InitConfig(dir string, file string, ext string) (conf *Config, err error) {

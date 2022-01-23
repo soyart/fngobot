@@ -1,4 +1,4 @@
-package handler
+package tghandler
 
 import (
 	"golang.org/x/text/language"

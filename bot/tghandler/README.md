@@ -1,5 +1,5 @@
-## `github.com/artnoi43/fngobot/bot/handler`
-Package `handler` provides FnGoBot with chat message handlers. The main program initialized a handler with `NewHandler`, which takes in `telebot.Bot` and `telebot.Message`. The initialized handler may be used to perform some methods, like sending quotes, price alerts, or user command error.
+## `github.com/artnoi43/fngobot/bot/tghandler`
+Package `tghandler` provides FnGoBot with chat message handlers. The main program initialized a handler with `NewHandler`, which takes in `telebot.Bot` and `telebot.Message`. The initialized handler may be used to perform some methods, like sending quotes, price alerts, or user command error.
 
 ## Types and interfaces
 The type for FnGoBot handlers is `handler`, which implements the `Handler` interface. There're also `Handlers`, which is a type alias for `[]*Handler`

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/artnoi43/fngobot/bot/handler"
+	"github.com/artnoi43/fngobot/bot/tghandler"
 	"github.com/artnoi43/fngobot/config"
 	"github.com/artnoi43/fngobot/help"
 	"github.com/artnoi43/fngobot/parse"
@@ -50,19 +50,22 @@ func main() {
 		log.Fatalf("Configuration failed\n%v", err)
 	}
 
-	/* Initializes bot b with token conf.BotToken */
+	token := conf.Telegram.BotToken
+	/* Initializes bot b with token */
 	b, err := tb.NewBot(tb.Settings{
 		/* If empty defaults to "https://api.telegram.org" */
 		URL:    "",
-		Token:  conf.BotToken,
+		Token:  conf.Telegram.BotToken,
 		Poller: &tb.LongPoller{Timeout: 10 * time.Second},
 	})
 
+	var msg string
 	if err != nil {
-		log.Fatalf("Failed to initialize bot.\nPossibly invalid token: %s", conf.BotToken)
+		msg = "Failed to initialize bot.\nPossibly invalid token: %s"
 	} else {
-		log.Printf("Initialized bot: %s", conf.BotToken)
+		msg = "Initialized bot: %s"
 	}
+	log.Printf(msg, token)
 
 	b.Handle("/help", func(c tb.Context) error {
 		cmd, _ := parse.UserCommand{
@@ -78,12 +81,12 @@ func main() {
 			Command: parse.QuoteCmd,
 			Chat:    c.Text(),
 		}.Parse()
-		h := handler.New(b, c.Message(), conf.BotConfig, &cmd)
+		h := tghandler.New(b, c.Message(), conf.Telegram, &cmd)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
 			defer h.Done()
-			h.Handle(handler.QUOTEBOT)
+			h.Handle(tghandler.QUOTEBOT)
 		}
 		return nil
 	})
@@ -93,12 +96,12 @@ func main() {
 			Command: parse.TrackCmd,
 			Chat:    c.Text(),
 		}.Parse()
-		h := handler.New(b, c.Message(), conf.BotConfig, &cmd)
+		h := tghandler.New(b, c.Message(), conf.Telegram, &cmd)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
 			defer h.Done()
-			h.Handle(handler.TRACKBOT)
+			h.Handle(tghandler.TRACKBOT)
 		}
 		return nil
 	})
@@ -108,12 +111,12 @@ func main() {
 			Command: parse.AlertCmd,
 			Chat:    c.Text(),
 		}.Parse()
-		h := handler.New(b, c.Message(), conf.BotConfig, &cmd)
+		h := tghandler.New(b, c.Message(), conf.Telegram, &cmd)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
 			defer h.Done()
-			h.Handle(handler.ALERTBOT)
+			h.Handle(tghandler.ALERTBOT)
 		}
 		return nil
 	})
@@ -125,32 +128,32 @@ func main() {
 		return nil
 	})
 
-	// Stop a tracking or alerting handler
+	// Stop a tracking or alerting tghandler
 	b.Handle("/handlers", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
 			Command: parse.HandlersCmd,
 			Chat:    c.Text(),
 		}.Parse()
-		h := handler.New(b, c.Message(), conf.BotConfig, &cmd)
+		h := tghandler.New(b, c.Message(), conf.Telegram, &cmd)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
 			defer h.Done()
-			h.Handle(handler.HANDLERS)
+			h.Handle(tghandler.HANDLERS)
 		}
 		return nil
 	})
 
-	// Stop a tracking or alerting handler
+	// Stop a tracking or alerting tghandler
 	b.Handle("/stop", func(c tb.Context) error {
 		senderId := c.Sender().ID
 		uuids := strings.Split(c.Text(), " ")[1:]
 		for _, uuid := range uuids {
 			// Stop is Handlers method
-			idx, ok := handler.SenderHandlers[senderId].Stop(uuid)
+			idx, ok := tghandler.SenderHandlers[senderId].Stop(uuid)
 			if ok {
 				// Remove is a plain function
-				handler.Remove(senderId, idx)
+				tghandler.Remove(senderId, idx)
 			}
 		}
 		return nil
