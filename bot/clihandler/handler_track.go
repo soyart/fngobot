@@ -2,6 +2,7 @@ package clihandler
 
 import (
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
@@ -36,11 +37,11 @@ func (h *handler) Track(
 					c++
 				}
 			}
-			// @TODO: exits if done
 			fmt.Printf(
-				"Tracking done for %s\nPress Ctrl-C to quit\n",
+				"Tracking done for %s\n",
 				h.Uuid,
 			)
+			os.Exit(0)
 		}(security)
 	}
 	wg.Wait()
