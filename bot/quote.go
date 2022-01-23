@@ -33,6 +33,6 @@ func (s *Security) Quote() (q fetch.Quoter, err error) {
 		return q, nil
 	}
 	return nil, fmt.Errorf(
-		"invalis source %s", s.Src,
+		"invalid source %s", s.Src,
 	)
 }
