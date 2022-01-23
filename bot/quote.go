@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/artnoi43/fngobot/enums"
@@ -13,21 +14,25 @@ import (
 	yh "github.com/artnoi43/fngobot/fetch/yahoo"
 )
 
+var quoteFunc = map[enums.Src]fetch.FetchFunc{
+	enums.Yahoo:       yh.Get,
+	enums.YahooCrypto: ct.Get,
+	enums.Satang:      st.Get,
+	enums.Bitkub:      bk.Get,
+	enums.Binance:     bn.Get,
+	enums.Coinbase:    cb.Get,
+}
+
 func (s *Security) Quote() (q fetch.Quoter, err error) {
-	s.Tick = strings.ToUpper(s.Tick)
-	switch s.Src {
-	case enums.Yahoo:
-		q, err = yh.Get(s.Tick)
-	case enums.YahooCrypto:
-		q, err = ct.Get(s.Tick)
-	case enums.Satang:
-		q, err = st.Get(s.Tick)
-	case enums.Bitkub:
-		q, err = bk.Get(s.Tick)
-	case enums.Binance:
-		q, err = bn.Get(s.Tick)
-	case enums.Coinbase:
-		q, err = cb.Get(s.Tick)
+	if s.Src.IsValid() {
+		s.Tick = strings.ToUpper(s.Tick)
+		q, err = quoteFunc[s.Src](s.Tick)
+		if err != nil {
+			return nil, err
+		}
+		return q, nil
 	}
-	return
+	return nil, fmt.Errorf(
+		"invalis source %s", s.Src,
+	)
 }

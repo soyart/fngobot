@@ -25,7 +25,7 @@ func (q *quote) Ask() (float64, error) {
 }
 
 // Get just wraps qt.Get
-func Get(tick string) (*quote, error) {
+func Get(tick string) (fetch.Quoter, error) {
 	var q quote
 	_q, err := qt.Get(tick)
 	if err != nil {

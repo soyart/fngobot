@@ -9,14 +9,14 @@ import (
 	"github.com/pkg/errors"
 )
 
-type FetchFunc func(string) (interface{}, error)
-
 // Quoter is returned by all Get functions
 type Quoter interface {
 	Last() (float64, error)
 	Bid() (float64, error)
 	Ask() (float64, error)
 }
+
+type FetchFunc func(string) (Quoter, error)
 
 var (
 	// ErrNotFound indicates the ticker symbol is not found in JSON data
