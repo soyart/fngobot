@@ -1,6 +1,9 @@
 package config
 
 import (
+	"path/filepath"
+	"strings"
+
 	"github.com/artnoi43/fngobot/bot/tghandler"
 	"github.com/spf13/viper"
 )
@@ -12,6 +15,13 @@ type Config struct {
 	TrackSeconds  int `mapstructure:"track_seconds"`
 	AlertTimes    int `mapstructure:"alert_times"`
 	AlertInterval int `mapstructure:"alert_seconds_interval"`
+}
+
+func ParseConfigPath(rawPath string) (dir, name, ext string) {
+	dir, configFile := filepath.Split(rawPath)
+	name = strings.Split(configFile, ".")[0] // remove ext from filename
+	ext = filepath.Ext(configFile)[1:]       // remove dot
+	return dir, name, ext
 }
 
 func InitConfig(dir string, file string, ext string) (conf *Config, err error) {

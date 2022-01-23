@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -32,21 +31,14 @@ var (
 	cmdFlags flags
 )
 
-func parseConfigPath() (dir, name, ext string) {
-	dir, configFile := filepath.Split(cmdFlags.configFile)
-	name = strings.Split(configFile, ".")[0] // remove ext from filename
-	ext = filepath.Ext(configFile)[1:]       // remove dot
-	return dir, name, ext
-}
-
 func init() {
 	cmdFlags.parse()
 	log.Println("Config path:", cmdFlags.configFile)
 }
 
 func main() {
-	configPath, configFilename, configType := parseConfigPath()
-	conf, err := config.InitConfig(configPath, configFilename, configType)
+	confPath, confFile, confType := config.ParseConfigPath(cmdFlags.configFile)
+	conf, err := config.InitConfig(confPath, confFile, confType)
 	if err != nil {
 		log.Fatalf("Configuration failed\n%v", err)
 	}
@@ -70,8 +62,8 @@ func main() {
 
 	b.Handle("/help", func(c tb.Context) error {
 		cmd, _ := parse.UserCommand{
-			Command: parse.HelpCmd,
-			Chat:    c.Text(),
+			Type: enums.HELPBOT,
+			Text: c.Text(),
 		}.Parse()
 		b.Send(c.Recipient(), cmd.Help.HelpMessage)
 		return nil
@@ -79,10 +71,10 @@ func main() {
 
 	b.Handle("/quote", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
-			Command: parse.QuoteCmd,
-			Chat:    c.Text(),
+			Type: enums.QUOTEBOT,
+			Text: c.Text(),
 		}.Parse()
-		h := tghandler.New(b, c.Message(), conf.Telegram, &cmd)
+		h := tghandler.New(b, c.Message(), &cmd, conf.Telegram)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
@@ -94,10 +86,10 @@ func main() {
 
 	b.Handle("/track", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
-			Command: parse.TrackCmd,
-			Chat:    c.Text(),
+			Type: enums.TRACKBOT,
+			Text: c.Text(),
 		}.Parse()
-		h := tghandler.New(b, c.Message(), conf.Telegram, &cmd)
+		h := tghandler.New(b, c.Message(), &cmd, conf.Telegram)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
@@ -109,10 +101,10 @@ func main() {
 
 	b.Handle("/alert", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
-			Command: parse.AlertCmd,
-			Chat:    c.Text(),
+			Type: enums.ALERTBOT,
+			Text: c.Text(),
 		}.Parse()
-		h := tghandler.New(b, c.Message(), conf.Telegram, &cmd)
+		h := tghandler.New(b, c.Message(), &cmd, conf.Telegram)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
@@ -132,10 +124,10 @@ func main() {
 	// Stop a tracking or alerting tghandler
 	b.Handle("/handlers", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
-			Command: parse.HandlersCmd,
-			Chat:    c.Text(),
+			Type: enums.HANDLERS,
+			Text: c.Text(),
 		}.Parse()
-		h := tghandler.New(b, c.Message(), conf.Telegram, &cmd)
+		h := tghandler.New(b, c.Message(), &cmd, conf.Telegram)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {

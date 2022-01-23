@@ -4,6 +4,7 @@ import (
 	"reflect"
 
 	"github.com/artnoi43/fngobot/bot"
+	"github.com/artnoi43/fngobot/bot/utils"
 	"github.com/artnoi43/fngobot/parse"
 	"github.com/go-yaml/yaml"
 )
@@ -54,7 +55,7 @@ func (h *handler) yaml() string {
 			Condition: h.GetCmd().Alert.GetCondStr(),
 			Target:    h.GetCmd().Alert.Target,
 		},
-		Start: h.Start.Format(timeFormat),
+		Start: h.Start.Format(utils.TimeFormat),
 	}
 	y, _ := yaml.Marshal(&thisHandler)
 	return string(y)

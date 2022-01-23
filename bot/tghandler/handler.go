@@ -3,13 +3,12 @@ package tghandler
 import (
 	"fmt"
 	"log"
-	"strings"
 	"time"
 
 	"github.com/artnoi43/fngobot/bot"
+	"github.com/artnoi43/fngobot/bot/utils"
 	"github.com/artnoi43/fngobot/enums"
 	"github.com/artnoi43/fngobot/parse"
-	"github.com/google/uuid"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
@@ -19,9 +18,9 @@ type Handler interface {
 	QuitChan() chan struct{}
 	Done()
 	GetCmd() *parse.BotCommand
-	Handle(int)
+	Handle(enums.BotType)
 	HandleParsingError(parse.ParseError)
-	SendQuote([]bot.Security)
+	Quote([]bot.Security)
 	Track([]bot.Security, int, Config)
 	PriceAlert(bot.Alert, Config)
 	// These unexported methods are called from this package
@@ -66,14 +65,23 @@ func (h *handler) GetCmd() *parse.BotCommand {
 }
 
 // Handle calls different methods on h based on its function parameter
-func (h *handler) Handle(t int) {
+func (h *handler) Handle(t enums.BotType) {
 	switch t {
 	case enums.QUOTEBOT:
-		h.SendQuote(h.Cmd.Quote.Securities)
+		h.Quote(
+			h.GetCmd().Quote.Securities,
+		)
 	case enums.TRACKBOT:
-		h.Track(h.Cmd.Track.Securities, h.Cmd.Track.TrackTimes, h.Conf)
+		h.Track(
+			h.GetCmd().Track.Securities,
+			h.GetCmd().Track.TrackTimes,
+			h.Conf,
+		)
 	case enums.ALERTBOT:
-		h.PriceAlert(h.Cmd.Alert, h.Conf)
+		h.PriceAlert(
+			h.GetCmd().Alert,
+			h.Conf,
+		)
 	case enums.HANDLERS:
 		h.SendHandlers()
 	}
@@ -122,13 +130,13 @@ func Remove(senderId int64, idx int) {
 }
 
 // New returns a new handler and appends it to SenderHandlers
-func New(b *tb.Bot, m *tb.Message, conf Config, cmd *parse.BotCommand) Handler {
-	// @TODO: Proper UUID
-	uuid := strings.Split(
-		uuid.NewString(), "-",
-	)[0]
-
-	quit := make(chan struct{}, 1)
+func New(
+	b *tb.Bot,
+	m *tb.Message,
+	cmd *parse.BotCommand,
+	conf Config,
+) Handler {
+	uuid := utils.NewUUID()
 	// Log every new handler
 	log.Printf(
 		"[%s]: %s (from %d)\n",
@@ -136,12 +144,11 @@ func New(b *tb.Bot, m *tb.Message, conf Config, cmd *parse.BotCommand) Handler {
 		m.Text,
 		m.Sender.ID,
 	)
-
 	h := &handler{
-		Uuid:   uuid,
 		Start:  time.Now(),
+		Uuid:   uuid,
 		Cmd:    cmd,
-		Quit:   quit,
+		Quit:   utils.NewQuit(),
 		IsDone: false,
 		Conf:   conf,
 		Bot:    b,

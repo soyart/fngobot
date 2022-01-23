@@ -8,13 +8,17 @@ import (
 )
 
 // Track periodically calls SendQuote()
-func (h *handler) Track(s []bot.Security, r int, conf Config) {
+func (h *handler) Track(
+	s []bot.Security,
+	r int, // Track times
+	conf Config,
+) {
 	ticker := time.NewTicker(
 		time.Duration(conf.TrackSeconds) * time.Second,
 	)
 
 	// First quote right away
-	h.SendQuote(s)
+	h.Quote(s)
 	// r-1 bc 1st quote already sent
 	for c := 0; c < r-1; {
 		select {
@@ -24,7 +28,7 @@ func (h *handler) Track(s []bot.Security, r int, conf Config) {
 			return
 		// Send quotes every N second
 		case <-ticker.C:
-			h.SendQuote(s)
+			h.Quote(s)
 			c++
 		}
 	}

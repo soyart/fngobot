@@ -9,33 +9,9 @@ import (
 	"github.com/artnoi43/fngobot/help"
 )
 
-type ParseError int
-type Command string
-
-const (
-	// These errors are non-zero
-	ErrParseInt ParseError = iota + 1
-	ErrParseFloat
-	ErrInvalidSign
-	ErrInvalidBidAskSwitch
-	ErrInvalidQuoteTypeBid
-	ErrInvalidQuoteTypeAsk
-	ErrInvalidQuoteTypeLast
-)
-
-const (
-	HelpCmd     Command = "help"
-	QuoteCmd    Command = "quote"
-	TrackCmd    Command = "track"
-	AlertCmd    Command = "alert"
-	HandlersCmd Command = "handlers"
-)
-
-// UserCommand is essentially a chat message.
-// UserCommand.Chat is an int enum
 type UserCommand struct {
-	Command Command `json:"command,omitempty"`
-	Chat    string  `json:"chat,omitempty"`
+	Type enums.BotType `json:"command,omitempty"`
+	Text string        `json:"chat,omitempty"`
 }
 
 type helpCommand struct {
@@ -98,28 +74,28 @@ func (cmd *quoteCommand) appendSecurities(ticks []string, src enums.Src) {
 }
 
 // Parse parses UserCommand to BotCommand
-func (c UserCommand) Parse() (cmd BotCommand, parseError ParseError) {
-	if c.Command == HandlersCmd {
+func (c UserCommand) Parse() (cmd BotCommand, e ParseError) {
+	if c.Type == enums.HANDLERS {
 		return cmd, 0
 	}
-	chat := strings.Split(c.Chat, " ")
+	chat := strings.Split(c.Text, " ")
 	lenChat := len(chat)
 	sw := strings.ToUpper(chat[1])
 	idx, src := getSrc(sw)
 
-	switch c.Command {
-	case HelpCmd:
-		cmd.Help.HelpMessage = help.GetHelp(c.Chat)
-	case QuoteCmd:
+	switch c.Type {
+	case enums.HELPBOT:
+		cmd.Help.HelpMessage = help.GetHelp(c.Text)
+	case enums.QUOTEBOT:
 		cmd.Quote.appendSecurities(chat[idx:], src)
-	case TrackCmd:
+	case enums.TRACKBOT:
 		cmd.Track.appendSecurities(chat[idx:lenChat-1], src)
 		r, err := strconv.Atoi(chat[lenChat-1])
 		if err != nil {
 			return cmd, ErrParseInt
 		}
 		cmd.Track.TrackTimes = r
-	case AlertCmd:
+	case enums.ALERTBOT:
 		cmd.Alert.Security.Tick = strings.ToUpper(chat[idx])
 		cmd.Alert.Security.Src = src
 		targ, err := strconv.ParseFloat(chat[lenChat-1], 64)
@@ -179,5 +155,5 @@ func (c UserCommand) Parse() (cmd BotCommand, parseError ParseError) {
 			}
 		}
 	}
-	return cmd, parseError
+	return cmd, e
 }

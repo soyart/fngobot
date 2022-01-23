@@ -5,16 +5,17 @@ import (
 	"time"
 
 	"github.com/artnoi43/fngobot/bot"
+	"github.com/artnoi43/fngobot/bot/utils"
 )
 
 // PriceAlert sends alerts to users if a condition is matched.
 func (h *handler) PriceAlert(alert bot.Alert, conf Config) {
 	// Notify user of the alert handler
-	startMsg := printer.Sprintf(
+	startMsg := utils.Printer.Sprintf(
 		"Your alert handler ID is %s\nMessage: %s\nTime: %s)",
 		h.Uuid,
 		h.Msg.Text,
-		h.Msg.Time().Format(timeFormat),
+		h.Msg.Time().Format(utils.TimeFormat),
 	)
 	h.send(startMsg)
 	// Channels for alerting and time ticker
@@ -40,7 +41,7 @@ func (h *handler) PriceAlert(alert bot.Alert, conf Config) {
 			bot.GetQuoteAndAlert(&alert, matchedChan, errChan)
 		case matched := <-matchedChan:
 			if matched {
-				msg := printer.Sprintf(
+				msg := utils.Printer.Sprintf(
 					"[%s]\nALERT!\n%s (%s) is now %s %f\non %s",
 					h.UUID(),
 					alert.Security.Tick,
@@ -51,7 +52,7 @@ func (h *handler) PriceAlert(alert bot.Alert, conf Config) {
 				)
 				h.send(msg)
 				// Also send quote to user
-				h.SendQuote([]bot.Security{
+				h.Quote([]bot.Security{
 					alert.Security,
 				})
 				// Increment counter
@@ -60,7 +61,7 @@ func (h *handler) PriceAlert(alert bot.Alert, conf Config) {
 		}
 	}
 	// Alert user when done
-	h.send(printer.Sprintf(
+	h.send(utils.Printer.Sprintf(
 		"[%s]\nAlert done for %s",
 		h.Uuid,
 		alert.Security.Tick,

@@ -3,26 +3,27 @@ package enums
 import "fmt"
 
 // Bot types - used in handler.Handle()
+type BotType string
+
 const (
-	QUOTEBOT = iota
-	TRACKBOT
-	ALERTBOT
-	HANDLERS
+	QUOTEBOT BotType = "Quote"
+	TRACKBOT BotType = "Track"
+	ALERTBOT BotType = "Alert"
+	HELPBOT  BotType = "Help"
+	HANDLERS BotType = "Handlers"
 )
 
 type Src string
-type QuoteType string
-type Condition string
 
 // quote sources - when adding new sources,
 // also add them to validSrc below
 const (
-	Yahoo       Src = "yahoo"
-	YahooCrypto Src = "yahooCrypto"
-	Satang      Src = "satang"
-	Bitkub      Src = "bitkub"
-	Binance     Src = "binance"
-	Coinbase    Src = "coinbase"
+	Yahoo       Src = "Yahoo"
+	YahooCrypto Src = "YahooCrypto"
+	Satang      Src = "Satang"
+	Bitkub      Src = "Bitkub"
+	Binance     Src = "Binance"
+	Coinbase    Src = "Coinbase"
 )
 
 var validSrc = [6]Src{
@@ -36,19 +37,6 @@ var validSrc = [6]Src{
 
 var ErrInvalidSrc = fmt.Errorf("invalid source")
 
-// quote types
-const (
-	Bid  QuoteType = "bid"
-	Ask  QuoteType = "ask"
-	Last QuoteType = "last"
-)
-
-// alert condition
-const (
-	Lt Condition = "lt"
-	Gt Condition = "gt"
-)
-
 func (s Src) IsValid() bool {
 	for _, valid := range validSrc {
 		if s == valid {
@@ -56,4 +44,40 @@ func (s Src) IsValid() bool {
 		}
 	}
 	return false
+}
+
+// quote types
+type QuoteType string
+
+const (
+	Bid  QuoteType = "bid"
+	Ask  QuoteType = "ask"
+	Last QuoteType = "last"
+)
+
+// alert condition
+type Condition string
+
+const (
+	Lt Condition = "lt"
+	Gt Condition = "gt"
+)
+
+// For CLI
+type Command string
+
+const (
+	QuoteCommand    Command = "/quote"
+	TrackCommand    Command = "/track"
+	AlertCommand    Command = "/alert"
+	HelpCommand     Command = "/help"
+	HandlersCommand Command = "/handlers"
+)
+
+var CommandMap = map[Command]BotType{
+	QuoteCommand:    QUOTEBOT,
+	TrackCommand:    TRACKBOT,
+	AlertCommand:    ALERTBOT,
+	HelpCommand:     HELPBOT,
+	HandlersCommand: HANDLERS,
 }

@@ -3,11 +3,18 @@ A simple, stupid command-line-like Telegram chatbot for tracking financial marke
 
 The bot is made possible with [this amazing Go Telegram bot library](https://gopkg.in/tucnak/telebot.v3). It fetches quotes from Yahoo! Finance (via [finance-go](https://github.com/piquette/finance-go)), [Binance](https://binance.com), [Coinbase](https://coinbase.com), [Satang](https://satangcorp.com), and [Bitkub](https://bitkub.com).
 
-I try to keep the code small *and the user interface command-line-like*.
-
 - Tested on Arch Linux and macOS.
 
 - This bot is currently in use in my friends' circle doing real trades, so the command-line patterns are not to be changed.
+
+## Running the bot
+For a Telegram chatbot, run:
+
+     go run ./cmd/tg;
+
+For a CLI program, run:
+
+     go run ./cmd/cli;
 
 # Quote sources
 ## `github.com/piquette/finance-go`
