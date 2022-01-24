@@ -1,13 +1,13 @@
 # FnGoBot
-A simple, stupid command-line-like Telegram chatbot for tracking financial market quotes written in Go
+A simple, stupid CLI/Telegram bot for tracking financial markets. FnGoBot can be run as a standalone CLI program, or as a Telegram chatbot. Both versions have the same text interface.
 
-The bot is made possible with [this amazing Go Telegram bot library](https://gopkg.in/tucnak/telebot.v3). It fetches quotes from Yahoo! Finance (via [finance-go](https://github.com/piquette/finance-go)), [Binance](https://binance.com), [Coinbase](https://coinbase.com), [Satang](https://satangcorp.com), and [Bitkub](https://bitkub.com).
+The Telegram part is made possible with [this amazing Go Telegram bot library](https://gopkg.in/tucnak/telebot.v3). It fetches quotes from Yahoo! Finance (via [finance-go](https://github.com/piquette/finance-go)), [Binance](https://binance.com), [Coinbase](https://coinbase.com), [Satang](https://satangcorp.com), and [Bitkub](https://bitkub.com).
 
 - Tested on Arch Linux and macOS.
 
 - This bot is currently in use in my friends' circle doing real trades, so the command-line patterns are not to be changed.
 
-## FnGoBot now also comes as CLI
+## FnGoBot now also comes in CLI!
 For a CLI program, run:
 
      go run ./cmd/fngobot-cli "<CMD>" "<Args>";
@@ -133,3 +133,12 @@ The example below will make the bot alert if BTC (From Bitkub.com) bid price is 
 `/stop` is used to stop a running handler. Let's say we have an alerting handler whose UUID is cfd337b7, to stop it, send:
 
     /stop cfd337b7
+
+## Important packages
+After editing the code, you probably want to run tests on these packages before you start using FnGoBot.
+
+The `parse` package provides command parsing for both CLI and Telegram versions. This means that they both share the same text interface.
+
+The `bot` package defines logic for handling alerts, price tracking, and quoting, and is also used by both CLI and Telegram versions.
+
+The `fetch` package, which fetches data from remote APIs, provides an interface (`fetch.Quoter`) to all quotes processed by FnGoBot.
