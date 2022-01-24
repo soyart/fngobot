@@ -9,8 +9,8 @@ import (
 	"github.com/artnoi43/fngobot/fetch"
 )
 
-// SendQuote sends quote(s) to users via chats.
-// It is reused by tracking and alerting handlers.
+// Quote is called by other handler methods
+// to display security quotes to users.
 func (h *handler) Quote(securities []bot.Security) {
 	quotes := make(chan fetch.Quoter, len(securities))
 	var wg sync.WaitGroup
