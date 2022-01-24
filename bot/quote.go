@@ -22,11 +22,14 @@ var quoteFuncs = map[enums.Src]fetch.FetchFunc{
 	enums.Coinbase:    cb.Get,
 }
 
+// Quote quotes Security instance. Quote sources are identified by s.Src.
+// This function is called by many almost all handlers.
 func (s *Security) Quote() (q fetch.Quoter, err error) {
 	if s.Src.IsValid() {
 		s.Tick = strings.ToUpper(s.Tick)
 		quoteFunc, ok := quoteFuncs[s.Src]
 		if !ok {
+			// Probably forgot to add new source to quoteFีืuncs
 			return nil, enums.ErrInvalidSrc
 		}
 		q, err = quoteFunc(s.Tick)

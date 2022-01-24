@@ -15,8 +15,8 @@ type Alert struct {
 }
 
 // GetQuoteAndAlert is routinely called with a time.Ticker.
-// It calls Quote() to get current market price, and then
-// calls Match() to compare the target and market price.
+// It calls Security.Quote() to get current market price, and then
+// calls Match to compare the target and market price.
 func GetQuoteAndAlert(
 	a *Alert,
 	matched chan<- bool,

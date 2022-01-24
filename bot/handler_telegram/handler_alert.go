@@ -62,12 +62,13 @@ func (h *handler) PriceAlert(alert bot.Alert, conf Config) {
 	}
 	// Alert user when done
 	h.send(utils.Printer.Sprintf(
-		"[%s]\nAlert done for %s",
+		"[%s]: Alert Finished %s (%s)\n",
 		h.Uuid,
 		alert.Security.Tick,
+		alert.GetSrcStr(),
 	))
 	log.Printf(
-		"[%s]: Alert done for %s (%s)\n",
+		"[%s]: Alert Finished %s (%s)\n",
 		h.Uuid,
 		alert.Security.Tick,
 		alert.GetSrcStr(),

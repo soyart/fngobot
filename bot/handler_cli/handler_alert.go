@@ -52,4 +52,7 @@ func (h *handler) PriceAlert(
 			}
 		}
 	}
+	utils.Printer.Printf(
+		"[%s] Alert Finished", h.UUID(),
+	)
 }
