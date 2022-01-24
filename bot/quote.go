@@ -13,7 +13,7 @@ import (
 	yh "github.com/artnoi43/fngobot/fetch/yahoo"
 )
 
-var quoteFunc = map[enums.Src]fetch.FetchFunc{
+var quoteFuncs = map[enums.Src]fetch.FetchFunc{
 	enums.Yahoo:       yh.Get,
 	enums.YahooCrypto: ct.Get,
 	enums.Satang:      st.Get,
@@ -25,7 +25,11 @@ var quoteFunc = map[enums.Src]fetch.FetchFunc{
 func (s *Security) Quote() (q fetch.Quoter, err error) {
 	if s.Src.IsValid() {
 		s.Tick = strings.ToUpper(s.Tick)
-		q, err = quoteFunc[s.Src](s.Tick)
+		quoteFunc, ok := quoteFuncs[s.Src]
+		if !ok {
+			return nil, enums.ErrInvalidSrc
+		}
+		q, err = quoteFunc(s.Tick)
 		if err != nil {
 			return nil, err
 		}
