@@ -48,6 +48,7 @@ func main() {
 	if parseError != 0 {
 		h.HandleParsingError(parseError)
 	} else {
+		defer h.Done()
 		h.Handle(targetBot)
 	}
 }
