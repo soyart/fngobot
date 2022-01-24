@@ -49,12 +49,7 @@ func (h *handler) Quote(securities []bot.Security) {
 				ask, _ := q.Ask()
 				msg := utils.Printer.Sprintf(
 					"[%s]\nQuote from %s\n%s\nBid: %f\nAsk: %f\nLast: %f\n",
-					h.UUID(),
-					s.GetSrcStr(),
-					s.Tick,
-					bid,
-					ask,
-					last,
+					h.UUID(), s.GetSrcStr(), s.Tick, bid, ask, last,
 				)
 				h.send(msg)
 			}
