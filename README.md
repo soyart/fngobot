@@ -73,7 +73,7 @@ Or change the default filename in `cmd/main.go` to your desired file extension.
 
 - `golang.org/x/text/message` and `golang.org/x/text/language` for thousands operator (`,`)
 
-## Example chat commands
+## Example commands
 The chat will look like a CLI program. The bot supports 3 commands: `/quote`, `track`, and `/alert`. Source switches can be used in all commands to set quote source.
 
 The general syntax for `/quote` is
