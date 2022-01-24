@@ -1,13 +1,13 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"strings"
 	"time"
 
 	tghandler "github.com/artnoi43/fngobot/bot/handler_telegram"
+	"github.com/artnoi43/fngobot/cmd"
 	"github.com/artnoi43/fngobot/config"
 	"github.com/artnoi43/fngobot/enums"
 	"github.com/artnoi43/fngobot/help"
@@ -16,29 +16,22 @@ import (
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
-// Only command-line flag is the path to configuration file
-// Different bots should use different config files, not command-line flags
-type flags struct {
-	configFile string
-}
-
-func (f *flags) parse() {
-	flag.StringVar(&f.configFile, "c", "$HOME/.config/fngobot/config.yml", "Path to configuration file")
-	flag.Parse()
-}
-
 var (
-	cmdFlags flags
+	cmdFlags cmd.Flags
 )
 
 func init() {
-	cmdFlags.parse()
-	log.Println("Config path:", cmdFlags.configFile)
+	cmdFlags.Parse()
+	log.Println("Config path:", cmdFlags.ConfigFile)
 }
 
 func main() {
-	confPath, confFile, confType := config.ParseConfigPath(cmdFlags.configFile)
-	conf, err := config.InitConfig(confPath, confFile, confType)
+	confLoc := config.ParsePath(
+		cmdFlags.ConfigFile,
+	)
+	conf, err := config.InitConfig(
+		confLoc.Dir, confLoc.Name, confLoc.Ext,
+	)
 	if err != nil {
 		log.Fatalf("Configuration failed\n%v", err)
 	}

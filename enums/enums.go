@@ -2,6 +2,8 @@ package enums
 
 import "fmt"
 
+const CONF = "$HOME/.config/fngobot/config.yml"
+
 // Bot types - used in handler.Handle()
 type BotType string
 

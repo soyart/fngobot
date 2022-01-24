@@ -1,41 +1,37 @@
 package main
 
 import (
-	"flag"
 	"log"
 	"os"
 	"strings"
 
 	clihandler "github.com/artnoi43/fngobot/bot/handler_cli"
+	"github.com/artnoi43/fngobot/cmd"
 	"github.com/artnoi43/fngobot/config"
 	"github.com/artnoi43/fngobot/enums"
 	"github.com/artnoi43/fngobot/parse"
 )
 
-type flags struct {
-	configFile string
-}
-
-func (f *flags) parse() {
-	flag.StringVar(&f.configFile, "c", "$HOME/.config/fngobot/config.yml", "Path to configuration file")
-	flag.Parse()
-}
-
 var (
-	cmdFlags flags
+	cmdFlags cmd.Flags
+	conf     *config.Config
 )
 
 func init() {
-	cmdFlags.parse()
-}
-
-func main() {
-	confPath, confFile, confType := config.ParseConfigPath(cmdFlags.configFile)
-	conf, err := config.InitConfig(confPath, confFile, confType)
+	cmdFlags.Parse()
+	confLoc := config.ParsePath(
+		cmdFlags.ConfigFile,
+	)
+	var err error
+	conf, err = config.InitConfig(
+		confLoc.Dir, confLoc.Name, confLoc.Ext,
+	)
 	if err != nil {
 		log.Fatalf("failed to init config: %v\n", err.Error())
 	}
+}
 
+func main() {
 	args := os.Args[1:]
 	cmdStr := enums.Command(args[0])
 	targetBot, ok := enums.BotMap[cmdStr]

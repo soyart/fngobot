@@ -17,11 +17,21 @@ type Config struct {
 	AlertTimes    int `mapstructure:"alert_times"`
 }
 
-func ParseConfigPath(rawPath string) (dir, name, ext string) {
+type Location struct {
+	Dir  string
+	Name string
+	Ext  string
+}
+
+func ParsePath(rawPath string) *Location {
 	dir, configFile := filepath.Split(rawPath)
-	name = strings.Split(configFile, ".")[0] // remove ext from filename
-	ext = filepath.Ext(configFile)[1:]       // remove dot
-	return dir, name, ext
+	name := strings.Split(configFile, ".")[0] // remove ext from filename
+	ext := filepath.Ext(configFile)[1:]       // remove dot
+	return &Location{
+		Dir:  dir,
+		Name: name,
+		Ext:  ext,
+	}
 }
 
 func InitConfig(dir string, file string, ext string) (conf *Config, err error) {
