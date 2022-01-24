@@ -42,13 +42,13 @@ func (h *handler) PriceAlert(alert bot.Alert, conf Config) {
 		case matched := <-matchedChan:
 			if matched {
 				msg := utils.Printer.Sprintf(
-					"[%s]\nALERT!\n%s (%s) is now %s %f\non %s",
+					"[%s]\nALERT!\n%s (%s, %s) is now %s %f",
 					h.UUID(),
 					alert.Security.Tick,
+					alert.GetSrcStr(),
 					alert.GetQuoteTypeStr(),
 					alert.GetCondStr(),
 					alert.Target,
-					alert.GetSrcStr(),
 				)
 				h.send(msg)
 				// Also send quote to user
