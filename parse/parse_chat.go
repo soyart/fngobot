@@ -113,21 +113,10 @@ func (c UserCommand) Parse() (cmd BotCommand, e ParseError) {
 			cmd.Alert.Condition = enums.Gt
 		}
 
-		// @NOTE: When adding new source, also add it to defLen below
-
-		// Determine if bid/ask or last alert
-		// bid/ask alert will have length = default length + 1
-		defLen := make(map[enums.Src]int)
-		defLen[enums.YahooCrypto] = 5 /* /alert crypto btc-usd > 1 */
-		defLen[enums.Coinbase] = 5    /* /alert coinbase btc bid > 1 */
-		defLen[enums.Binance] = 5     /* /alert binance btc bid > 1 */
-		defLen[enums.Satang] = 5      /* /alert satang btc bid > 1 */
-		defLen[enums.Bitkub] = 5      /* /alert bitkub btc > 1 */
-		defLen[enums.Yahoo] = 4       /* /alert bbl.bk > 120 */
 		// If unsupported alert/ use ones that are supported
 		switch lenChat {
 		// Last price alerts
-		case defLen[cmd.Alert.Src]:
+		case idx + 3:
 			// Satang does not support last price
 			if cmd.Alert.Src == enums.Satang {
 				return cmd, ErrInvalidQuoteTypeLast
