@@ -7,14 +7,16 @@ The bot is made possible with [this amazing Go Telegram bot library](https://gop
 
 - This bot is currently in use in my friends' circle doing real trades, so the command-line patterns are not to be changed.
 
-## Running the bot
+## FnGoBot now also comes as CLI
+For a CLI program, run:
+
+     go run ./cmd/fngobot-cli "<CMD>" "<Args>";
+
+> For `/alert`, it is neccessary to separate CLI arguments into 2 parts - for the full command `/alert coinbase ada > 100`, it must be separated into a CMD (e.g. `/alert`), and an argument (e.g. `coinbase ada > 100`)
+
 For a Telegram chatbot, run:
 
      go run ./cmd/fngobot;
-
-For a CLI program, run:
-
-     go run ./cmd/fngobot-cli;
 
 # Quote sources
 ## `github.com/piquette/finance-go`
