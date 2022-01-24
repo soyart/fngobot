@@ -1,5 +1,8 @@
-bot_token: 123456789:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-bot:
-  track_seconds: 60
+track_interval: 60
+alert_interval: 60
+alert_times: 5
+telegram:
+  bot_token: 123456789:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  track_interval: 60
+  alert_interval: 60
   alert_times: 5
-  alert_second_interval: 60

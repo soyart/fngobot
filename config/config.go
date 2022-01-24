@@ -12,8 +12,8 @@ type Config struct {
 	// tghandler.Config also has TrackSeconds, AlertConf, AlertInterval
 	Telegram tghandler.Config `mapstructure:"telegram"`
 	// The rest is for CLI
-	TrackInterval int `mapstructure:"track_seconds"`
-	AlertInterval int `mapstructure:"alert_seconds_interval"`
+	TrackInterval int `mapstructure:"track_interval"`
+	AlertInterval int `mapstructure:"alert_interval"`
 	AlertTimes    int `mapstructure:"alert_times"`
 }
 
