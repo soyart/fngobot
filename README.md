@@ -1,22 +1,11 @@
 # FnGoBot
-A simple, stupid CLI/Telegram bot for tracking financial markets. FnGoBot can be run as a standalone CLI program, or as a Telegram chatbot. Both versions have the same text interface.
+A simple, stupid CLI/Telegram bot for tracking financial markets. FnGoBot can be run as a standalone CLI program, or as a Telegram chatbot. Both versions share the same text interface (see `bot` package).
 
 The Telegram part is made possible with [this amazing Go Telegram bot library](https://gopkg.in/tucnak/telebot.v3). It fetches quotes from Yahoo! Finance (via [finance-go](https://github.com/piquette/finance-go)), [Binance](https://binance.com), [Coinbase](https://coinbase.com), [Satang](https://satangcorp.com), and [Bitkub](https://bitkub.com).
 
 - Tested on Arch Linux and macOS.
 
 - This bot is currently in use in my friends' circle doing real trades, so the command-line patterns are not to be changed.
-
-## FnGoBot now also comes in CLI!
-For a CLI program, run:
-
-     go run ./cmd/fngobot-cli "<CMD>" "<Args>";
-
-> For `/alert`, it is neccessary to separate CLI arguments into 2 parts - for the full command `/alert coinbase ada > 100`, it must be separated into a CMD (e.g. `/alert`), and an argument (e.g. `coinbase ada > 100`)
-
-For a Telegram chatbot, run:
-
-     go run ./cmd/fngobot;
 
 # Quote sources
 ## `github.com/piquette/finance-go`
