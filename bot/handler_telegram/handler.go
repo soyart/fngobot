@@ -48,21 +48,11 @@ type handler struct {
 	Msg    *tb.Message       `json:"-" yaml:"-"`
 }
 
-func (h *handler) UUID() string {
-	return h.Uuid
-}
-func (h *handler) QuitChan() chan struct{} {
-	return h.Quit
-}
-func (h *handler) Done() {
-	h.IsDone = true
-}
-func (h *handler) isRunning() bool {
-	return !h.IsDone
-}
-func (h *handler) GetCmd() *parse.BotCommand {
-	return h.Cmd
-}
+func (h *handler) UUID() string              { return h.Uuid }
+func (h *handler) QuitChan() chan struct{}   { return h.Quit }
+func (h *handler) isRunning() bool           { return !h.IsDone }
+func (h *handler) GetCmd() *parse.BotCommand { return h.Cmd }
+func (h *handler) Done()                     { h.IsDone = true }
 
 // Handle calls different methods on h based on its function parameter
 func (h *handler) Handle(t enums.BotType) {
