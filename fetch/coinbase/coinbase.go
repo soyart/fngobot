@@ -9,7 +9,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-const BASE_URL = "https://api.coinbase.com"
+const BaseURL = "https://api.coinbase.com"
 
 type info struct {
 	symbol string
@@ -19,7 +19,7 @@ type info struct {
 func Get(tick string) (fetch.Quoter, error) {
 	urlMap := prepareURLs(info{
 		symbol: tick,
-		url:    BASE_URL,
+		url:    BaseURL,
 	})
 	var q quote
 	var errChan = make(chan error)

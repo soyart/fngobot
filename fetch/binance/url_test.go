@@ -7,7 +7,7 @@ import (
 func TestPrepareUrl(t *testing.T) {
 	info := info{
 		symbol: "ETHUSDT",
-		url:    BASE_URL,
+		url:    BaseURL,
 	}
 	m := prepareURLs(info)
 	if m["price"] != "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT" {

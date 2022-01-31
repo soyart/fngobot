@@ -12,10 +12,11 @@ import (
 func prepareURLs(info info) map[string]string {
 	priceURL := preparePrice(info)
 	depthURL := prepareDepth(info)
-	var m = make(map[string]string)
-	m["price"] = priceURL
-	m["depth"] = depthURL
-	return m
+
+	return map[string]string{
+		"price": priceURL,
+		"depth": depthURL,
+	}
 }
 
 // preparePrice just generate URL to

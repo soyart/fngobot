@@ -9,7 +9,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-const BASE_URL = "https://api.binance.com"
+const BaseURL = "https://api.binance.com"
 
 type info struct {
 	symbol string
@@ -19,7 +19,7 @@ type info struct {
 func Get(tick string) (fetch.Quoter, error) {
 	urlMap := prepareURLs(info{
 		symbol: tick + "USDT",
-		url:    BASE_URL,
+		url:    BaseURL,
 	})
 	var q quote
 	var errChan = make(chan error)

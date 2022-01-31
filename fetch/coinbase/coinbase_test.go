@@ -10,9 +10,9 @@ import (
 
 var (
 	URLs = [3]string{
-		BASE_URL + "/v2/prices/BTC-THB/spot",
-		BASE_URL + "/v2/prices/BTC-THB/buy",
-		BASE_URL + "/v2/prices/XLM-THB/sell",
+		BaseURL + "/v2/prices/BTC-THB/spot",
+		BaseURL + "/v2/prices/BTC-THB/buy",
+		BaseURL + "/v2/prices/XLM-THB/sell",
 	}
 )
 

@@ -7,7 +7,7 @@ import (
 func TestPrepareUrl(t *testing.T) {
 	info := info{
 		symbol: "CAKE",
-		url:    BASE_URL,
+		url:    BaseURL,
 	}
 	m := prepareURLs(info)
 	if actual := m["price"]; actual != "https://api.coinbase.com/v2/prices/CAKE-THB/spot" {
