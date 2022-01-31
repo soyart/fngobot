@@ -16,6 +16,14 @@ type info struct {
 	url    string
 }
 
+type response struct {
+	Data priceData `json:"data"`
+}
+
+type priceData struct {
+	Amount string `json:"amount"`
+}
+
 func Get(tick string) (fetch.Quoter, error) {
 	urls := prepareURLs(info{
 		symbol: tick,
@@ -64,12 +72,4 @@ func Get(tick string) (fetch.Quoter, error) {
 	}
 	wg.Wait()
 	return &q, nil
-}
-
-type response struct {
-	Data priceData `json:"data"`
-}
-
-type priceData struct {
-	Amount string `json:"amount"`
 }
