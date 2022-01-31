@@ -4,8 +4,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	tghandler "github.com/artnoi43/fngobot/bot/handler_telegram"
 	"github.com/spf13/viper"
+
+	tghandler "github.com/artnoi43/fngobot/bot/handler_telegram"
 )
 
 type Config struct {

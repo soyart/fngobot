@@ -5,8 +5,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/artnoi43/fngobot/fetch"
 	"github.com/pkg/errors"
+
+	"github.com/artnoi43/fngobot/fetch"
 )
 
 const BaseURL = "https://api.binance.com"

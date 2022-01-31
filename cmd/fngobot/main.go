@@ -6,14 +6,14 @@ import (
 	"strings"
 	"time"
 
+	tb "gopkg.in/tucnak/telebot.v3"
+
 	tghandler "github.com/artnoi43/fngobot/bot/handler_telegram"
 	"github.com/artnoi43/fngobot/cmd"
 	"github.com/artnoi43/fngobot/config"
 	"github.com/artnoi43/fngobot/enums"
 	"github.com/artnoi43/fngobot/help"
 	"github.com/artnoi43/fngobot/parse"
-
-	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 var (

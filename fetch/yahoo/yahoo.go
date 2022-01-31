@@ -3,8 +3,9 @@ package yahoo
 import (
 	"log"
 
-	"github.com/artnoi43/fngobot/fetch"
 	qt "github.com/piquette/finance-go/quote"
+
+	"github.com/artnoi43/fngobot/fetch"
 )
 
 // Quote for Yahoo! Finance

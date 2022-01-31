@@ -45,8 +45,9 @@ import (
 	"log"
 	"net/url"
 
-	"github.com/artnoi43/fngobot/fetch"
 	"github.com/pkg/errors"
+
+	"github.com/artnoi43/fngobot/fetch"
 )
 
 const URL = "https://bitkub.com/api/market/ticker/"

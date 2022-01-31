@@ -4,8 +4,9 @@ import (
 	"errors"
 	"log"
 
-	"github.com/artnoi43/fngobot/fetch"
 	"github.com/piquette/finance-go/crypto"
+
+	"github.com/artnoi43/fngobot/fetch"
 )
 
 type quote struct {
