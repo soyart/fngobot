@@ -17,7 +17,7 @@ type info struct {
 }
 
 func Get(tick string) (fetch.Quoter, error) {
-	urlMap := prepareURLs(info{
+	urls := prepareURLs(info{
 		symbol: tick,
 		url:    BaseURL,
 	})
@@ -25,7 +25,7 @@ func Get(tick string) (fetch.Quoter, error) {
 	var errChan = make(chan error)
 	var wg sync.WaitGroup
 
-	for key, url := range urlMap {
+	for key, url := range urls {
 		wg.Add(1)
 		go func(k, u string) {
 			defer wg.Done()
