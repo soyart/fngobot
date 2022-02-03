@@ -7,9 +7,6 @@ The Telegram part is made possible with [this amazing Go Telegram bot library](h
 
 - This bot is currently in use in my friends' circle doing real trades, so the command-line patterns are not to be changed.
 
-# Overview
-![Bot Diagram](https://github.com/artnoi43/fngobot/blob/develop/fngobot.png?raw=true)
-
 # Quote sources
 ## `github.com/piquette/finance-go`
 For Yahoo! Finance API. This is the default security quote source.
@@ -28,6 +25,9 @@ FnGoBot's [satangcorp.com](https://satangcorp.com) API data fetcher. This source
 
 ## `fetch/bitkub/bitkub.go`
 FnGoBot's [bitkub.com](https://bitkub.com) API data fetcher. This source is activated with a `bitkub` switch in the command. Bitkub quotes are only THB denominated.
+
+# Overview
+![BotDiagram](https://github.com/artnoi43/fngobot/blob/develop/fngobot.png?raw=true)
 
 ## Running your own bot
 - Clone this repository
