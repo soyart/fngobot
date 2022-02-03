@@ -7,6 +7,9 @@ The Telegram part is made possible with [this amazing Go Telegram bot library](h
 
 - This bot is currently in use in my friends' circle doing real trades, so the command-line patterns are not to be changed.
 
+# Overview
+![Bot Diagram](https://github.com/artnoi43/fngobot/blob/develop/fngobot.png?raw=true)
+
 # Quote sources
 ## `github.com/piquette/finance-go`
 For Yahoo! Finance API. This is the default security quote source.
