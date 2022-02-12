@@ -1,6 +1,8 @@
 # FnGoBot
 A simple, stupid CLI/Telegram bot for tracking financial markets. FnGoBot can be run as a standalone CLI program, or as a Telegram chatbot. Both versions share the same text interface (see `bot` package).
 
+FnGoBot is my practice project for designing more complicated software, parsing JSON responses, and using external libraries. It developed from an ugly single-file program into a much more *normal* looking Go project.
+
 The Telegram part is made possible with [this amazing Go Telegram bot library](https://gopkg.in/tucnak/telebot.v3). It fetches quotes from Yahoo! Finance (via [finance-go](https://github.com/piquette/finance-go)), [Binance](https://binance.com), [Coinbase](https://coinbase.com), [Satang](https://satangcorp.com), and [Bitkub](https://bitkub.com).
 
 - Tested on Arch Linux and macOS.
@@ -25,6 +27,8 @@ FnGoBot's [satangcorp.com](https://satangcorp.com) API data fetcher. This source
 
 ## `fetch/bitkub/bitkub.go`
 FnGoBot's [bitkub.com](https://bitkub.com) API data fetcher. This source is activated with a `bitkub` switch in the command. Bitkub quotes are only THB denominated.
+
+## [Adding quote sources](add_source.md)
 
 # Overview
 ![BotDiagram](https://github.com/artnoi43/fngobot/blob/develop/fngobot.png?raw=true)
