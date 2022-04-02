@@ -14,7 +14,7 @@ import (
 func (h *handler) SendHandlers() error {
 	var nullChecker = &parse.BotCommand{}
 	var runningHandlers []*handler
-	for _, handlerInterface := range SenderHandlers[h.Msg.Sender.ID] {
+	for _, handlerInterface := range SenderHandlers[h.tbCtx.Message().Sender.ID] {
 		// Discard null struct
 		h, ok := handlerInterface.(*handler)
 		if !ok {
@@ -32,10 +32,10 @@ func (h *handler) SendHandlers() error {
 		for _, runningHandler := range runningHandlers {
 			msg = msg + runningHandler.yaml()
 		}
-		h.send(msg)
+		h.reply(msg)
 		return nil
 	}
-	h.send("No active handlers found")
+	h.reply("No active handlers found")
 	return nil
 }
 

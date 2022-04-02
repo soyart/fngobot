@@ -8,7 +8,7 @@ import (
 
 // HandleParsingError handles errors from package parse
 func (h *handler) HandleParsingError(e parse.ParseError) {
-	h.send(formString(e))
+	h.reply(formString(e))
 }
 
 func formString(e parse.ParseError) string {

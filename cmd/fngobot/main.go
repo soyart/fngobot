@@ -101,7 +101,7 @@ func main() {
 			Type: enums.QUOTEBOT,
 			Text: c.Text(),
 		}.Parse()
-		h := tghandler.New(b, c.Message(), &cmd, conf.Telegram)
+		h := tghandler.New(b, c, &cmd, conf.Telegram)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
@@ -116,7 +116,7 @@ func main() {
 			Type: enums.TRACKBOT,
 			Text: c.Text(),
 		}.Parse()
-		h := tghandler.New(b, c.Message(), &cmd, conf.Telegram)
+		h := tghandler.New(b, c, &cmd, conf.Telegram)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
@@ -131,7 +131,7 @@ func main() {
 			Type: enums.ALERTBOT,
 			Text: c.Text(),
 		}.Parse()
-		h := tghandler.New(b, c.Message(), &cmd, conf.Telegram)
+		h := tghandler.New(b, c, &cmd, conf.Telegram)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {
@@ -158,7 +158,7 @@ func main() {
 			Type: enums.HANDLERS,
 			Text: c.Text(),
 		}.Parse()
-		h := tghandler.New(b, c.Message(), &cmd, conf.Telegram)
+		h := tghandler.New(b, c, &cmd, conf.Telegram)
 		if parseError != 0 {
 			h.HandleParsingError(parseError)
 		} else {

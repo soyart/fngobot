@@ -27,7 +27,7 @@ func (h *handler) Quote(securities []bot.Security) {
 				} else {
 					errMsg = "Error getting quote"
 				}
-				h.send(utils.Printer.Sprintf(
+				h.reply(utils.Printer.Sprintf(
 					"[%s]\n%s: %s from %s",
 					h.UUID(),
 					errMsg,
@@ -43,7 +43,7 @@ func (h *handler) Quote(securities []bot.Security) {
 				"[%s]\nQuote from %s\n%s\nBid: %f\nAsk: %f\nLast: %f\n",
 				h.UUID(), s.GetSrcStr(), s.Tick, bid, ask, last,
 			)
-			h.send(msg)
+			h.reply(msg)
 			// quotes <- q
 		}(security)
 	}

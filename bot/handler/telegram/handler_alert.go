@@ -11,13 +11,14 @@ import (
 // PriceAlert sends alerts to users if a condition is matched.
 func (h *handler) PriceAlert(alert bot.Alert) {
 	// Notify user of the alert handler
+	chatMsg := h.tbCtx.Message()
 	startMsg := utils.Printer.Sprintf(
 		"Your alert handler ID is %s\nMessage: %s\nTime: %s)",
 		h.Uuid,
-		h.Msg.Text,
-		h.Msg.Time().Format(utils.TimeFormat),
+		chatMsg.Text,
+		chatMsg.Time().Format(utils.TimeFormat),
 	)
-	h.send(startMsg)
+	h.reply(startMsg)
 	// Channels for alerting and time ticker
 	matchedChan := make(chan bool, h.conf.Handler.AlertTimes)
 	errChan := make(chan error)
@@ -50,8 +51,8 @@ func (h *handler) PriceAlert(alert bot.Alert) {
 					alert.GetCondStr(),
 					alert.Target,
 				)
-				h.send(msg)
-				// Also send quote to user
+				h.reply(msg)
+				// Also reply quote to user
 				h.Quote([]bot.Security{
 					alert.Security,
 				})
@@ -61,7 +62,7 @@ func (h *handler) PriceAlert(alert bot.Alert) {
 		}
 	}
 	// Alert user when done
-	h.send(utils.Printer.Sprintf(
+	h.reply(utils.Printer.Sprintf(
 		"[%s]: Alert Finished %s (%s)\n",
 		h.Uuid,
 		alert.Security.Tick,
