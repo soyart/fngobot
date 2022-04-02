@@ -1,9 +1,10 @@
 package bot
 
 import (
+	"github.com/pkg/errors"
+
 	"github.com/artnoi43/fngobot/enums"
 	"github.com/artnoi43/fngobot/fetch"
-	"github.com/pkg/errors"
 )
 
 // Alert struct stores info about price alerts

@@ -74,10 +74,6 @@ func main() {
 	go func() {
 		defer wg.Done()
 		<-sigChan
-		// _, err := b.Close()
-		// if err != nil {
-		// 	log.Printf("Failed to close poller: %s\n", err.Error())
-		// }
 		log.Println("closed poller connection")
 	}()
 
