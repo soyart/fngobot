@@ -38,7 +38,7 @@ FnGoBot's [bitkub.com](https://bitkub.com) API data fetcher. This source is acti
 
 - Provide your bot's [configuration](#config)
 
-- Run the bot with `go run ./cmd` or build and run the binary
+- Run the bot with `go run ./cmd/fngobot` or `go run ./cmd/fngobot-cli`, or build and run the binaries
 
 - If the bot successfully initializes, you may now start using the bot
 

@@ -1,19 +1,25 @@
 package tghandler
 
 import (
+	"fmt"
 	"reflect"
+
+	"github.com/go-yaml/yaml"
 
 	"github.com/artnoi43/fngobot/bot"
 	"github.com/artnoi43/fngobot/bot/utils"
 	"github.com/artnoi43/fngobot/parse"
-	"github.com/go-yaml/yaml"
 )
 
-func (h *handler) SendHandlers() {
+func (h *handler) SendHandlers() error {
 	var nullChecker = &parse.BotCommand{}
-	var runningHandlers Handlers
-	for _, h := range SenderHandlers[h.Msg.Sender.ID] {
+	var runningHandlers []*handler
+	for _, handlerInterface := range SenderHandlers[h.Msg.Sender.ID] {
 		// Discard null struct
+		h, ok := handlerInterface.(*handler)
+		if !ok {
+			return fmt.Errorf("type assertion on Handler interface failed")
+		}
 		if !reflect.DeepEqual(h.GetCmd(), nullChecker) {
 			if h.isRunning() {
 				runningHandlers = append(runningHandlers, h)
@@ -27,9 +33,10 @@ func (h *handler) SendHandlers() {
 			msg = msg + runningHandler.yaml()
 		}
 		h.send(msg)
-		return
+		return nil
 	}
 	h.send("No active handlers found")
+	return nil
 }
 
 func (h *handler) yaml() string {

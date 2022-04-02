@@ -26,8 +26,8 @@ const (
 type Condition string
 
 const (
-	Lt Condition = "lt"
-	Gt Condition = "gt"
+	Lt Condition = "LT"
+	Gt Condition = "GT"
 )
 
 // For CLI

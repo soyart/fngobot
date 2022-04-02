@@ -1,23 +1,21 @@
 package clihandler
 
 import (
-	"os"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/artnoi43/fngobot/bot"
 	"github.com/artnoi43/fngobot/bot/utils"
-	"github.com/artnoi43/fngobot/config"
 )
 
 func (h *handler) Track(
 	securities []bot.Security,
 	r int, // Track rounds
-	conf *config.Config,
 ) {
 	utils.Printer.Printf(
 		"Starting tracker: %dx, every %d sec\n\n",
-		r, conf.TrackInterval,
+		r, h.conf.Handler.TrackInterval,
 	)
 	// First quote fires right away (hence r-1)
 	h.Quote(securities)
@@ -26,13 +24,14 @@ func (h *handler) Track(
 			h.Quote(securities)
 		}
 	}
+
 	ticker := time.NewTicker(
-		time.Duration(conf.TrackInterval) * time.Second,
+		time.Duration(h.conf.Handler.TrackInterval) * time.Second,
 	)
+	defer ticker.Stop()
 
 	// This Goroutine fires quote every ticking second
 	// and also listening on h.Quit
-	defer ticker.Stop()
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go func() {
@@ -43,12 +42,17 @@ func (h *handler) Track(
 		// Impossible for now
 		case <-h.Quit:
 			h.notifyStop()
-			os.Exit(0)
+			return
 		}
 	}()
 	wg.Wait()
+	tickers := make([]string, len(securities))
+	for i, security := range securities {
+		tickers[i] = security.Tick
+	}
 	utils.Printer.Printf(
-		"[%s] Tracking done\n",
+		"[%s] Tracking done for %s\n",
 		h.UUID(),
+		strings.Join(tickers, ", "),
 	)
 }

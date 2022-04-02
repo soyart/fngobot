@@ -1,21 +1,21 @@
 package config
 
 import (
+	"encoding/json"
+	"fmt"
 	"path/filepath"
 	"strings"
 
+	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 
-	tghandler "github.com/artnoi43/fngobot/bot/handler_telegram"
+	clihandler "github.com/artnoi43/fngobot/bot/handler/cli"
+	tghandler "github.com/artnoi43/fngobot/bot/handler/telegram"
 )
 
 type Config struct {
-	// tghandler.Config also has TrackSeconds, AlertConf, AlertInterval
-	Telegram tghandler.Config `mapstructure:"telegram"`
-	// The rest is for CLI
-	TrackInterval int `mapstructure:"track_interval"`
-	AlertInterval int `mapstructure:"alert_interval"`
-	AlertTimes    int `mapstructure:"alert_times"`
+	Telegram tghandler.Config  `mapstructure:"telegram" json:"telegram"`
+	CLI      clihandler.Config `mapstructure:"cli" json:"cli"`
 }
 
 type Location struct {
@@ -37,13 +37,22 @@ func ParsePath(rawPath string) *Location {
 
 func InitConfig(dir string, file string, ext string) (conf *Config, err error) {
 	// Defaults
-	viper.SetDefault("bot_token", "123456789:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-	viper.SetDefault("bot.track_seconds", 60)
-	viper.SetDefault("bot.alert_times", 5)
-	viper.SetDefault("bot.alert_seconds_interval", 60)
+	// TrackInterval int `mapstructure:"track_interval"`
+	// AlertInterval int `mapstructure:"alert_interval"`
+	// AlertTimes    int `mapstructure:"alert_times"`
+
+	viper.SetDefault("telegram.bot_token", "123456789:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+	viper.SetDefault("telegram.handler.track_interval", 60)
+	viper.SetDefault("telegram.handler.alert_interval", 60)
+	viper.SetDefault("telegram.handler.alert_times", 5)
+	viper.SetDefault("cli.handler.track_interval", 60)
+	viper.SetDefault("cli.handler.alert_interval", 60)
+	viper.SetDefault("cli.handler.alert_times", 5)
 
 	// ENV
-	viper.BindEnv("bot_token")
+	if err := viper.BindEnv("bot_token"); err != nil {
+		return nil, err
+	}
 
 	err = loadConf(dir, file, ext)
 	if err != nil {
@@ -53,6 +62,8 @@ func InitConfig(dir string, file string, ext string) (conf *Config, err error) {
 	if err != nil {
 		return nil, err
 	}
+	j, _ := json.Marshal(conf)
+	fmt.Printf("%s\n", j)
 	return conf, nil
 }
 
@@ -70,7 +81,9 @@ func loadConf(dir string, file string, ext string) error {
 		// Config file not found
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			// WriteConfig() just won't create new file if doesn't exist
-			viper.SafeWriteConfig()
+			if err := viper.SafeWriteConfig(); err != nil {
+				return errors.Wrap(err, "failed to write config")
+			}
 		} else {
 			return err
 		}

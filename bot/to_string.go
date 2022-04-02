@@ -23,6 +23,8 @@ func (a *Alert) GetCondStr() string {
 	switch a.Condition {
 	case enums.Lt:
 		return "<="
+	case enums.Gt:
+		return ">="
 	}
 	return ">="
 }

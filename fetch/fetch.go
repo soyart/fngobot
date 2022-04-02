@@ -28,15 +28,15 @@ var (
 func Fetch(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "HTTP GET %s failed", url)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return nil, errors.Wrap(err, "non-200 status")
+		return nil, errors.Wrapf(err, "non-200 status: %d", resp.StatusCode)
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "failed to read response body")
 	}
 	return body, nil
 }
@@ -49,11 +49,11 @@ func FetchMapStrInf(url string) (map[string]interface{}, error) {
 	}
 	/* Since the JSON key is arbitary,
 	 * we first unmarshal it into empty interface f */
-	var f interface{}
-	err = json.Unmarshal(body, &f)
+	var v map[string]interface{}
+	err = json.Unmarshal(body, &v)
 	if err != nil {
 		log.Println("Error parsing JSON: ", err)
-		return nil, err
+		return nil, errors.Wrap(err, "error parsing JSON response body")
 	}
-	return f.(map[string]interface{}), nil
+	return v, nil
 }

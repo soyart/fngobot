@@ -1,8 +1,11 @@
-track_interval: 60
-alert_interval: 60
-alert_times: 5
+cli:
+  handler:
+    track_interval: 60
+    alert_interval: 60
+    alert_times: 5
 telegram:
   bot_token: 123456789:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-  track_interval: 60
-  alert_interval: 60
-  alert_times: 5
+  handler:
+    track_interval: 60
+    alert_interval: 60
+    alert_times: 5

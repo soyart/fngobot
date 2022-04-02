@@ -2,6 +2,7 @@ package tghandler
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/artnoi43/fngobot/bot"
@@ -9,17 +10,16 @@ import (
 
 // Track periodically calls SendQuote()
 func (h *handler) Track(
-	s []bot.Security,
+	securities []bot.Security,
 	r int, // Track times
-	conf Config,
 ) {
 	ticker := time.NewTicker(
-		time.Duration(conf.TrackInterval) * time.Second,
+		time.Duration(h.conf.Handler.TrackInterval) * time.Second,
 	)
 	defer ticker.Stop()
 
 	// First quote right away
-	h.Quote(s)
+	h.Quote(securities)
 	// r-1 bc 1st quote already sent
 	for c := 0; c < r-1; {
 		select {
@@ -29,9 +29,13 @@ func (h *handler) Track(
 			return
 		// Send quotes every N second
 		case <-ticker.C:
-			h.Quote(s)
+			h.Quote(securities)
 			c++
 		}
 	}
-	h.send(fmt.Sprintf("Tracking done for %s", h.Uuid))
+	tickers := make([]string, len(securities))
+	for i, security := range securities {
+		tickers[i] = security.Tick
+	}
+	h.send(fmt.Sprintf("[%s]\nTracking done for %s", h.Uuid, strings.Join(tickers, ", ")))
 }

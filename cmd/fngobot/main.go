@@ -3,12 +3,16 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	"os/signal"
 	"strings"
+	"sync"
+	"syscall"
 	"time"
 
 	tb "gopkg.in/tucnak/telebot.v3"
 
-	tghandler "github.com/artnoi43/fngobot/bot/handler_telegram"
+	tghandler "github.com/artnoi43/fngobot/bot/handler/telegram"
 	"github.com/artnoi43/fngobot/cmd"
 	"github.com/artnoi43/fngobot/config"
 	"github.com/artnoi43/fngobot/enums"
@@ -18,26 +22,28 @@ import (
 
 var (
 	cmdFlags cmd.Flags
+	conf     *config.Config
+	token    string
 )
 
 func init() {
 	cmdFlags.Parse()
-	log.Println("Config path:", cmdFlags.ConfigFile)
-}
-
-func main() {
+	log.Println("config path:", cmdFlags.ConfigFile)
 	confLoc := config.ParsePath(
 		cmdFlags.ConfigFile,
 	)
-	conf, err := config.InitConfig(
+	var err error
+	conf, err = config.InitConfig(
 		confLoc.Dir, confLoc.Name, confLoc.Ext,
 	)
 	if err != nil {
-		log.Fatalf("Configuration failed\n%v", err)
+		log.Fatalf("configuration failed\n%v", err)
 	}
 
-	token := conf.Telegram.BotToken
-	/* Initializes bot b with token */
+	token = conf.Telegram.BotToken
+}
+
+func main() {
 	b, err := tb.NewBot(tb.Settings{
 		/* If empty defaults to "https://api.telegram.org" */
 		URL:    "",
@@ -45,20 +51,48 @@ func main() {
 		Poller: &tb.LongPoller{Timeout: 10 * time.Second},
 	})
 
-	var msg string
 	if err != nil {
-		msg = "Failed to initialize bot.\nPossibly invalid token: %s"
-	} else {
-		msg = "Initialized bot: %s"
+		log.Printf("failed to initialize bot.\nPossibly invalid token: %s", token)
+		os.Exit(1)
 	}
-	log.Printf(msg, token)
+
+	log.Printf("initialized bot: %s", token)
+
+	// sigChan for receiving OS signals for graceful shutdowns
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(
+		sigChan,
+		syscall.SIGHUP,  // kill -SIGHUP XXXX
+		syscall.SIGINT,  // kill -SIGINT XXXX or Ctrl+c
+		syscall.SIGQUIT, // kill -SIGQUIT XXXX
+		syscall.SIGTERM, // kill -SIGTERM XXXX
+	)
+
+	// Graceful shutdown
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		<-sigChan
+		// _, err := b.Close()
+		// if err != nil {
+		// 	log.Printf("Failed to close poller: %s\n", err.Error())
+		// }
+		log.Println("closed poller connection")
+	}()
+
+	sendFail := func() {
+		log.Println("error sending Telegram message to recipient")
+	}
 
 	b.Handle("/help", func(c tb.Context) error {
 		cmd, _ := parse.UserCommand{
 			Type: enums.HELPBOT,
 			Text: c.Text(),
 		}.Parse()
-		b.Send(c.Recipient(), cmd.Help.HelpMessage)
+		if _, err := b.Reply(c.Message(), cmd.Help.HelpMessage); err != nil {
+			sendFail()
+		}
 		return nil
 	})
 
@@ -109,8 +143,12 @@ func main() {
 
 	b.Handle("/start", func(c tb.Context) error {
 		log.Println(c.Text())
-		b.Send(c.Recipient(), help.LONG)
-		b.Send(c.Recipient(), "Hello!\nWelcome to FnGoBot chat!")
+		if _, err := b.Reply(c.Message(), help.LONG); err != nil {
+			sendFail()
+		}
+		if _, err := b.Reply(c.Message(), "Hello!\nWelcome to FnGoBot chat!"); err != nil {
+			sendFail()
+		}
 		return nil
 	})
 
@@ -148,12 +186,20 @@ func main() {
 	/* Catch-all help message for unhandled text */
 	b.Handle(tb.OnText, func(c tb.Context) error {
 		log.Println(c.Text())
-		b.Send(
-			c.Recipient(),
+		if _, err := b.Reply(
+			c.Message(),
 			fmt.Sprintf("wut? %s\nSee /help for help", c.Text()),
-		)
+		); err != nil {
+			sendFail()
+		}
 		return nil
 	})
 
-	b.Start()
+	go func() {
+		log.Println("fngobot started")
+		b.Start()
+	}()
+
+	wg.Wait()
+	log.Println("fngobot exited")
 }

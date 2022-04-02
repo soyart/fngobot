@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	clihandler "github.com/artnoi43/fngobot/bot/handler_cli"
+	clihandler "github.com/artnoi43/fngobot/bot/handler/cli"
 	"github.com/artnoi43/fngobot/cmd"
 	"github.com/artnoi43/fngobot/config"
 	"github.com/artnoi43/fngobot/enums"
@@ -19,6 +19,7 @@ var (
 
 func init() {
 	cmdFlags.Parse()
+	log.Println("Config path:", cmdFlags.ConfigFile)
 	confLoc := config.ParsePath(
 		cmdFlags.ConfigFile,
 	)
@@ -27,7 +28,10 @@ func init() {
 		confLoc.Dir, confLoc.Name, confLoc.Ext,
 	)
 	if err != nil {
-		log.Fatalf("failed to init config: %v\n", err.Error())
+		log.Fatalf("configuration failed\n%v", err.Error())
+	}
+	if len(os.Args) < 2 {
+		log.Fatal("not enough arguments")
 	}
 }
 
@@ -36,7 +40,7 @@ func main() {
 	cmdStr := enums.Command(args[0])
 	targetBot, ok := enums.BotMap[cmdStr]
 	if !ok {
-		panic("invalid cmdStr")
+		log.Fatal("invalid cmdStr")
 	}
 
 	cmd, parseError := parse.UserCommand{
@@ -44,7 +48,7 @@ func main() {
 		Text: strings.Join(args, " "),
 	}.Parse()
 
-	h := clihandler.New(&cmd, conf)
+	h := clihandler.New(&cmd, &conf.CLI)
 	if parseError != 0 {
 		h.HandleParsingError(parseError)
 	} else {

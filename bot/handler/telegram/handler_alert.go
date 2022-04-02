@@ -9,7 +9,7 @@ import (
 )
 
 // PriceAlert sends alerts to users if a condition is matched.
-func (h *handler) PriceAlert(alert bot.Alert, conf Config) {
+func (h *handler) PriceAlert(alert bot.Alert) {
 	// Notify user of the alert handler
 	startMsg := utils.Printer.Sprintf(
 		"Your alert handler ID is %s\nMessage: %s\nTime: %s)",
@@ -19,17 +19,17 @@ func (h *handler) PriceAlert(alert bot.Alert, conf Config) {
 	)
 	h.send(startMsg)
 	// Channels for alerting and time ticker
-	matchedChan := make(chan bool, conf.AlertTimes)
+	matchedChan := make(chan bool, h.conf.Handler.AlertTimes)
 	errChan := make(chan error)
 	ticker := time.NewTicker(
-		time.Duration(conf.AlertInterval) * time.Second,
+		time.Duration(h.conf.Handler.AlertInterval) * time.Second,
 	)
 	defer ticker.Stop()
 	// First alert right away
 	bot.GetQuoteAndAlert(&alert, matchedChan, errChan)
 	// Then we range over the channels
 	c := 0
-	for c < conf.AlertTimes {
+	for c < h.conf.Handler.AlertTimes {
 		select {
 		case <-h.Quit:
 			h.notifyStop()
