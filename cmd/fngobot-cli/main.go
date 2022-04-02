@@ -18,6 +18,7 @@ import (
 var (
 	cmdFlags cmd.Flags
 	conf     *config.Config
+	done     = make(chan struct{})
 )
 
 func init() {
@@ -51,37 +52,38 @@ func main() {
 		Text: strings.Join(args, " "),
 	}.Parse()
 
-	// sigChan for receiving OS signals for graceful shutdowns
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(
-		sigChan,
-		syscall.SIGHUP,  // kill -SIGHUP XXXX
-		syscall.SIGINT,  // kill -SIGINT XXXX or Ctrl+c
-		syscall.SIGQUIT, // kill -SIGQUIT XXXX
-		syscall.SIGTERM, // kill -SIGTERM XXXX
-	)
-	done := make(chan struct{})
-
-	// Graceful shutdown
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		for {
-			select {
-			case <-sigChan:
-				os.Exit(1)
-			case <-done:
-				os.Exit(0)
-			}
-		}
-	}()
-
 	h := clihandler.New(&cmd, &conf.CLI, done)
 	if parseError != 0 {
 		h.HandleParsingError(parseError)
 	} else {
+		var wg sync.WaitGroup
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			// sigChan for receiving OS signals for graceful shutdowns
+			sigChan := make(chan os.Signal, 1)
+			signal.Notify(
+				sigChan,
+				syscall.SIGHUP,  // kill -SIGHUP XXXX
+				syscall.SIGINT,  // kill -SIGINT XXXX or Ctrl+c
+				syscall.SIGQUIT, // kill -SIGQUIT XXXX
+				syscall.SIGTERM, // kill -SIGTERM XXXX
+			)
+
+			// Graceful shutdown
+			go func() {
+				for {
+					select {
+					case <-sigChan:
+						log.Fatal("received interrupt")
+					case <-done:
+						os.Exit(0)
+					}
+				}
+			}()
+		}()
 		defer h.Done()
 		h.Handle(targetBot)
+		wg.Wait()
 	}
 }

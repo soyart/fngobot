@@ -44,7 +44,6 @@ func (h *handler) Quote(securities []bot.Security) {
 				h.UUID(), s.GetSrcStr(), s.Tick, bid, ask, last,
 			)
 			h.reply(msg)
-			// quotes <- q
 		}(security)
 	}
 	wg.Wait()

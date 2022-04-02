@@ -31,7 +31,6 @@ func (h *handler) Quote(securities []bot.Security) {
 		}(security)
 	}
 	wg.Wait()
-	h.done <- struct{}{}
 }
 
 func printQuote(t string, s enums.Src, q fetch.Quoter) {
