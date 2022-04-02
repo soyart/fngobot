@@ -4,8 +4,10 @@ cli:
     alert_interval: 60
     alert_times: 5
 telegram:
-  bot_token: 123456789:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
   handler:
     track_interval: 60
     alert_interval: 60
     alert_times: 5
+  # bot_tokens are array, so you can add more than 1 token
+  bot_tokens:
+    - 123456789:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
