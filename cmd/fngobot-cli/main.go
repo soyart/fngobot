@@ -3,7 +3,10 @@ package main
 import (
 	"log"
 	"os"
+	"os/signal"
 	"strings"
+	"sync"
+	"syscall"
 
 	clihandler "github.com/artnoi43/fngobot/bot/handler/cli"
 	"github.com/artnoi43/fngobot/cmd"
@@ -48,7 +51,33 @@ func main() {
 		Text: strings.Join(args, " "),
 	}.Parse()
 
-	h := clihandler.New(&cmd, &conf.CLI)
+	// sigChan for receiving OS signals for graceful shutdowns
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(
+		sigChan,
+		syscall.SIGHUP,  // kill -SIGHUP XXXX
+		syscall.SIGINT,  // kill -SIGINT XXXX or Ctrl+c
+		syscall.SIGQUIT, // kill -SIGQUIT XXXX
+		syscall.SIGTERM, // kill -SIGTERM XXXX
+	)
+	done := make(chan struct{})
+
+	// Graceful shutdown
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for {
+			select {
+			case <-sigChan:
+				os.Exit(1)
+			case <-done:
+				os.Exit(0)
+			}
+		}
+	}()
+
+	h := clihandler.New(&cmd, &conf.CLI, done)
 	if parseError != 0 {
 		h.HandleParsingError(parseError)
 	} else {

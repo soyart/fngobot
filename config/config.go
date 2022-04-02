@@ -11,6 +11,7 @@ import (
 
 	clihandler "github.com/artnoi43/fngobot/bot/handler/cli"
 	tghandler "github.com/artnoi43/fngobot/bot/handler/telegram"
+	"github.com/artnoi43/fngobot/enums"
 )
 
 type Config struct {
@@ -64,6 +65,7 @@ func InitConfig(dir string, file string, ext string) (conf *Config, err error) {
 	}
 	j, _ := json.Marshal(conf)
 	fmt.Printf("%s\n", j)
+	fmt.Println(enums.Bar)
 	return conf, nil
 }
 

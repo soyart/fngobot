@@ -55,4 +55,5 @@ func (h *handler) Track(
 		h.UUID(),
 		strings.Join(tickers, ", "),
 	)
+	h.done <- struct{}{}
 }

@@ -1,6 +1,7 @@
 package clihandler
 
 import (
+	"fmt"
 	"log"
 	"sync"
 
@@ -30,6 +31,7 @@ func (h *handler) Quote(securities []bot.Security) {
 		}(security)
 	}
 	wg.Wait()
+	h.done <- struct{}{}
 }
 
 func printQuote(t string, s enums.Src, q fetch.Quoter) {
@@ -49,5 +51,5 @@ func printQuote(t string, s enums.Src, q fetch.Quoter) {
 		"Ticker: %s [%s]\nBid: %f\nAsk: %f\nLast: %f\n",
 		t, s, bid, ask, last,
 	)
-	utils.Printer.Println("===================")
+	fmt.Println(enums.Bar)
 }

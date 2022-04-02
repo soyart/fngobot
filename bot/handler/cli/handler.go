@@ -12,7 +12,8 @@ import (
 
 type handler struct {
 	*_handler.BaseHandler
-	conf *Config `json:"-" yaml:"-"`
+	conf *Config       `json:"-" yaml:"-"`
+	done chan struct{} `json:"-" yaml:"-"`
 }
 
 func (h *handler) UUID() string              { return h.Uuid }
@@ -52,6 +53,7 @@ func (h *handler) notifyStop() {
 func New(
 	cmd *parse.BotCommand,
 	conf *Config,
+	done chan struct{},
 ) _handler.Handler {
 	return &handler{
 		BaseHandler: &_handler.BaseHandler{
@@ -61,5 +63,6 @@ func New(
 			Quit:  utils.NewQuit(),
 		},
 		conf: conf,
+		done: done,
 	}
 }

@@ -48,3 +48,5 @@ var BotMap = map[Command]BotType{
 	HelpCommand:     HELPBOT,
 	HandlersCommand: HANDLERS,
 }
+
+const Bar = "=============================="

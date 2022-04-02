@@ -24,6 +24,8 @@ type Handler interface {
 
 type Handlers []Handler
 
+// BaseHandler represents most boiler plate fields for any handler structs.
+// Embed it in your new handler, or ignore it completely
 type BaseHandler struct {
 	Uuid   string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 	Cmd    *parse.BotCommand `json:"command,omitempty" yaml:"command,omitempty"`

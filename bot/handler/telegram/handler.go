@@ -19,6 +19,7 @@ var (
 	SenderHandlers = make(map[int64]_handler.Handlers)
 )
 
+// handler implements _handler.Handler, and has _handler.BaseHandler embedded
 type handler struct {
 	*_handler.BaseHandler
 	conf Config          `json:"-" yaml:"-"`
@@ -86,7 +87,7 @@ func Remove(senderId int64, idx int) {
 	)
 }
 
-// New returns a new handler and appends it to SenderHandlers
+// New returns a new handler (Telegram) and appends it to SenderHandlers
 func New(
 	b *telebot.Bot,
 	c telebot.Context,
@@ -98,9 +99,7 @@ func New(
 	// Log every new handler
 	log.Printf(
 		"[%s]: %s (from %d)\n",
-		uuid,
-		m.Text,
-		m.Sender.ID,
+		uuid, m.Text, m.Sender.ID,
 	)
 	h := &handler{
 		BaseHandler: &_handler.BaseHandler{
