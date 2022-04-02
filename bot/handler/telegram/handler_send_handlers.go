@@ -14,7 +14,7 @@ import (
 func (h *handler) SendHandlers() error {
 	var nullChecker = &parse.BotCommand{}
 	var runningHandlers []*handler
-	for _, handlerInterface := range SenderHandlers[h.tbCtx.Message().Sender.ID] {
+	for _, handlerInterface := range SenderHandlers[h.c.Message().Sender.ID] {
 		// Discard null struct
 		h, ok := handlerInterface.(*handler)
 		if !ok {

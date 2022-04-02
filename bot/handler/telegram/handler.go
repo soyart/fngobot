@@ -20,14 +20,10 @@ var (
 )
 
 type handler struct {
-	Uuid   string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	conf   Config            `json:"-" yaml:"-"`
-	Cmd    *parse.BotCommand `json:"command,omitempty" yaml:"command,omitempty"`
-	Start  time.Time         `json:"start,omitempty" yaml:"start,omitempty"`
-	Quit   chan struct{}     `json:"-" yaml:"-"`
-	IsDone bool              `json:"-" yaml:"-"`
-	Bot    *telebot.Bot      `json:"-" yaml:"-"`
-	tbCtx  telebot.Context   `json:"-" yaml:"-"`
+	*_handler.BaseHandler
+	conf Config          `json:"-" yaml:"-"`
+	c    telebot.Context `json:"-" yaml:"-"`
+	bot  *telebot.Bot    `json:"-" yaml:"-"`
 }
 
 func (h *handler) UUID() string              { return h.Uuid }
@@ -62,15 +58,15 @@ func (h *handler) Handle(t enums.BotType) {
 // send sends given string to the handler's sender
 // Now fngobot uses reply()
 // func (h *handler) send(s string) {
-// 	sender := h.tbCtx.Message().Sender
+// 	sender := h.c.Message().Sender
 // 	if _, err := h.Bot.Send(sender, s); err != nil {
 // 		log.Printf("[%s] failed to send message\n", h.Uuid)
 // 	}
 // }
 
 func (h *handler) reply(s string) {
-	chatMsg := h.tbCtx.Message()
-	if _, err := h.Bot.Reply(chatMsg, s); err != nil {
+	chatMsg := h.c.Message()
+	if _, err := h.bot.Reply(chatMsg, s); err != nil {
 		log.Printf("[%s] failed to reply message\n", h.Uuid)
 	}
 }
@@ -93,12 +89,12 @@ func Remove(senderId int64, idx int) {
 // New returns a new handler and appends it to SenderHandlers
 func New(
 	b *telebot.Bot,
-	ctx telebot.Context,
+	c telebot.Context,
 	cmd *parse.BotCommand,
 	conf Config,
 ) _handler.Handler {
 	uuid := utils.NewUUID()
-	m := ctx.Message()
+	m := c.Message()
 	// Log every new handler
 	log.Printf(
 		"[%s]: %s (from %d)\n",
@@ -107,14 +103,16 @@ func New(
 		m.Sender.ID,
 	)
 	h := &handler{
-		Start:  time.Now(),
-		Uuid:   uuid,
-		Cmd:    cmd,
-		Quit:   utils.NewQuit(),
-		IsDone: false,
-		conf:   conf,
-		Bot:    b,
-		tbCtx:  ctx,
+		BaseHandler: &_handler.BaseHandler{
+			Start:  time.Now(),
+			Uuid:   uuid,
+			Cmd:    cmd,
+			IsDone: false,
+			Quit:   utils.NewQuit(),
+		},
+		conf: conf,
+		bot:  b,
+		c:    c,
 	}
 	SenderHandlers[m.Sender.ID] = append(SenderHandlers[m.Sender.ID], h)
 	return h

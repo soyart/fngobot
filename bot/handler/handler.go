@@ -2,6 +2,7 @@ package handler
 
 import (
 	"log"
+	"time"
 
 	"github.com/artnoi43/fngobot/bot"
 	"github.com/artnoi43/fngobot/enums"
@@ -22,6 +23,14 @@ type Handler interface {
 }
 
 type Handlers []Handler
+
+type BaseHandler struct {
+	Uuid   string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
+	Cmd    *parse.BotCommand `json:"command,omitempty" yaml:"command,omitempty"`
+	Start  time.Time         `json:"start,omitempty" yaml:"start,omitempty"`
+	IsDone bool              `json:"-" yaml:"-"`
+	Quit   chan struct{}     `json:"-" yaml:"-"`
+}
 
 // Stop stops a handler with matching UUID,
 // returning the index to the target handler

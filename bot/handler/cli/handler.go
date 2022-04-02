@@ -11,12 +11,8 @@ import (
 )
 
 type handler struct {
-	Uuid   string            `json:"uuid,omitempty" yaml:"uuid,omitempty"`
-	conf   *Config           `json:"-" yaml:"-"`
-	Cmd    *parse.BotCommand `json:"command,omitempty" yaml:"command,omitempty"`
-	Start  time.Time         `json:"start,omitempty" yaml:"start,omitempty"`
-	IsDone bool              `json:"isDone" yaml:"isDone"`
-	Quit   chan struct{}     `json:"-" yaml:"-"`
+	*_handler.BaseHandler
+	conf *Config `json:"-" yaml:"-"`
 }
 
 func (h *handler) UUID() string              { return h.Uuid }
@@ -58,10 +54,12 @@ func New(
 	conf *Config,
 ) _handler.Handler {
 	return &handler{
-		Start: time.Now(),
-		Uuid:  utils.NewUUID(),
-		Quit:  utils.NewQuit(),
-		Cmd:   cmd,
-		conf:  conf,
+		BaseHandler: &_handler.BaseHandler{
+			Start: time.Now(),
+			Uuid:  utils.NewUUID(),
+			Cmd:   cmd,
+			Quit:  utils.NewQuit(),
+		},
+		conf: conf,
 	}
 }

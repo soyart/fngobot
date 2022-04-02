@@ -11,7 +11,7 @@ import (
 // PriceAlert sends alerts to users if a condition is matched.
 func (h *handler) PriceAlert(alert bot.Alert) {
 	// Notify user of the alert handler
-	chatMsg := h.tbCtx.Message()
+	chatMsg := h.c.Message()
 	startMsg := utils.Printer.Sprintf(
 		"Your alert handler ID is %s\nMessage: %s\nTime: %s)",
 		h.Uuid,
