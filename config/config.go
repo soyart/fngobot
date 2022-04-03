@@ -9,9 +9,9 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 
-	clihandler "github.com/artnoi43/fngobot/bot/handler/cli"
-	tghandler "github.com/artnoi43/fngobot/bot/handler/telegram"
-	"github.com/artnoi43/fngobot/enums"
+	clihandler "github.com/artnoi43/fngobot/lib/bot/handler/cli"
+	tghandler "github.com/artnoi43/fngobot/lib/bot/handler/telegram"
+	"github.com/artnoi43/fngobot/lib/enums"
 )
 
 type Config struct {

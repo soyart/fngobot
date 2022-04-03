@@ -11,10 +11,10 @@ import (
 
 	tb "gopkg.in/tucnak/telebot.v3"
 
-	tghandler "github.com/artnoi43/fngobot/bot/handler/telegram"
-	"github.com/artnoi43/fngobot/enums"
-	"github.com/artnoi43/fngobot/help"
-	"github.com/artnoi43/fngobot/parse"
+	tghandler "github.com/artnoi43/fngobot/lib/bot/handler/telegram"
+	"github.com/artnoi43/fngobot/lib/enums"
+	"github.com/artnoi43/fngobot/lib/etc/help"
+	"github.com/artnoi43/fngobot/lib/parse"
 	"github.com/pkg/errors"
 )
 

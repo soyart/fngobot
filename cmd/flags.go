@@ -3,7 +3,7 @@ package cmd
 import (
 	"flag"
 
-	"github.com/artnoi43/fngobot/enums"
+	"github.com/artnoi43/fngobot/lib/enums"
 )
 
 type Flags struct {

@@ -8,11 +8,11 @@ import (
 	"sync"
 	"syscall"
 
-	clihandler "github.com/artnoi43/fngobot/bot/handler/cli"
 	"github.com/artnoi43/fngobot/cmd"
 	"github.com/artnoi43/fngobot/config"
-	"github.com/artnoi43/fngobot/enums"
-	"github.com/artnoi43/fngobot/parse"
+	clihandler "github.com/artnoi43/fngobot/lib/bot/handler/cli"
+	"github.com/artnoi43/fngobot/lib/enums"
+	"github.com/artnoi43/fngobot/lib/parse"
 )
 
 var (

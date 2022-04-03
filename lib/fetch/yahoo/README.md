@@ -1,0 +1,2 @@
+## github.com/artnoi43/fngobot/lib/fetch/satang
+Package `yahoo` defines functions `Get` and `GetCrypto`. These functions wrap `quote.Get` and `crypto.Get` respectively, and return structs implementing `bot.Quoter` interface.
