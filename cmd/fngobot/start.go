@@ -56,62 +56,13 @@ func start(token string) error {
 		log.Println("error sending Telegram message to recipient")
 	}
 
-	b.Handle("/help", func(c tb.Context) error {
-		cmd, _ := parse.UserCommand{
-			Text:      c.Text(),
-			TargetBot: enums.HelpBot,
-		}.Parse()
-		if _, err := b.Reply(c.Message(), cmd.Help.HelpMessage); err != nil {
-			sendFail()
-		}
-		return nil
-	})
+	b.Handle("/help", handle(b, "/help"))
+	b.Handle("/quote", handle(b, "/quote"))
+	b.Handle("/track", handle(b, "/track"))
+	b.Handle("/alert", handle(b, "/alert"))
+	b.Handle("/handlers", handle(b, "/handlers"))
 
-	b.Handle("/quote", func(c tb.Context) error {
-		cmd, parseError := parse.UserCommand{
-			Text:      c.Text(),
-			TargetBot: enums.QuoteBot,
-		}.Parse()
-		h := tghandler.New(b, c, &cmd, conf.Telegram)
-		if parseError != 0 {
-			h.HandleParsingError(parseError)
-		} else {
-			defer h.Done()
-			h.Handle(enums.QuoteBot)
-		}
-		return nil
-	})
-
-	b.Handle("/track", func(c tb.Context) error {
-		cmd, parseError := parse.UserCommand{
-			Text:      c.Text(),
-			TargetBot: enums.TrackBot,
-		}.Parse()
-		h := tghandler.New(b, c, &cmd, conf.Telegram)
-		if parseError != 0 {
-			h.HandleParsingError(parseError)
-		} else {
-			defer h.Done()
-			h.Handle(enums.TrackBot)
-		}
-		return nil
-	})
-
-	b.Handle("/alert", func(c tb.Context) error {
-		cmd, parseError := parse.UserCommand{
-			Text:      c.Text(),
-			TargetBot: enums.AlertBot,
-		}.Parse()
-		h := tghandler.New(b, c, &cmd, conf.Telegram)
-		if parseError != 0 {
-			h.HandleParsingError(parseError)
-		} else {
-			defer h.Done()
-			h.Handle(enums.AlertBot)
-		}
-		return nil
-	})
-
+	// Welcome/Greeting
 	b.Handle("/start", func(c tb.Context) error {
 		log.Println(c.Text())
 		if _, err := b.Reply(c.Message(), help.LONG); err != nil {
@@ -123,23 +74,7 @@ func start(token string) error {
 		return nil
 	})
 
-	// Stop a tracking or alerting tghandler
-	b.Handle("/handlers", func(c tb.Context) error {
-		cmd, parseError := parse.UserCommand{
-			Text:      c.Text(),
-			TargetBot: enums.HandlersBot,
-		}.Parse()
-		h := tghandler.New(b, c, &cmd, conf.Telegram)
-		if parseError != 0 {
-			h.HandleParsingError(parseError)
-		} else {
-			defer h.Done()
-			h.Handle(enums.HandlersBot)
-		}
-		return nil
-	})
-
-	// Stop a tracking or alerting tghandler
+	// Stop a tracking or alerting Telegram handler
 	b.Handle("/stop", func(c tb.Context) error {
 		senderId := c.Sender().ID
 		uuids := strings.Split(c.Text(), " ")[1:]
@@ -174,4 +109,35 @@ func start(token string) error {
 	wg.Wait()
 	log.Println("fngobot exited")
 	return nil
+}
+
+func handle(
+	b *tb.Bot,
+	command enums.InputCommand,
+) func(c tb.Context) error {
+	return func(c tb.Context) error {
+		targetBot, exits := enums.BotMap[command]
+		if !exits {
+			return fmt.Errorf("invalid command")
+		}
+		cmd, parseError := parse.UserCommand{
+			Text:      c.Text(),
+			TargetBot: targetBot,
+		}.Parse()
+		h := tghandler.New(b, c, &cmd, conf.Telegram)
+		if parseError != 0 {
+			h.HandleParsingError(parseError)
+			return fmt.Errorf("parseError: %d", parseError)
+		}
+		defer h.Done()
+		h.Handle(targetBot)
+
+		if targetBot == enums.HelpBot {
+			if _, err := b.Reply(c.Message(), cmd.Help.HelpMessage); err != nil {
+				return errors.Wrap(err, "failed to send help message")
+			}
+			return nil
+		}
+		return nil
+	}
 }

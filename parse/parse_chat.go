@@ -75,15 +75,18 @@ func (cmd *quoteCommand) appendSecurities(ticks []string, src enums.Src) {
 
 // Parse parses UserCommand to BotCommand
 func (c UserCommand) Parse() (cmd BotCommand, e ParseError) {
-	if c.TargetBot == enums.HandlersBot {
+	targetBot := c.TargetBot
+	if targetBot == enums.HandlersBot {
 		return cmd, 0
 	}
 	chat := strings.Split(c.Text, " ")
 	lenChat := len(chat)
-	sw := strings.ToUpper(chat[1])
+	var sw string
+	if targetBot != enums.HelpBot {
+		sw = strings.ToUpper(chat[1])
+	}
 	idx, src := getSrc(sw)
-
-	switch c.TargetBot {
+	switch targetBot {
 	case enums.HelpBot:
 		cmd.Help.HelpMessage = help.GetHelp(c.Text)
 	case enums.QuoteBot:

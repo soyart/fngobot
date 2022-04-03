@@ -1,6 +1,8 @@
 package help
 
-import "strings"
+import (
+	"strings"
+)
 
 func GetHelp(s string) string {
 	chat := strings.Split(s, " ")
