@@ -58,8 +58,8 @@ func start(token string) error {
 
 	b.Handle("/help", func(c tb.Context) error {
 		cmd, _ := parse.UserCommand{
-			Type: enums.HelpBot,
-			Text: c.Text(),
+			Text:      c.Text(),
+			TargetBot: enums.HelpBot,
 		}.Parse()
 		if _, err := b.Reply(c.Message(), cmd.Help.HelpMessage); err != nil {
 			sendFail()
@@ -69,8 +69,8 @@ func start(token string) error {
 
 	b.Handle("/quote", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
-			Type: enums.QuoteBot,
-			Text: c.Text(),
+			Text:      c.Text(),
+			TargetBot: enums.QuoteBot,
 		}.Parse()
 		h := tghandler.New(b, c, &cmd, conf.Telegram)
 		if parseError != 0 {
@@ -84,8 +84,8 @@ func start(token string) error {
 
 	b.Handle("/track", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
-			Type: enums.TrackBot,
-			Text: c.Text(),
+			Text:      c.Text(),
+			TargetBot: enums.TrackBot,
 		}.Parse()
 		h := tghandler.New(b, c, &cmd, conf.Telegram)
 		if parseError != 0 {
@@ -99,8 +99,8 @@ func start(token string) error {
 
 	b.Handle("/alert", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
-			Type: enums.AlertBot,
-			Text: c.Text(),
+			Text:      c.Text(),
+			TargetBot: enums.AlertBot,
 		}.Parse()
 		h := tghandler.New(b, c, &cmd, conf.Telegram)
 		if parseError != 0 {
@@ -126,8 +126,8 @@ func start(token string) error {
 	// Stop a tracking or alerting tghandler
 	b.Handle("/handlers", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
-			Type: enums.HandlersBot,
-			Text: c.Text(),
+			Text:      c.Text(),
+			TargetBot: enums.HandlersBot,
 		}.Parse()
 		h := tghandler.New(b, c, &cmd, conf.Telegram)
 		if parseError != 0 {

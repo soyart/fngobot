@@ -86,7 +86,7 @@ func TestParse(t *testing.T) {
 		report := func() {
 			fmt.Printf("In: %s\nOut: %s\n", inJSON, outJSON)
 		}
-		switch test.In.Type {
+		switch test.In.TargetBot {
 		case enums.QuoteBot:
 			if !reflect.DeepEqual(out.Quote.Securities, test.Expected.Quote.Securities) {
 				t.Errorf("[/quote] invalid quote securities")
@@ -137,8 +137,9 @@ var (
 	tests = []parseTest{
 		{
 			In: UserCommand{
-				Type: enums.QuoteBot,
-				Text: "/quote gc=f"},
+				Text:      "/quote gc=f",
+				TargetBot: enums.QuoteBot,
+			},
 			Expected: BotCommand{
 				Quote: quoteCommand{
 					Securities: []bot.Security{
@@ -152,8 +153,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.QuoteBot,
-				Text: "/quote satang btc",
+				Text:      "/quote satang btc",
+				TargetBot: enums.QuoteBot,
 			},
 			Expected: BotCommand{
 				Quote: quoteCommand{
@@ -168,8 +169,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.QuoteBot,
-				Text: "/quote bitkub btc",
+				Text:      "/quote bitkub btc",
+				TargetBot: enums.QuoteBot,
 			},
 			Expected: BotCommand{
 				Quote: quoteCommand{
@@ -184,8 +185,9 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.QuoteBot,
-				Text: "/quote binance btc"},
+				Text:      "/quote binance btc",
+				TargetBot: enums.QuoteBot,
+			},
 			Expected: BotCommand{
 				Quote: quoteCommand{
 					Securities: []bot.Security{
@@ -199,8 +201,9 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.QuoteBot,
-				Text: "/quote coinbase ada"},
+				Text:      "/quote coinbase ada",
+				TargetBot: enums.QuoteBot,
+			},
 			Expected: BotCommand{
 				Quote: quoteCommand{
 					Securities: []bot.Security{
@@ -214,8 +217,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.TrackBot,
-				Text: "/track gc=f 2",
+				Text:      "/track gc=f 2",
+				TargetBot: enums.TrackBot,
 			},
 			Expected: BotCommand{
 				Track: trackCommand{
@@ -233,8 +236,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.TrackBot,
-				Text: "/track satang btc 69",
+				Text:      "/track satang btc 69",
+				TargetBot: enums.TrackBot,
 			},
 			Expected: BotCommand{
 				Track: trackCommand{
@@ -252,8 +255,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.TrackBot,
-				Text: "/track bitkub btc ada 69",
+				Text:      "/track bitkub btc ada 69",
+				TargetBot: enums.TrackBot,
 			},
 			Expected: BotCommand{
 				Track: trackCommand{
@@ -269,8 +272,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.TrackBot,
-				Text: "/track binance btc ada 69",
+				Text:      "/track binance btc ada 69",
+				TargetBot: enums.TrackBot,
 			},
 			Expected: BotCommand{
 				Track: trackCommand{
@@ -286,8 +289,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.TrackBot,
-				Text: "/track coinbase btc ada 69",
+				Text:      "/track coinbase btc ada 69",
+				TargetBot: enums.TrackBot,
 			},
 			Expected: BotCommand{
 				Track: trackCommand{
@@ -303,8 +306,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.AlertBot,
-				Text: "/alert gc=f > 0",
+				Text:      "/alert gc=f > 0",
+				TargetBot: enums.AlertBot,
 			},
 			Expected: BotCommand{
 				Alert: bot.Alert{
@@ -320,8 +323,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.AlertBot,
-				Text: "/alert gc=f bid > 0",
+				Text:      "/alert gc=f bid > 0",
+				TargetBot: enums.AlertBot,
 			},
 			Expected: BotCommand{
 				Alert: bot.Alert{
@@ -337,8 +340,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.AlertBot,
-				Text: "/alert satang btc bid > 112",
+				Text:      "/alert satang btc bid > 112",
+				TargetBot: enums.AlertBot,
 			},
 			Expected: BotCommand{
 				Alert: bot.Alert{
@@ -354,8 +357,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.AlertBot,
-				Text: "/alert bitkub btc < 112",
+				Text:      "/alert bitkub btc < 112",
+				TargetBot: enums.AlertBot,
 			},
 			Expected: BotCommand{
 				Alert: bot.Alert{
@@ -371,8 +374,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.AlertBot,
-				Text: "/alert bitkub btc bid > 112",
+				Text:      "/alert bitkub btc bid > 112",
+				TargetBot: enums.AlertBot,
 			},
 			Expected: BotCommand{
 				Alert: bot.Alert{
@@ -388,8 +391,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.AlertBot,
-				Text: "/alert binance btc bid > 112",
+				Text:      "/alert binance btc bid > 112",
+				TargetBot: enums.AlertBot,
 			},
 			Expected: BotCommand{
 				Alert: bot.Alert{
@@ -405,8 +408,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.AlertBot,
-				Text: "/alert coinbase btc bid > 112",
+				Text:      "/alert coinbase btc bid > 112",
+				TargetBot: enums.AlertBot,
 			},
 			Expected: BotCommand{
 				Alert: bot.Alert{
@@ -422,8 +425,8 @@ var (
 		},
 		{
 			In: UserCommand{
-				Type: enums.AlertBot,
-				Text: "/alert coinbase btc < 112",
+				Text:      "/alert coinbase btc < 112",
+				TargetBot: enums.AlertBot,
 			},
 			Expected: BotCommand{
 				Alert: bot.Alert{

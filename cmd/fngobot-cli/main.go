@@ -48,8 +48,8 @@ func main() {
 	}
 
 	cmd, parseError := parse.UserCommand{
-		Type: targetBot,
-		Text: strings.Join(args, " "),
+		Text:      strings.Join(args, " "),
+		TargetBot: targetBot,
 	}.Parse()
 
 	h := clihandler.New(&cmd, &conf.CLI, done)

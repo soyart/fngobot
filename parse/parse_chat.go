@@ -10,8 +10,8 @@ import (
 )
 
 type UserCommand struct {
-	Type enums.BotType `json:"command,omitempty"`
-	Text string        `json:"chat,omitempty"`
+	Text      string        `json:"chat,omitempty"`
+	TargetBot enums.BotType `json:"command,omitempty"`
 }
 
 type helpCommand struct {
@@ -75,7 +75,7 @@ func (cmd *quoteCommand) appendSecurities(ticks []string, src enums.Src) {
 
 // Parse parses UserCommand to BotCommand
 func (c UserCommand) Parse() (cmd BotCommand, e ParseError) {
-	if c.Type == enums.HandlersBot {
+	if c.TargetBot == enums.HandlersBot {
 		return cmd, 0
 	}
 	chat := strings.Split(c.Text, " ")
@@ -83,7 +83,7 @@ func (c UserCommand) Parse() (cmd BotCommand, e ParseError) {
 	sw := strings.ToUpper(chat[1])
 	idx, src := getSrc(sw)
 
-	switch c.Type {
+	switch c.TargetBot {
 	case enums.HelpBot:
 		cmd.Help.HelpMessage = help.GetHelp(c.Text)
 	case enums.QuoteBot:
