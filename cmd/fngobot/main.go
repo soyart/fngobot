@@ -5,9 +5,10 @@ import (
 	"sync"
 	"time"
 
+	tb "gopkg.in/tucnak/telebot.v3"
+
 	"github.com/artnoi43/fngobot/cmd"
 	"github.com/artnoi43/fngobot/config"
-	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 var (
@@ -51,8 +52,8 @@ func main() {
 		wg.Add(1)
 		go func(token string) {
 			defer wg.Done()
-			if err := runBot(b, token); err != nil {
-				log.Println("telegram bot error", err)
+			if err := handle(b, token); err != nil {
+				log.Printf("telegram bot %s error: %s\n", token, err.Error())
 			}
 		}(botToken)
 	}
