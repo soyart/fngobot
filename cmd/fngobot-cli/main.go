@@ -41,7 +41,7 @@ func init() {
 
 func main() {
 	args := os.Args[1:]
-	cmdStr := enums.Command(args[0])
+	cmdStr := enums.InputCommand(args[0])
 	targetBot, ok := enums.BotMap[cmdStr]
 	if !ok {
 		log.Fatal("invalid cmdStr")

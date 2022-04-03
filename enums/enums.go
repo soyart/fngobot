@@ -6,24 +6,24 @@ const (
 )
 
 type (
-	BotType   string
-	Command   string
-	QuoteType string
-	Condition string
+	InputCommand string
+	BotType      string
+	QuoteType    string
+	Condition    string
 )
 
 const (
+	QuoteCommand    InputCommand = "/quote"
+	TrackCommand    InputCommand = "/track"
+	AlertCommand    InputCommand = "/alert"
+	HelpCommand     InputCommand = "/help"
+	HandlersCommand InputCommand = "/handlers"
+
 	QuoteBot    BotType = "QUOTE"
 	TrackBot    BotType = "TRACK"
 	AlertBot    BotType = "ALERT"
 	HelpBot     BotType = "HELP"
 	HandlersBot BotType = "HANDLERSBOT"
-
-	QuoteCommand    Command = "/quote"
-	TrackCommand    Command = "/track"
-	AlertCommand    Command = "/alert"
-	HelpCommand     Command = "/help"
-	HandlersCommand Command = "/handlers"
 
 	Bid  QuoteType = "BID"
 	Ask  QuoteType = "ASK"
@@ -33,7 +33,7 @@ const (
 	Gt Condition = "GT"
 )
 
-var BotMap = map[Command]BotType{
+var BotMap = map[InputCommand]BotType{
 	QuoteCommand:    QuoteBot,
 	TrackCommand:    TrackBot,
 	AlertCommand:    AlertBot,
