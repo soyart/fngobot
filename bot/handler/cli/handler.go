@@ -23,16 +23,16 @@ func (h *handler) Done()                     { h.IsDone = true }
 
 func (h *handler) Handle(t enums.BotType) {
 	switch t {
-	case enums.QUOTEBOT:
+	case enums.QuoteBot:
 		h.Quote(
 			h.GetCmd().Quote.Securities,
 		)
-	case enums.TRACKBOT:
+	case enums.TrackBot:
 		h.Track(
 			h.GetCmd().Track.Securities,
 			h.GetCmd().Track.TrackTimes,
 		)
-	case enums.ALERTBOT:
+	case enums.AlertBot:
 		h.PriceAlert(
 			h.GetCmd().Alert,
 		)

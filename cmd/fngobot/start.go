@@ -58,7 +58,7 @@ func start(token string) error {
 
 	b.Handle("/help", func(c tb.Context) error {
 		cmd, _ := parse.UserCommand{
-			Type: enums.HELPBOT,
+			Type: enums.HelpBot,
 			Text: c.Text(),
 		}.Parse()
 		if _, err := b.Reply(c.Message(), cmd.Help.HelpMessage); err != nil {
@@ -69,7 +69,7 @@ func start(token string) error {
 
 	b.Handle("/quote", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
-			Type: enums.QUOTEBOT,
+			Type: enums.QuoteBot,
 			Text: c.Text(),
 		}.Parse()
 		h := tghandler.New(b, c, &cmd, conf.Telegram)
@@ -77,14 +77,14 @@ func start(token string) error {
 			h.HandleParsingError(parseError)
 		} else {
 			defer h.Done()
-			h.Handle(enums.QUOTEBOT)
+			h.Handle(enums.QuoteBot)
 		}
 		return nil
 	})
 
 	b.Handle("/track", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
-			Type: enums.TRACKBOT,
+			Type: enums.TrackBot,
 			Text: c.Text(),
 		}.Parse()
 		h := tghandler.New(b, c, &cmd, conf.Telegram)
@@ -92,14 +92,14 @@ func start(token string) error {
 			h.HandleParsingError(parseError)
 		} else {
 			defer h.Done()
-			h.Handle(enums.TRACKBOT)
+			h.Handle(enums.TrackBot)
 		}
 		return nil
 	})
 
 	b.Handle("/alert", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
-			Type: enums.ALERTBOT,
+			Type: enums.AlertBot,
 			Text: c.Text(),
 		}.Parse()
 		h := tghandler.New(b, c, &cmd, conf.Telegram)
@@ -107,7 +107,7 @@ func start(token string) error {
 			h.HandleParsingError(parseError)
 		} else {
 			defer h.Done()
-			h.Handle(enums.ALERTBOT)
+			h.Handle(enums.AlertBot)
 		}
 		return nil
 	})
@@ -126,7 +126,7 @@ func start(token string) error {
 	// Stop a tracking or alerting tghandler
 	b.Handle("/handlers", func(c tb.Context) error {
 		cmd, parseError := parse.UserCommand{
-			Type: enums.HANDLERS,
+			Type: enums.HandlersBot,
 			Text: c.Text(),
 		}.Parse()
 		h := tghandler.New(b, c, &cmd, conf.Telegram)
@@ -134,7 +134,7 @@ func start(token string) error {
 			h.HandleParsingError(parseError)
 		} else {
 			defer h.Done()
-			h.Handle(enums.HANDLERS)
+			h.Handle(enums.HandlersBot)
 		}
 		return nil
 	})

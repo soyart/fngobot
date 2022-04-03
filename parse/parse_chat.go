@@ -75,7 +75,7 @@ func (cmd *quoteCommand) appendSecurities(ticks []string, src enums.Src) {
 
 // Parse parses UserCommand to BotCommand
 func (c UserCommand) Parse() (cmd BotCommand, e ParseError) {
-	if c.Type == enums.HANDLERS {
+	if c.Type == enums.HandlersBot {
 		return cmd, 0
 	}
 	chat := strings.Split(c.Text, " ")
@@ -84,18 +84,18 @@ func (c UserCommand) Parse() (cmd BotCommand, e ParseError) {
 	idx, src := getSrc(sw)
 
 	switch c.Type {
-	case enums.HELPBOT:
+	case enums.HelpBot:
 		cmd.Help.HelpMessage = help.GetHelp(c.Text)
-	case enums.QUOTEBOT:
+	case enums.QuoteBot:
 		cmd.Quote.appendSecurities(chat[idx:], src)
-	case enums.TRACKBOT:
+	case enums.TrackBot:
 		cmd.Track.appendSecurities(chat[idx:lenChat-1], src)
 		r, err := strconv.Atoi(chat[lenChat-1])
 		if err != nil {
 			return cmd, ErrParseInt
 		}
 		cmd.Track.TrackTimes = r
-	case enums.ALERTBOT:
+	case enums.AlertBot:
 		cmd.Alert.Security.Tick = strings.ToUpper(chat[idx])
 		cmd.Alert.Security.Src = src
 		targ, err := strconv.ParseFloat(chat[lenChat-1], 64)

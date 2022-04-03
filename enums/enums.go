@@ -1,52 +1,42 @@
 package enums
 
-const CONF = "$HOME/.config/fngobot/config.yml"
-
-// Bot types - used in handler.Handle()
-type BotType string
-
 const (
-	QUOTEBOT BotType = "Quote"
-	TRACKBOT BotType = "Track"
-	ALERTBOT BotType = "Alert"
-	HELPBOT  BotType = "Help"
-	HANDLERS BotType = "Handlers"
+	Bar  = "=============================="
+	CONF = "$HOME/.config/fngobot/config.yml"
 )
 
-// quote types
-type QuoteType string
-
-const (
-	Bid  QuoteType = "bid"
-	Ask  QuoteType = "ask"
-	Last QuoteType = "last"
+type (
+	BotType   string
+	Command   string
+	QuoteType string
+	Condition string
 )
 
-// alert condition
-type Condition string
-
 const (
-	Lt Condition = "LT"
-	Gt Condition = "GT"
-)
+	QuoteBot    BotType = "QUOTE"
+	TrackBot    BotType = "TRACK"
+	AlertBot    BotType = "ALERT"
+	HelpBot     BotType = "HELP"
+	HandlersBot BotType = "HANDLERSBOT"
 
-// For CLI
-type Command string
-
-const (
 	QuoteCommand    Command = "/quote"
 	TrackCommand    Command = "/track"
 	AlertCommand    Command = "/alert"
 	HelpCommand     Command = "/help"
 	HandlersCommand Command = "/handlers"
+
+	Bid  QuoteType = "BID"
+	Ask  QuoteType = "ASK"
+	Last QuoteType = "LAST"
+
+	Lt Condition = "LT"
+	Gt Condition = "GT"
 )
 
 var BotMap = map[Command]BotType{
-	QuoteCommand:    QUOTEBOT,
-	TrackCommand:    TRACKBOT,
-	AlertCommand:    ALERTBOT,
-	HelpCommand:     HELPBOT,
-	HandlersCommand: HANDLERS,
+	QuoteCommand:    QuoteBot,
+	TrackCommand:    TrackBot,
+	AlertCommand:    AlertBot,
+	HelpCommand:     HelpBot,
+	HandlersCommand: HandlersBot,
 }
-
-const Bar = "=============================="

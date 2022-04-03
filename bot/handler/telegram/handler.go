@@ -36,20 +36,20 @@ func (h *handler) Done()                     { h.IsDone = true }
 // Handle calls different methods on h based on its function parameter
 func (h *handler) Handle(t enums.BotType) {
 	switch t {
-	case enums.QUOTEBOT:
+	case enums.QuoteBot:
 		h.Quote(
 			h.GetCmd().Quote.Securities,
 		)
-	case enums.TRACKBOT:
+	case enums.TrackBot:
 		h.Track(
 			h.GetCmd().Track.Securities,
 			h.GetCmd().Track.TrackTimes,
 		)
-	case enums.ALERTBOT:
+	case enums.AlertBot:
 		h.PriceAlert(
 			h.GetCmd().Alert,
 		)
-	case enums.HANDLERS:
+	case enums.HandlersBot:
 		if err := h.SendHandlers(); err != nil {
 			log.Println("failed to send handlers:", err.Error())
 		}
