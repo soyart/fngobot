@@ -42,13 +42,15 @@ func InitConfig(dir string, file string, ext string) (conf *Config, err error) {
 	// AlertInterval int `mapstructure:"alert_interval"`
 	// AlertTimes    int `mapstructure:"alert_times"`
 
-	viper.SetDefault("telegram.bot_token", "123456789:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-	viper.SetDefault("telegram.handler.track_interval", 60)
-	viper.SetDefault("telegram.handler.alert_interval", 60)
-	viper.SetDefault("telegram.handler.alert_times", 5)
 	viper.SetDefault("cli.handler.track_interval", 60)
 	viper.SetDefault("cli.handler.alert_interval", 60)
 	viper.SetDefault("cli.handler.alert_times", 5)
+	viper.SetDefault("telegram.handler.track_interval", 60)
+	viper.SetDefault("telegram.handler.alert_interval", 60)
+	viper.SetDefault("telegram.handler.alert_times", 5)
+	viper.SetDefault("telegram.client.bot_token", "123456789:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+	viper.SetDefault("telegram.client.timeout_seconds", 10)
+	viper.SetDefault("telegram.client.verbose", false)
 
 	// ENV
 	if err := viper.BindEnv("bot_token"); err != nil {

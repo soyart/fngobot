@@ -29,7 +29,7 @@ func init() {
 	if err != nil {
 		log.Fatalf("configuration failed\n%v", err)
 	}
-	tokens = conf.Telegram.BotTokens
+	tokens = conf.Telegram.Client.BotTokens
 }
 
 func main() {
@@ -37,9 +37,12 @@ func main() {
 	for _, botToken := range tokens {
 		b, err := tb.NewBot(tb.Settings{
 			/* If empty defaults to "https://api.telegram.org" */
-			URL:    "",
-			Token:  botToken,
-			Poller: &tb.LongPoller{Timeout: 10 * time.Second},
+			URL:   "https://api.telegram.org",
+			Token: botToken,
+			Poller: &tb.LongPoller{
+				Timeout: time.Duration(conf.Telegram.Client.TimeoutSeconds) * time.Second,
+			},
+			Verbose: conf.Telegram.Client.Verbose,
 		})
 		if err != nil {
 			log.Fatalf("failed to init new bot: %s\n", err.Error())
