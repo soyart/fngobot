@@ -8,7 +8,6 @@ import (
 	"strings"
 	"sync"
 	"syscall"
-	"time"
 
 	tb "gopkg.in/tucnak/telebot.v3"
 
@@ -19,17 +18,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func start(token string) error {
-	b, err := tb.NewBot(tb.Settings{
-		/* If empty defaults to "https://api.telegram.org" */
-		URL:    "",
-		Token:  token,
-		Poller: &tb.LongPoller{Timeout: 10 * time.Second},
-	})
-
-	if err != nil {
-		return errors.Wrapf(err, "failed to initialize bot.\nPossibly invalid token: %s", token)
-	}
+func runBot(b *tb.Bot, token string) error {
 
 	log.Printf("initialized bot: %s", token)
 
@@ -56,11 +45,11 @@ func start(token string) error {
 		log.Println("error sending Telegram message to recipient")
 	}
 
-	b.Handle("/help", handle(b, "/help"))
-	b.Handle("/quote", handle(b, "/quote"))
-	b.Handle("/track", handle(b, "/track"))
-	b.Handle("/alert", handle(b, "/alert"))
-	b.Handle("/handlers", handle(b, "/handlers"))
+	b.Handle("/help", handleFunc(b, "/help"))
+	b.Handle("/quote", handleFunc(b, "/quote"))
+	b.Handle("/track", handleFunc(b, "/track"))
+	b.Handle("/alert", handleFunc(b, "/alert"))
+	b.Handle("/handlers", handleFunc(b, "/handlers"))
 
 	// Welcome/Greeting
 	b.Handle("/start", func(c tb.Context) error {
@@ -111,7 +100,7 @@ func start(token string) error {
 	return nil
 }
 
-func handle(
+func handleFunc(
 	b *tb.Bot,
 	command enums.InputCommand,
 ) func(c tb.Context) error {

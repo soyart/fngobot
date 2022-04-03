@@ -3,9 +3,11 @@ package main
 import (
 	"log"
 	"sync"
+	"time"
 
 	"github.com/artnoi43/fngobot/cmd"
 	"github.com/artnoi43/fngobot/config"
+	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 var (
@@ -33,10 +35,20 @@ func init() {
 func main() {
 	var wg sync.WaitGroup
 	for _, botToken := range tokens {
+		b, err := tb.NewBot(tb.Settings{
+			/* If empty defaults to "https://api.telegram.org" */
+			URL:    "",
+			Token:  botToken,
+			Poller: &tb.LongPoller{Timeout: 10 * time.Second},
+		})
+		if err != nil {
+			log.Fatalf("failed to init new bot: %s\n", err.Error())
+		}
+
 		wg.Add(1)
 		go func(token string) {
 			defer wg.Done()
-			if err := start(token); err != nil {
+			if err := runBot(b, token); err != nil {
 				log.Println("telegram bot error", err)
 			}
 		}(botToken)
