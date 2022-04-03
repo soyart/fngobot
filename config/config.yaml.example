@@ -1,0 +1,16 @@
+cli:
+  handler:
+    track_interval: 5
+    alert_interval: 5
+    alert_times: 5
+telegram:
+  handler:
+    track_interval: 6
+    alert_interval: 5
+    alert_times: 5
+  client:
+    timeout_seconds: 12
+    verbose: 1
+    bot_tokens:
+      - 123456789:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      - 123456789:BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
