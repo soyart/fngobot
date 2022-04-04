@@ -4,7 +4,8 @@ type ParseError int
 
 const (
 	// These errors are non-zero
-	ErrParseInt ParseError = iota + 1
+	NoErr ParseError = iota
+	ErrParseInt
 	ErrParseFloat
 	ErrInvalidSign
 	ErrInvalidBidAskSwitch

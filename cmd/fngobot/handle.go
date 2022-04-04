@@ -81,7 +81,10 @@ func handle(b *tb.Bot, token string) error {
 			idx, ok := f.history[senderId].Stop(uuid)
 			if ok {
 				// Remove handler from slice f.history[senderId]
-				f.history[senderId] = append(f.history[senderId][:idx], f.history[senderId][idx+1:]...)
+				f.history[senderId] = append(
+					f.history[senderId][:idx],
+					f.history[senderId][idx+1:]...,
+				)
 				// Notify user for succesful removal
 				if _, err := b.Reply(
 					c.Message(),
@@ -161,7 +164,7 @@ func handleFunc(
 			TargetBot: targetBot,
 		}.Parse()
 		h := tghandler.New(b, c, &cmd, conf.Telegram)
-		if parseError != 0 {
+		if parseError != parse.NoErr {
 			h.HandleParsingError(parseError)
 			return fmt.Errorf("parseError: %d", parseError)
 		}
