@@ -154,7 +154,7 @@ func handleFunc(
 	return func(c tb.Context) error {
 		targetBot, exits := enums.BotMap[command]
 		if !exits {
-			return fmt.Errorf("invalid command")
+			return fmt.Errorf("invalid command '%s'", command)
 		}
 		cmd, parseError := parse.UserCommand{
 			Text:      c.Text(),
@@ -175,7 +175,6 @@ func handleFunc(
 			if _, err := b.Reply(c.Message(), cmd.Help.HelpMessage); err != nil {
 				return errors.Wrap(err, "failed to send help message")
 			}
-			return nil
 		}
 		return nil
 	}
