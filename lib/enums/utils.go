@@ -21,6 +21,8 @@ func isValid[T enum](value T, valids []T) bool {
 	return false
 }
 
+// IsValid returns whether the given value is present in a valid list.
+// Note: InputCommand values are NOT capitalized
 func (t InputCommand) IsValid() bool {
 	return isValid(
 		t,
@@ -28,13 +30,8 @@ func (t InputCommand) IsValid() bool {
 	)
 }
 
-func (t BotType) IsValid() bool {
-	return isValid(
-		utils.ToUpper(t),
-		validBotTypes,
-	)
-}
-
+// IsValid returns whether the given value is present in a valid list.
+// Note: Src values are NOT capitalized
 func (t Src) IsValid() bool {
 	return isValid(
 		t,
@@ -42,6 +39,17 @@ func (t Src) IsValid() bool {
 	)
 }
 
+// IsValid returns whether the given value is present in a valid list.
+// Note: BotType values are capitalized
+func (t BotType) IsValid() bool {
+	return isValid(
+		utils.ToUpper(t),
+		validBotTypes,
+	)
+}
+
+// IsValid returns whether the given value is present in a valid list.
+// Note: QuoteType values are capitalized
 func (t QuoteType) IsValid() bool {
 	return isValid(
 		utils.ToUpper(t),
@@ -49,6 +57,8 @@ func (t QuoteType) IsValid() bool {
 	)
 }
 
+// IsValid returns whether the given value is present in a valid list.
+// Note: Condition values are capitalized
 func (t Condition) IsValid() bool {
 	return isValid(
 		utils.ToUpper(t),
