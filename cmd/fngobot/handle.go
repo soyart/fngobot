@@ -82,6 +82,20 @@ func handle(b *tb.Bot, token string) error {
 			if ok {
 				// Remove handler from slice f.history[senderId]
 				f.history[senderId] = append(f.history[senderId][:idx], f.history[senderId][idx+1:]...)
+				// Notify user for succesful removal
+				if _, err := b.Reply(
+					c.Message(),
+					fmt.Sprintf("[%s] stopped", uuid),
+				); err != nil {
+					sendFail()
+				}
+				return nil
+			}
+			if _, err := b.Reply(
+				c.Message(),
+				fmt.Sprintf("[%s] does not exist", uuid),
+			); err != nil {
+				sendFail()
 			}
 		}
 		return nil
