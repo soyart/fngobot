@@ -14,12 +14,14 @@ type Handler interface {
 	UUID() string
 	QuitChan() chan struct{}
 	Done()
+	IsRunning() bool
 	GetCmd() *parse.BotCommand
 	Handle(enums.BotType)
 	HandleParsingError(parse.ParseError)
 	Quote([]bot.Security)
 	Track([]bot.Security, int)
 	PriceAlert(bot.Alert)
+	StartTime() time.Time
 }
 
 type Handlers []Handler
@@ -54,4 +56,18 @@ func (h Handlers) Stop(uuid string) (i int, ok bool) {
 		}
 	}
 	return i, ok
+}
+
+// These types are only for marshaling YAML
+type PrettyAlert struct {
+	Security  bot.Security `yaml:"Security,omitempty"`
+	Condition string       `yaml:"Condition,omitempty"`
+	Target    float64      `yaml:"Target,omitempty"`
+}
+type PrettyHandler struct {
+	Uuid  string         `yaml:"UUID,omitempty"`
+	Start string         `yaml:"Start,omitempty"`
+	Quote []bot.Security `yaml:"Quote,omitempty"`
+	Track []bot.Security `yaml:"Track,omitempty"`
+	Alert PrettyAlert    `yaml:"Alert,omitempty"`
 }

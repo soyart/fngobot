@@ -12,14 +12,22 @@ import (
 	"github.com/pkg/errors"
 	tb "gopkg.in/tucnak/telebot.v3"
 
+	"github.com/artnoi43/fngobot/lib/bot/handler"
 	tghandler "github.com/artnoi43/fngobot/lib/bot/handler/telegram"
+	"github.com/artnoi43/fngobot/lib/bot/handler/utils"
 	"github.com/artnoi43/fngobot/lib/enums"
 	"github.com/artnoi43/fngobot/lib/etc/help"
 	"github.com/artnoi43/fngobot/lib/parse"
 )
 
-func handle(b *tb.Bot, token string) error {
+type fngobot struct {
+	history map[int64]handler.Handlers
+}
 
+func handle(b *tb.Bot, token string) error {
+	f := &fngobot{
+		history: make(map[int64]handler.Handlers),
+	}
 	log.Printf("initialized bot: %s", token)
 
 	// sigChan for receiving OS signals for graceful shutdowns
@@ -45,11 +53,10 @@ func handle(b *tb.Bot, token string) error {
 		log.Println("error sending Telegram message to recipient")
 	}
 
-	b.Handle("/help", handleFunc(b, "/help"))
-	b.Handle("/quote", handleFunc(b, "/quote"))
-	b.Handle("/track", handleFunc(b, "/track"))
-	b.Handle("/alert", handleFunc(b, "/alert"))
-	b.Handle("/handlers", handleFunc(b, "/handlers"))
+	b.Handle("/help", handleFunc(b, f, "/help"))
+	b.Handle("/quote", handleFunc(b, f, "/quote"))
+	b.Handle("/track", handleFunc(b, f, "/track"))
+	b.Handle("/alert", handleFunc(b, f, "/alert"))
 
 	// Welcome/Greeting
 	b.Handle("/start", func(c tb.Context) error {
@@ -69,11 +76,34 @@ func handle(b *tb.Bot, token string) error {
 		uuids := strings.Split(c.Text(), " ")[1:]
 		for _, uuid := range uuids {
 			// Stop is Handlers method
-			idx, ok := tghandler.SenderHandlers[senderId].Stop(uuid)
+			idx, ok := f.history[senderId].Stop(uuid)
 			if ok {
-				// Remove is a plain function
-				tghandler.Remove(senderId, idx)
+				// Remove handler from slice f.history[senderId]
+				f.history[senderId] = append(f.history[senderId][:idx], f.history[senderId][idx+1:]...)
 			}
+		}
+		return nil
+	})
+
+	b.Handle("/handlers", func(c tb.Context) error {
+		senderId := c.Sender().ID
+		handlers := f.history[senderId]
+		var runningHandlers handler.Handlers
+		for _, h := range handlers {
+			if h.IsRunning() {
+				runningHandlers = append(runningHandlers, h)
+			}
+		}
+		var msg string
+		if len(runningHandlers) > 0 {
+			for _, h := range runningHandlers {
+				msg = msg + utils.Yaml(h)
+			}
+		} else {
+			msg = "No active handlers"
+		}
+		if _, err := b.Reply(c.Message(), msg); err != nil {
+			return err
 		}
 		return nil
 	})
@@ -102,6 +132,7 @@ func handle(b *tb.Bot, token string) error {
 
 func handleFunc(
 	b *tb.Bot,
+	f *fngobot,
 	command enums.InputCommand,
 ) func(c tb.Context) error {
 	return func(c tb.Context) error {
@@ -118,9 +149,12 @@ func handleFunc(
 			h.HandleParsingError(parseError)
 			return fmt.Errorf("parseError: %d", parseError)
 		}
-		defer h.Done()
-		h.Handle(targetBot)
 
+		defer h.Done()
+		senderId := c.Sender().ID
+		// Append to fngobot history
+		f.history[senderId] = append(f.history[senderId], h)
+		h.Handle(targetBot)
 		if targetBot == enums.HelpBot {
 			if _, err := b.Reply(c.Message(), cmd.Help.HelpMessage); err != nil {
 				return errors.Wrap(err, "failed to send help message")
