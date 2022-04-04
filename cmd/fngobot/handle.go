@@ -46,7 +46,9 @@ func handle(b *tb.Bot, token string) error {
 	go func() {
 		defer wg.Done()
 		<-sigChan
-		log.Println("closed poller connection")
+		log.Printf("closing poller connection for %s\n", token)
+		b.Close()
+		log.Printf("closed poller connection for %s\n", token)
 	}()
 
 	sendFail := func() {
