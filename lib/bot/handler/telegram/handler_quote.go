@@ -23,9 +23,9 @@ func (h *handler) Quote(securities []bot.Security) {
 			if err != nil {
 				var errMsg string
 				if errors.Is(err, fetch.ErrNotFound) {
-					errMsg = "Ticker not found"
+					errMsg = "ticker not found"
 				} else {
-					errMsg = "Error getting quote"
+					errMsg = err.Error()
 				}
 				h.reply(utils.Printer.Sprintf(
 					"[%s]\n%s: %s from %s",

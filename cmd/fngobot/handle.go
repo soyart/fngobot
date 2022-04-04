@@ -9,16 +9,16 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/pkg/errors"
 	tb "gopkg.in/tucnak/telebot.v3"
 
 	tghandler "github.com/artnoi43/fngobot/lib/bot/handler/telegram"
 	"github.com/artnoi43/fngobot/lib/enums"
 	"github.com/artnoi43/fngobot/lib/etc/help"
 	"github.com/artnoi43/fngobot/lib/parse"
-	"github.com/pkg/errors"
 )
 
-func runBot(b *tb.Bot, token string) error {
+func handle(b *tb.Bot, token string) error {
 
 	log.Printf("initialized bot: %s", token)
 

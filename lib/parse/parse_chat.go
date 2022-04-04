@@ -36,30 +36,19 @@ type BotCommand struct {
 	Alert bot.Alert    `json:"alert,omitempty"`
 }
 
-// getSrc gets the source from enums,
-// and also returns an index to the first ticker from the chat
+// getSrc returns the source and from enums.SwitchSrcMap,
+// and if it's not available, returns 1, enums.Yahoo
 func getSrc(sw string) (idx int, src enums.Src) {
-	switch sw {
-	case "CRYPTO":
-		idx = 2
-		src = enums.YahooCrypto
-	case "SATANG":
-		idx = 2
-		src = enums.Satang
-	case "BITKUB":
-		idx = 2
-		src = enums.Bitkub
-	case "BINANCE", "BN":
-		idx = 2
-		src = enums.Binance
-	case "COINBASE":
-		idx = 2
-		src = enums.Coinbase
-	default:
-		idx = 1
-		src = enums.Yahoo
+	target, exists := enums.SwitchSrcMap[enums.Switch(strings.ToUpper(sw))]
+	if !exists {
+		return 1, enums.Yahoo
 	}
-	return idx, src
+	if len(target) == 1 {
+		for src, idx := range target {
+			return idx, src
+		}
+	}
+	return 1, enums.Yahoo
 }
 
 // appendSecurities receives a slice of string representing ticker

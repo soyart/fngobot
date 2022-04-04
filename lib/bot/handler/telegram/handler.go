@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/tucnak/telebot.v3"
 
 	_handler "github.com/artnoi43/fngobot/lib/bot/handler"
 	"github.com/artnoi43/fngobot/lib/bot/handler/utils"
@@ -22,9 +22,9 @@ var (
 // handler implements _handler.Handler, and has _handler.BaseHandler embedded
 type handler struct {
 	*_handler.BaseHandler
-	conf Config          `json:"-" yaml:"-"`
-	c    telebot.Context `json:"-" yaml:"-"`
-	bot  *telebot.Bot    `json:"-" yaml:"-"`
+	conf Config     `json:"-" yaml:"-"`
+	c    tb.Context `json:"-" yaml:"-"`
+	bot  *tb.Bot    `json:"-" yaml:"-"`
 }
 
 func (h *handler) UUID() string              { return h.Uuid }
@@ -89,8 +89,8 @@ func Remove(senderId int64, idx int) {
 
 // New returns a new handler (Telegram) and appends it to SenderHandlers
 func New(
-	b *telebot.Bot,
-	c telebot.Context,
+	b *tb.Bot,
+	c tb.Context,
 	cmd *parse.BotCommand,
 	conf Config,
 ) _handler.Handler {
