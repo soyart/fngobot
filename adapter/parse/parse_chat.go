@@ -13,32 +13,34 @@ import (
 	"github.com/artnoi43/fngobot/usecase"
 )
 
-type UserCommand struct {
-	Text      string        `json:"chat,omitempty"`
-	TargetBot enums.BotType `json:"command,omitempty"`
-}
+// The commands are parsed from UserCommand into BotCommand.
+// quoteCommand and trackCommand are almost identical in their usecases,
+// so they share quoteCommand, which has []usecase.Security.
+// On the other hand, alertCommand is imported directly as usecase.Alert,
+// which also has usecase.Security (not slice).
+type (
+	UserCommand struct {
+		Text      string        `json:"chat,omitempty"`
+		TargetBot enums.BotType `json:"command,omitempty"`
+	}
+	helpCommand struct {
+		HelpMessage string `json:"help_msg,omitempty"`
+	}
 
-type helpCommand struct {
-	HelpMessage string `json:"help_msg,omitempty"`
-}
-
-type quoteCommand struct {
-	Securities []usecase.Security `json:"securities,omitempty"`
-}
-type trackCommand struct {
-	quoteCommand
-	TrackTimes int `json:"track_times,omitempty"`
-}
-
-// BotCommand is derived from UserCommand by parsing with Parse()
-// Alerting does not need its own command struct,
-// as the usecase.Alert struct already has all the info needed.
-type BotCommand struct {
-	Help  helpCommand   `json:"-"`
-	Quote quoteCommand  `json:"quote,omitempty"`
-	Track trackCommand  `json:"track,omitempty"`
-	Alert usecase.Alert `json:"alert,omitempty"`
-}
+	quoteCommand struct {
+		Securities []usecase.Security `json:"securities,omitempty"`
+	}
+	trackCommand struct {
+		quoteCommand
+		TrackTimes int `json:"track_times,omitempty"`
+	}
+	BotCommand struct {
+		Help  helpCommand   `json:"-"`
+		Quote quoteCommand  `json:"quote,omitempty"`
+		Track trackCommand  `json:"track,omitempty"`
+		Alert usecase.Alert `json:"alert,omitempty"`
+	}
+)
 
 // getSrc returns the source and from enums.SwitchSrcMap,
 // and if it's not available, returns 1, enums.Yahoo
