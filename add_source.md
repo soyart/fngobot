@@ -1,14 +1,18 @@
 # Adding a quote source to [FnGoBot](README.md)
 
-## Package `enums`
-Update `source.go` with the new source enums.
+We implement quote fetching in `adapter/fetch`. For a source to be usable in FnGoBot, it's implementation need to satisfy the `usecase.Fetcher` and `usecase.Quoter` and interfaces.
 
-## Package `fetch`
+## 1. `usecase.Fetcher`
+`Fetcher` specifies 1 method: `Get(string) (Quoter, error)`, i.e. any structs that can return a `usecase.Quoter` (itself an alias to `entity.Quoter`).
+
+## 2. `usecase.Quoter` or `entity.Quoter`
+`Quoter` specifies 3 methods, all of which are of type `func(string) (float64, error)`. These methods are `Last`, `Bid`, and `Ask`, for getting last market price, best bid price, and best ask price respectively.
+
+## 3. Package `adapter/fetch`
 Create a new package in `fetch` package for the source.
 
-From there, compose a new struct, for example, struct `quote`. Make sure `quote` implement the `fetch.Quoter` interface.
+## 4. Package `internal/enums`
+After you are done with implementing `usecase` interfaces, update `source.go` with the new source enums.
 
-Lastly, you'll need a `Get` method. The function signature for `Get` must match `fetch.FetchFunc` type alias. Usually, `Get` fetches JSON data from remote APIs and parses the data into something useful. Sometimes, as with `fetch/yahoo` and `fetch/crypto`, `Get` is just a wrapper for other library functions.
-
-## Package `bot`
-In `quote.go`, populate the `quoteFuncs` map. It's just a map of your sources (enums) and their `Get` methods.
+## 5. Package `adapter/fetch`
+After the new enum for the source is declared, go back to `adapter/fetch/fetch.go` and add your source fetcher and its `fetch.newFunc` function to map `newFetcherMap`.

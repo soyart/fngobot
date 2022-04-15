@@ -3,6 +3,7 @@ module github.com/artnoi43/fngobot
 go 1.18
 
 require (
+	github.com/artnoi43/mgl v0.0.0-20220406184722-c37686b84a54
 	github.com/google/uuid v1.3.0
 	github.com/piquette/finance-go v1.0.0
 	github.com/pkg/errors v0.9.1
@@ -13,7 +14,6 @@ require (
 )
 
 require (
-	github.com/artnoi43/mgl v0.0.0-20220406184722-c37686b84a54 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
