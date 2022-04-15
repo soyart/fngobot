@@ -37,21 +37,21 @@ func init() {
 func main() {
 	var wg sync.WaitGroup
 	for _, botToken := range tokens {
-		b, err := tb.NewBot(tb.Settings{
-			/* If empty defaults to "https://api.telegram.org" */
-			URL:   "https://api.telegram.org",
-			Token: botToken,
-			Poller: &tb.LongPoller{
-				Timeout: time.Duration(conf.Telegram.Client.TimeoutSeconds) * time.Second,
-			},
-			Verbose: conf.Telegram.Client.Verbose,
-		})
-		if err != nil {
-			log.Fatalf("failed to init new bot: %s\n", err.Error())
-		}
-		tgDriver := tgdriver.New(b, botToken, &conf.Telegram)
 		wg.Add(1)
 		go func(token string) {
+			b, err := tb.NewBot(tb.Settings{
+				/* If empty defaults to "https://api.telegram.org" */
+				URL:   "https://api.telegram.org",
+				Token: token,
+				Poller: &tb.LongPoller{
+					Timeout: time.Duration(conf.Telegram.Client.TimeoutSeconds) * time.Second,
+				},
+				Verbose: conf.Telegram.Client.Verbose,
+			})
+			if err != nil {
+				log.Fatalf("failed to init new bot: %s\n", err.Error())
+			}
+			tgDriver := tgdriver.New(b, token, &conf.Telegram)
 			defer wg.Done()
 			tgDriver.InitAndStartBot()
 		}(botToken)

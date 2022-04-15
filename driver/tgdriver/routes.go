@@ -107,24 +107,33 @@ func (tg *tgDriver) InitAndStartBot() error {
 
 	tg.bot.Handle("/handlers", func(ctx tb.Context) error {
 		senderId := ctx.Sender().ID
-		handlers := fngobot.history[senderId]
 		var runningHandlers handler.Handlers
-		for _, h := range handlers {
-			if h.IsRunning() {
-				runningHandlers = append(runningHandlers, h)
-			}
-		}
 		var msg string
-		if len(runningHandlers) > 0 {
-			for _, h := range runningHandlers {
-				msg = msg + utils.Yaml(h)
+		// findAndFormat finds runningHandlers and formats msg.
+		// I made it a func in case we want to reuse it in this block.
+		findAndFormat := func() {
+			// Overwrites runningHandlers and msg
+			runningHandlers = handler.Handlers{}
+			msg = ""
+			handlers := fngobot.history[senderId]
+			for _, h := range handlers {
+				if h.IsRunning() {
+					runningHandlers = append(runningHandlers, h)
+				}
 			}
-		} else {
-			msg = "No active handlers"
+			if len(runningHandlers) > 0 {
+				for _, h := range runningHandlers {
+					msg = msg + utils.Yaml(h)
+				}
+			} else {
+				msg = "No active handlers"
+			}
 		}
+		findAndFormat()
 		if _, err := tg.bot.Reply(ctx.Message(), msg); err != nil {
 			return err
 		}
+
 		return nil
 	})
 

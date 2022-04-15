@@ -9,5 +9,5 @@ import (
 type Security struct {
 	Tick    string    `json:"symbol" yaml:"Symbol"`
 	Src     enums.Src `json:"source" yaml:"Source"`
-	Fetcher Fetcher
+	Fetcher Fetcher   `json:"-" yaml:"-"`
 }
