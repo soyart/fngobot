@@ -9,9 +9,7 @@ import (
 )
 
 type TgDriver interface {
-	NewBot()
-	SetUpBot()
-	SetUpRoutes()
+	InitAndStartBot() error
 }
 
 type tgDriver struct {
@@ -20,7 +18,7 @@ type tgDriver struct {
 	handlerConfig *tghandler.Config
 }
 
-func New(b *tb.Bot, token string, conf *tghandler.Config) *tgDriver {
+func New(b *tb.Bot, token string, conf *tghandler.Config) TgDriver {
 	if b == nil {
 		log.Fatalln("nil bot for", token)
 	}
