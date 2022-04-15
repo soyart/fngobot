@@ -30,9 +30,6 @@ FnGoBot's [bitkub.com](https://bitkub.com) API data fetcher. This source is acti
 
 ## [Adding quote sources](add_source.md)
 
-# Overview
-![BotDiagram](https://github.com/artnoi43/fngobot/blob/develop/fngobot.png?raw=true)
-
 ## Running your own bot
 - Clone this repository
 
@@ -57,7 +54,7 @@ To use other configuration types (must be supported by Viper), specify the confi
 
 Or change the default filename in `cmd/main.go` to your desired file extension.
 
-## External dependencies
+## Core external dependencies
 
 - `gopkg.in/tucnak/telebot.v3` Telegram bot framework
 
