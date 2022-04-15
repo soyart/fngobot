@@ -11,9 +11,16 @@ func (s *Security) GetSrcStr() string {
 		return "Yahoo Finance"
 	case enums.YahooCrypto:
 		return "Yahoo Crypto"
-	default:
-		return string(s.Src)
+	case enums.Satang:
+		return "Satang"
+	case enums.Bitkub:
+		return "Bitkub"
+	case enums.Binance:
+		return "Binance"
+	case enums.Coinbase:
+		return "Coinbase"
 	}
+	return "Invalid Source"
 }
 
 // GetCondStr returns condition in string based on a.Condition

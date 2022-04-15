@@ -8,7 +8,7 @@ func TestSrc(t *testing.T) {
 			t.Fatalf("Seemingly valid source is invalid\n")
 		}
 	}
-	invalid := Src("uniswap")
+	invalid := Src(7)
 	if invalid.IsValid() {
 		t.Fatalf("Seemingly invalid source is valid\n")
 	}

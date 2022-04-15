@@ -6,7 +6,7 @@ import (
 
 type enum interface {
 	comparable
-	~string
+	any
 }
 
 // isValid is a generic function for interface enum,

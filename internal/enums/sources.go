@@ -3,7 +3,7 @@ package enums
 import "fmt"
 
 type (
-	Src    string
+	Src    int
 	Switch string
 )
 
@@ -12,12 +12,12 @@ var ErrInvalidSrc = fmt.Errorf("invalid source")
 // quote sources - when adding new sources,
 // also add them to validSrc below
 const (
-	Yahoo       Src = "Yahoo"
-	YahooCrypto Src = "YahooCrypto"
-	Satang      Src = "Satang"
-	Bitkub      Src = "Bitkub"
-	Binance     Src = "Binance"
-	Coinbase    Src = "Coinbase"
+	Yahoo Src = iota
+	YahooCrypto
+	Satang
+	Bitkub
+	Binance
+	Coinbase
 
 	YahooSw       Switch = ""
 	YahooCryptoSw Switch = "CRYPTO"
