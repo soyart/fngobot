@@ -4,9 +4,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/artnoi43/fngobot/lib/etc/help"
 	"github.com/artnoi43/fngobot/ng/adapter/fetch"
 	"github.com/artnoi43/fngobot/ng/internal/enums"
+	"github.com/artnoi43/fngobot/ng/internal/help"
 	"github.com/artnoi43/fngobot/ng/usecase"
 )
 

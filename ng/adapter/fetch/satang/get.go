@@ -3,17 +3,18 @@ package satang
 import (
 	"log"
 
-	"github.com/artnoi43/fngobot/lib/fetch"
+	"github.com/artnoi43/fngobot/ng/adapter/fetch/common"
+	"github.com/artnoi43/fngobot/ng/usecase"
 )
 
 // Get fetches data from Satang JSON API,
 // and parses the fetched JSON into Quote struct
-func (f *fetcher) Get(tick string) (fetch.Quoter, error) {
+func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 
 	/* Documentation for Satang:
 	 * https://docs.satangcorp.com/apis/public/orders */
 
-	data, err := fetch.FetchMapStrInf("https://satangcorp.com/api/orderbook-tickers/")
+	data, err := common.FetchMapStrInf("https://satangcorp.com/api/orderbook-tickers/")
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +45,7 @@ func (f *fetcher) Get(tick string) (fetch.Quoter, error) {
 	}
 	if !found {
 		log.Printf("%s not found in Satang JSON", tick)
-		return nil, fetch.ErrNotFound
+		return nil, common.ErrNotFound
 	}
 	return &q, nil
 }
