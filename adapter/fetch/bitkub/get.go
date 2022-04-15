@@ -59,7 +59,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 	 * https://github.com/bitkub/bitkub-official common-docs */
 
 	// @NOTE: Query string for this endpoint does not seem to work
-	u, err := url.Parse(URL)
+	u, err := url.Parse(BaseURL)
 	if err != nil {
 		return nil, errors.Wrap(err, "parse url failed")
 	}

@@ -1,6 +1,6 @@
 package bitkub
 
-const URL = "https://bitkub.com/api/market/ticker/"
+const BaseURL = "https://bitkub.com/api/market/ticker/"
 
 type fetcher struct{}
 

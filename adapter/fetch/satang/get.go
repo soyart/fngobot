@@ -2,19 +2,20 @@ package satang
 
 import (
 	"log"
+	"strconv"
 
 	"github.com/artnoi43/fngobot/adapter/fetch/common"
 	"github.com/artnoi43/fngobot/usecase"
 )
 
+const BaseURL = "https://satangcorp.com/api/orderbook-tickers/"
+
 // Get fetches data from Satang JSON API,
 // and parses the fetched JSON into Quote struct
 func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
-
 	/* Documentation for Satang:
 	 * https://docs.satangcorp.com/apis/public/orders */
-
-	data, err := common.FetchMapStrInf("https://satangcorp.com/api/orderbook-tickers/")
+	data, err := common.FetchMapStrInf(BaseURL)
 	if err != nil {
 		return nil, err
 	}
@@ -48,4 +49,23 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 		return nil, common.ErrNotFound
 	}
 	return &q, nil
+}
+
+func parse(q *quote, val interface{}, bidAsk int) error {
+	for k, v := range val.(map[string]interface{}) {
+		switch k {
+		case "price":
+			price, err := strconv.ParseFloat(v.(string), 64)
+			if err != nil {
+				return err
+			}
+			switch bidAsk {
+			case bid:
+				q.bid = price
+			case ask:
+				q.ask = price
+			}
+		}
+	}
+	return nil
 }
