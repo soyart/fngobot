@@ -21,7 +21,7 @@ const (
 
 	YahooSw       Switch = ""
 	YahooCryptoSw Switch = "CRYPTO"
-	SatangSw      Switch = "YAHOO"
+	SatangSw      Switch = "SATANG"
 	BitkubSw      Switch = "BITKUB"
 	BinanceSw     Switch = "BINANCE"
 	CoinbaseSw    Switch = "COINBASE"

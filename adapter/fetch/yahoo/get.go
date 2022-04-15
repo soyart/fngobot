@@ -17,7 +17,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 		return nil, err
 	}
 	if _q == nil {
-		log.Printf("%s not found from Yahoo Finance", tick)
+		log.Printf("%s not found from Yahoo Finance\n", tick)
 		return nil, common.ErrNotFound
 	}
 

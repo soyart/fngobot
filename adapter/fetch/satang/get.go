@@ -44,7 +44,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 		}
 	}
 	if !found {
-		log.Printf("%s not found in Satang JSON", tick)
+		log.Printf("%s not found in Satang JSON\n", tick)
 		return nil, common.ErrNotFound
 	}
 	return &q, nil

@@ -64,7 +64,7 @@ func TestGetSrc(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		idx, src := getSrc(test.In)
+		src, idx := getSrc(test.In)
 		if test.Expected.idx != idx {
 			t.Errorf("invalid idx for %s\n", test.In)
 		}
@@ -89,38 +89,38 @@ func TestParse(t *testing.T) {
 		switch test.In.TargetBot {
 		case enums.QuoteBot:
 			if !reflect.DeepEqual(out.Quote.Securities, test.Expected.Quote.Securities) {
-				t.Errorf("[/quote] invalid quote securities")
+				t.Errorf("[/quote] invalid quote securities\n")
 				report()
 			}
 		case enums.TrackBot:
 			if !reflect.DeepEqual(out.Quote.Securities, test.Expected.Quote.Securities) {
-				t.Errorf("[/track] invalid quote securities")
+				t.Errorf("[/track] invalid quote securities\n")
 				report()
 			}
 			if out.Track.TrackTimes != test.Expected.Track.TrackTimes {
-				t.Errorf("[/track] invalid track time")
+				t.Errorf("[/track] invalid track time\n")
 				report()
 			}
 		case enums.AlertBot:
 			if !reflect.DeepEqual(out.Alert, test.Expected.Alert) {
 				if !reflect.DeepEqual(out.Alert.Security, test.Expected.Alert.Security) {
-					t.Errorf("[/alert] invalid alert security")
+					t.Errorf("[/alert] invalid alert security\n")
 					report()
 				}
 				if out.Alert.Src != test.Expected.Alert.Src {
-					t.Errorf("[/alert] invalid alert source")
+					t.Errorf("[/alert] invalid alert source\n")
 					report()
 				}
 				if out.Alert.Condition != test.Expected.Alert.Condition {
-					t.Errorf("[/alert] invalid alert condition")
+					t.Errorf("[/alert] invalid alert condition\n")
 					report()
 				}
 				if out.Alert.QuoteType != test.Expected.Alert.QuoteType {
-					t.Errorf("[/alert] invalid alert quote type")
+					t.Errorf("[/alert] invalid alert quote type\n")
 					report()
 				}
 				if out.Alert.Target != test.Expected.Alert.Target {
-					t.Errorf("invalid alert target")
+					t.Errorf("invalid alert target\n")
 					report()
 				}
 			}

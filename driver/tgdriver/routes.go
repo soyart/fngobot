@@ -29,7 +29,7 @@ func (tg *tgDriver) InitAndStartBot() error {
 	fngobot := &fngobot{
 		history: make(map[int64]handler.Handlers),
 	}
-	log.Printf("initialized bot: %s", tg.token)
+	log.Printf("initialized bot: %s\n", tg.token)
 
 	// sigChan for receiving OS signals for graceful shutdowns
 	sigChan := make(chan os.Signal, 1)

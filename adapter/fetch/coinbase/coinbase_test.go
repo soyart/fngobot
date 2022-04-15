@@ -18,7 +18,7 @@ var (
 
 func TestUnmarshal(t *testing.T) {
 	fatal := func() {
-		t.Fatalf("json unmarshal failed")
+		t.Fatalf("json unmarshal failed\n")
 	}
 	var wg sync.WaitGroup
 	for _, u := range URLs {
@@ -27,7 +27,7 @@ func TestUnmarshal(t *testing.T) {
 			defer wg.Done()
 			body, err := common.Fetch(u)
 			if err != nil {
-				t.Errorf("fetch failed, %v", err.Error())
+				t.Errorf("fetch failed, %v\n", err.Error())
 			}
 			var r response
 			if err := json.Unmarshal(body, &r); err != nil {

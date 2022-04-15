@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"path/filepath"
 	"strings"
 
@@ -66,8 +66,8 @@ func InitConfig(dir string, file string, ext string) (conf *Config, err error) {
 		return nil, err
 	}
 	j, _ := json.Marshal(conf)
-	fmt.Printf("%s\n", j)
-	fmt.Println(enums.Bar)
+	log.Printf("%s\n", j)
+	log.Println(enums.Bar)
 	return conf, nil
 }
 

@@ -37,5 +37,5 @@ func (h *handler) Track(
 	for i, security := range securities {
 		tickers[i] = security.Tick
 	}
-	h.reply(fmt.Sprintf("[%s]\nTracking done for %s", h.Uuid, strings.Join(tickers, ", ")))
+	h.reply(fmt.Sprintf("[%s]\nTracking done for %s\n", h.Uuid, strings.Join(tickers, ", ")))
 }

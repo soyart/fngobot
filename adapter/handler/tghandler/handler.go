@@ -86,7 +86,7 @@ func (h *handler) reply(s string) {
 // notifyStop sends a Telegram message to sender to signal
 // that the handler has received a quit signal.
 func (h *handler) notifyStop() {
-	log.Printf("[%s]: received stop signal", h.Uuid)
+	log.Printf("[%s]: received stop signal\n", h.Uuid)
 	h.reply(fmt.Sprintf("Stopping %s", h.Uuid))
 }
 
