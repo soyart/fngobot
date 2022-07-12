@@ -10,7 +10,7 @@ import (
 )
 
 func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
-	var q common.Quote
+	var q common.ApiQuote
 	_q, err := crypto.Get(tick)
 	if err != nil {
 		return nil, err

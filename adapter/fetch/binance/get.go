@@ -16,7 +16,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 		symbol: tick + "USDT",
 		url:    BaseURL,
 	})
-	var q common.Quote
+	var q common.ApiQuote
 	var errChan = make(chan error)
 	var wg sync.WaitGroup
 	for key, url := range urls {

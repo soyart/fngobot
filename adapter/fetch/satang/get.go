@@ -20,7 +20,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 		return nil, err
 	}
 
-	var q common.Quote
+	var q common.ApiQuote
 	var found bool
 	for key, val := range data {
 		/* Filter ticker */
@@ -51,7 +51,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 	return &q, nil
 }
 
-func parse(q *common.Quote, val interface{}, bidAsk int) error {
+func parse(q *common.ApiQuote, val interface{}, bidAsk int) error {
 	for k, v := range val.(map[string]interface{}) {
 		switch k {
 		case "price":

@@ -11,7 +11,7 @@ import (
 
 // Get just wraps qt.Get
 func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
-	var q common.Quote
+	var q common.ApiQuote
 	_q, err := qt.Get(tick)
 	if err != nil {
 		return nil, err

@@ -77,7 +77,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 	}
 
 	var found bool
-	var q common.Quote
+	var q common.ApiQuote
 	for tokenName, tokenInfo := range resp.DataPart {
 		if tokenName == TickerPrefix+tick {
 			found = true
