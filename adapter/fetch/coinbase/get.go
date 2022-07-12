@@ -12,9 +12,9 @@ import (
 )
 
 func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
-	urls := prepareURLs(info{
-		symbol: tick,
-		url:    BaseURL,
+	urls := prepareURLs(&common.FetchInfo{
+		URL:    BaseURL,
+		Symbol: tick,
 	})
 	var q common.ApiQuote
 	var errChan = make(chan error)

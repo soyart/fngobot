@@ -2,12 +2,14 @@ package coinbase
 
 import (
 	"testing"
+
+	"github.com/artnoi43/fngobot/adapter/fetch/common"
 )
 
 func TestPrepareUrl(t *testing.T) {
-	info := info{
-		symbol: "CAKE",
-		url:    BaseURL,
+	info := &common.FetchInfo{
+		URL:    BaseURL,
+		Symbol: "CAKE",
 	}
 	m := prepareURLs(info)
 	if actual := m["price"]; actual != "https://api.coinbase.com/v2/prices/CAKE-THB/spot" {

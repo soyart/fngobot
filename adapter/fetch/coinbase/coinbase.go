@@ -6,11 +6,6 @@ func New() interface{} {
 	return &fetcher{}
 }
 
-type info struct {
-	symbol string
-	url    string
-}
-
 type response struct {
 	Data priceData `json:"data"`
 }

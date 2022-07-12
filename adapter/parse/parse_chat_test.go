@@ -1,7 +1,6 @@
 package parse
 
 import (
-	"encoding/json"
 	"fmt"
 	"reflect"
 	"testing"
@@ -77,36 +76,38 @@ func TestGetSrc(t *testing.T) {
 // Test parsing UserCommand into BotCommand
 func TestParse(t *testing.T) {
 	for _, test := range tests {
-		out, err := test.In.Parse()
+		in := test.In
+		out, err := in.Parse()
 		if err != 0 {
-			t.Errorf("error parsing UserCommand: %+v\n", test.In)
+			t.Errorf("error parsing UserCommand: %+v\n", in)
 		}
-		inJSON, _ := json.MarshalIndent(test.In, "  ", "  ")
-		outJSON, _ := json.MarshalIndent(out, "  ", "  ")
+
 		report := func() {
-			fmt.Printf("In: %s\nOut: %s\n", inJSON, outJSON)
+			fmt.Printf("In: %s\nOut: %+v\n", in, out)
+		}
+		compareSecs := func() {
+			for idx, actual := range out.Quote.Securities {
+				expectedSecurity := test.Expected.Quote.Securities[idx]
+				if actual.Src != expectedSecurity.Src {
+					t.Errorf("[invalid security]: sources differ - actual: %s, expected: %s\n", actual.Src.String(), expectedSecurity.Src.String())
+				}
+				if actual.Tick != expectedSecurity.Tick {
+					t.Errorf("[invalid security]: ticker symbols differ - actual: %s, expected: %s\n", actual.Tick, expectedSecurity.Tick)
+				}
+			}
 		}
 		switch test.In.TargetBot {
 		case enums.QuoteBot:
-			if !reflect.DeepEqual(out.Quote.Securities, test.Expected.Quote.Securities) {
-				t.Errorf("[/quote] invalid quote securities\n")
-				report()
-			}
+			compareSecs()
 		case enums.TrackBot:
-			if !reflect.DeepEqual(out.Quote.Securities, test.Expected.Quote.Securities) {
-				t.Errorf("[/track] invalid quote securities\n")
-				report()
-			}
+			compareSecs()
 			if out.Track.TrackTimes != test.Expected.Track.TrackTimes {
 				t.Errorf("[/track] invalid track time\n")
 				report()
 			}
 		case enums.AlertBot:
 			if !reflect.DeepEqual(out.Alert, test.Expected.Alert) {
-				if !reflect.DeepEqual(out.Alert.Security, test.Expected.Alert.Security) {
-					t.Errorf("[/alert] invalid alert security\n")
-					report()
-				}
+				compareSecs()
 				if out.Alert.Src != test.Expected.Alert.Src {
 					t.Errorf("[/alert] invalid alert source\n")
 					report()

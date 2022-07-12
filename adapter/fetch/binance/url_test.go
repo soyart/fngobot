@@ -2,12 +2,14 @@ package binance
 
 import (
 	"testing"
+
+	"github.com/artnoi43/fngobot/adapter/fetch/common"
 )
 
 func TestPrepareUrl(t *testing.T) {
-	info := info{
-		symbol: "ETHUSDT",
-		url:    BaseURL,
+	info := &common.FetchInfo{
+		URL:    BaseURL,
+		Symbol: "ETHUSDT",
 	}
 	m := prepareURLs(info)
 	if m["price"] != "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT" {

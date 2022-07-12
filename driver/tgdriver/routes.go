@@ -21,6 +21,7 @@ import (
 )
 
 type fngobot struct {
+	// Telegram's SenderID is int64
 	history map[int64]handler.Handlers
 }
 
@@ -164,8 +165,8 @@ func (tg *tgDriver) handleFunc(
 	command enums.InputCommand,
 ) func(ctx tb.Context) error {
 	return func(ctx tb.Context) error {
-		targetBot, exits := enums.BotMap[command]
-		if !exits {
+		targetBot, exists := enums.BotMap[command]
+		if !exists {
 			return fmt.Errorf("invalid command '%s'", command)
 		}
 		cmd, parseError := parse.UserCommand{

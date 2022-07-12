@@ -3,6 +3,8 @@ package coinbase
 import (
 	"fmt"
 	"net/url"
+
+	"github.com/artnoi43/fngobot/adapter/fetch/common"
 )
 
 const BaseURL = "https://api.coinbase.com"
@@ -11,7 +13,7 @@ const BaseURL = "https://api.coinbase.com"
 // but that didn't work. Just don't bother.
 
 // prepareURLs put string URLs into a map
-func prepareURLs(info info) map[string]string {
+func prepareURLs(info *common.FetchInfo) map[string]string {
 	priceURL := preparePrice(info)
 	bidURL := prepareBid(info)
 	askURL := prepareAsk(info)
@@ -23,27 +25,27 @@ func prepareURLs(info info) map[string]string {
 }
 
 // preparePrice just generate URL to
-func preparePrice(info info) string {
-	u, _ := url.Parse(info.url)
+func preparePrice(info *common.FetchInfo) string {
+	u, _ := url.Parse(info.URL)
 	u.Path = fmt.Sprintf(
 		"/v2/prices/%s-THB/spot",
-		info.symbol,
+		info.Symbol,
 	)
 	return u.String()
 }
-func prepareBid(info info) string {
-	u, _ := url.Parse(info.url)
+func prepareBid(info *common.FetchInfo) string {
+	u, _ := url.Parse(info.URL)
 	u.Path = fmt.Sprintf(
 		"/v2/prices/%s-THB/buy",
-		info.symbol,
+		info.Symbol,
 	)
 	return u.String()
 }
-func prepareAsk(info info) string {
-	u, _ := url.Parse(info.url)
+func prepareAsk(info *common.FetchInfo) string {
+	u, _ := url.Parse(info.URL)
 	u.Path = fmt.Sprintf(
 		"/v2/prices/%s-THB/sell",
-		info.symbol,
+		info.Symbol,
 	)
 	return u.String()
 }

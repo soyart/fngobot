@@ -11,7 +11,8 @@ import (
 
 var (
 	// ErrNotFound indicates the ticker symbol is not found in JSON data
-	ErrNotFound error = errors.New("Ticker not found in JSON")
+	ErrNotFound   error = errors.New("Ticker not found in JSON")
+	ErrBadRequest error = errors.New("Bad HTTP request")
 )
 
 // Fetch is a generic function used to fetch a HTTP response.
@@ -27,6 +28,9 @@ func Fetch(url string) ([]byte, error) {
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		if resp.StatusCode < 500 {
+			return nil, ErrBadRequest
+		}
 		return nil, errors.Wrap(err, "failed to read response body")
 	}
 	return body, nil

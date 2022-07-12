@@ -6,8 +6,8 @@ func New() interface{} {
 	return &fetcher{}
 }
 
-// Enum for parse() */
-const (
-	bid = iota
-	ask
-)
+type satangQuote struct {
+	Price string `json:"price"`
+}
+
+type satangResponse map[string][]satangQuote
