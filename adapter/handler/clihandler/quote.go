@@ -22,7 +22,7 @@ func (h *handler) Quote(securities []usecase.Security) {
 				log.Printf(
 					"Failed to fetch %s quote from %s: %s\n",
 					s.Tick,
-					s.Src,
+					s.Src.String(),
 					err.Error(),
 				)
 				return
@@ -34,15 +34,15 @@ func (h *handler) Quote(securities []usecase.Security) {
 }
 
 func printQuote(t string, s enums.Src, q entity.Quoter) {
-	bid, err := q.Bid()
+	bid, err := q.QuoteBid()
 	if err != nil {
 		bid = -1
 	}
-	ask, err := q.Ask()
+	ask, err := q.QuoteAsk()
 	if err != nil {
 		ask = -1
 	}
-	last, err := q.Last()
+	last, err := q.QuoteLast()
 	if err != nil {
 		last = -1
 	}

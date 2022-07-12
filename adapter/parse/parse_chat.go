@@ -101,11 +101,13 @@ func (c UserCommand) Parse() (cmd BotCommand, e ParseError) {
 		cmd.Alert.Security.Tick = str.ToUpper(chat[startIdx])
 		cmd.Alert.Security.Src = src
 		cmd.Alert.Security.Fetcher = fetch.New(src)
-		targ, err := strconv.ParseFloat(chat[lenChat-1], 64)
+
+		targ := chat[lenChat-1]
+		targetPrice, err := strconv.ParseFloat(targ, 64)
 		if err != nil {
 			return cmd, ErrParseFloat
 		}
-		cmd.Alert.Target = targ
+		cmd.Alert.Target = targetPrice
 
 		sign := chat[lenChat-2]
 		if sign != "<" && sign != ">" {

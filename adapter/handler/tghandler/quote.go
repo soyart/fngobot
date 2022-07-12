@@ -36,9 +36,9 @@ func (h *handler) Quote(securities []usecase.Security) {
 				))
 				return
 			}
-			last, _ := q.Last()
-			bid, _ := q.Bid()
-			ask, _ := q.Ask()
+			last, _ := q.QuoteLast()
+			bid, _ := q.QuoteBid()
+			ask, _ := q.QuoteAsk()
 			msg := utils.Printer.Sprintf(
 				"[%s]\nQuote from %s\n%s\nBid: %f\nAsk: %f\nLast: %f\n",
 				h.UUID(), s.GetSrcStr(), s.Tick, bid, ask, last,

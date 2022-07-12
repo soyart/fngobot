@@ -16,7 +16,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 		symbol: tick,
 		url:    BaseURL,
 	})
-	var q quote
+	var q common.Quote
 	var errChan = make(chan error)
 	var wg sync.WaitGroup
 
@@ -34,7 +34,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 				if err := json.Unmarshal(data, &r); err != nil {
 					errChan <- err
 				}
-				q.last, err = strconv.ParseFloat(r.Data.Amount, 64)
+				q.Last, err = strconv.ParseFloat(r.Data.Amount, 64)
 				if err != nil {
 					errChan <- errors.Wrap(err, "failed to parse last to float")
 				}
@@ -42,7 +42,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 				if err := json.Unmarshal(data, &r); err != nil {
 					errChan <- err
 				}
-				q.bid, err = strconv.ParseFloat(r.Data.Amount, 64)
+				q.Bid, err = strconv.ParseFloat(r.Data.Amount, 64)
 				if err != nil {
 					errChan <- errors.Wrap(err, "failed to parse bid to float")
 				}
@@ -50,7 +50,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 				if err := json.Unmarshal(data, &r); err != nil {
 					errChan <- err
 				}
-				q.ask, err = strconv.ParseFloat(r.Data.Amount, 64)
+				q.Ask, err = strconv.ParseFloat(r.Data.Amount, 64)
 				if err != nil {
 					errChan <- errors.Wrap(err, "failed to parse ask to float")
 				}

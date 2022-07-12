@@ -16,7 +16,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 		symbol: tick + "USDT",
 		url:    BaseURL,
 	})
-	var q quote
+	var q common.Quote
 	var errChan = make(chan error)
 	var wg sync.WaitGroup
 	for key, url := range urls {
@@ -41,7 +41,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 								"failed to parse last to float",
 							)
 						}
-						q.last = last
+						q.Last = last
 					}
 				}
 			case "depth":
@@ -55,7 +55,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 								"failed to parse bid to float",
 							)
 						}
-						q.bid = bid
+						q.Bid = bid
 					case "askPrice":
 						ask, err := strconv.ParseFloat(val.(string), 64)
 						if err != nil {
@@ -64,7 +64,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 								"failed to parse ask to float",
 							)
 						}
-						q.ask = ask
+						q.Ask = ask
 					}
 				}
 			}

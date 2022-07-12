@@ -10,7 +10,7 @@ import (
 )
 
 func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
-	var q quote
+	var q common.Quote
 	_q, err := crypto.Get(tick)
 	if err != nil {
 		return nil, err
@@ -20,8 +20,8 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 		return nil, common.ErrNotFound
 	}
 
-	q.last = _q.RegularMarketPrice
-	q.bid = _q.Bid
-	q.ask = _q.Ask
+	q.Last = _q.RegularMarketPrice
+	q.Bid = _q.Bid
+	q.Ask = _q.Ask
 	return &q, nil
 }

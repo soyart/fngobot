@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"path/filepath"
 	"strings"
@@ -11,7 +12,6 @@ import (
 
 	"github.com/artnoi43/fngobot/adapter/handler/clihandler"
 	"github.com/artnoi43/fngobot/adapter/handler/tghandler"
-	"github.com/artnoi43/fngobot/internal/enums"
 )
 
 type Config struct {
@@ -67,7 +67,7 @@ func InitConfig(dir string, file string, ext string) (conf *Config, err error) {
 	}
 	j, _ := json.Marshal(conf)
 	log.Printf("%s\n", j)
-	log.Println(enums.Bar)
+	fmt.Printf("\n\n")
 	return conf, nil
 }
 

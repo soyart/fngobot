@@ -143,12 +143,12 @@ type quote struct {
 	last float64
 }
 
-func (q quote) Bid() (float64, error) {
+func (q quote) QuoteBid() (float64, error) {
 	return q.bid, nil
 }
-func (q quote) Ask() (float64, error) {
+func (q quote) QuoteAsk() (float64, error) {
 	return q.ask, nil
 }
-func (q quote) Last() (float64, error) {
+func (q quote) QuoteLast() (float64, error) {
 	return q.last, nil
 }

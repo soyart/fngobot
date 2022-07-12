@@ -41,6 +41,7 @@ package bitkub
  */
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/url"
@@ -65,62 +66,28 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 	}
 	queryString := url.QueryEscape(fmt.Sprintf("sym=%s", tick))
 	u.RawQuery = queryString
-	data, err := common.FetchMapStrInf(u.String())
+	data, err := common.Fetch(u.String())
 	if err != nil {
 		return nil, errors.Wrap(err, "common failed()")
 	}
 
+	var resp bitkubResponse
+	if err := json.Unmarshal(data, &resp); err != nil {
+		return nil, errors.Wrap(err, "failed to unmarshal bitkub response")
+	}
+
 	var found bool
-	var q quote
-	for key0, val0 := range data {
-		switch key0 {
-		case "data":
-			/* Inner keys and values */
-			for key1, val1 := range val0.(map[string]interface{}) {
-				/* Filter ticker */
-				switch key1 {
-				case "THB_" + tick:
-					var ok bool
-					var err error = errors.New("failed to parse float")
-					for k, v := range val1.(map[string]interface{}) {
-						switch k {
-						case "last":
-							q.last, ok = v.(float64)
-							if !ok {
-								return nil, errors.Wrap(err, "last")
-							}
-						case "highestBid":
-							q.bid, ok = v.(float64)
-							if !ok {
-								return nil, errors.Wrap(err, "bid")
-							}
-						case "lowestAsk":
-							q.ask, ok = v.(float64)
-							if !ok {
-								return nil, errors.Wrap(err, "ask")
-							}
-						case "high24hr":
-							q.high, ok = v.(float64)
-							if !ok {
-								return nil, errors.Wrap(err, "high")
-							}
-						case "low24hr":
-							q.low, ok = v.(float64)
-							if !ok {
-								return nil, errors.Wrap(err, "low")
-							}
-						case "percentageChange":
-							q.change, ok = v.(float64)
-							if !ok {
-								return nil, errors.Wrap(err, "change")
-							}
-						}
-					}
-					found = true
-				}
-			}
+	var q common.Quote
+	for tokenName, tokenInfo := range resp.DataPart {
+		if tokenName == TickerPrefix+tick {
+			found = true
+			q.Bid = tokenInfo.Bid
+			q.Ask = tokenInfo.Ask
+			q.Last = tokenInfo.Last
+			break
 		}
 	}
+
 	if !found {
 		log.Printf("%s not found in Bitkub JSON\n", tick)
 		return nil, common.ErrNotFound

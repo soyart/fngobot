@@ -46,11 +46,11 @@ func Match(
 	var err error
 	switch a.QuoteType {
 	case enums.Bid:
-		p, err = marketQuote.Bid()
+		p, err = marketQuote.QuoteBid()
 	case enums.Ask:
-		p, err = marketQuote.Ask()
+		p, err = marketQuote.QuoteAsk()
 	case enums.Last:
-		p, err = marketQuote.Last()
+		p, err = marketQuote.QuoteLast()
 	}
 
 	if err != nil {

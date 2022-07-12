@@ -49,3 +49,21 @@ var SwitchSrcMap = map[Switch]map[Src]int{
 	BinanceSw:     {Binance: 2},
 	CoinbaseSw:    {Coinbase: 2},
 }
+
+func (s Src) String() string {
+	switch s {
+	case Yahoo:
+		return "Yahoo! Finance"
+	case YahooCrypto:
+		return "Yahoo! Finance Cryptocurrency"
+	case Satang:
+		return "Satang Pro"
+	case Bitkub:
+		return "Bitkub"
+	case Binance:
+		return "Binance"
+	case Coinbase:
+		return "Coinbase"
+	}
+	return "Invalid quote source"
+}
