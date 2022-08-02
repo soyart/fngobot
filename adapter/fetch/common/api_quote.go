@@ -1,7 +1,10 @@
 package common
 
+import "github.com/artnoi43/fngobot/internal/enums"
+
 // Quote struct for Bitkub
 type ApiQuote struct {
+	Src  enums.Src
 	Last float64
 	Bid  float64
 	Ask  float64

@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/artnoi43/fngobot/adapter/fetch/common"
+	"github.com/artnoi43/fngobot/internal/enums"
 	"github.com/artnoi43/fngobot/usecase"
 	"github.com/pkg/errors"
 )
@@ -35,6 +36,8 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 		best := openOrders[0]
 		populateBidAsk(key, &best, &q)
 	}
+
+	q.Src = enums.Satang
 	return &q, nil
 }
 

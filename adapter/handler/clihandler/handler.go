@@ -24,7 +24,7 @@ func New(
 	return &handler{
 		BaseHandler: &_handler.BaseHandler{
 			Start: time.Now(),
-			Uuid:  utils.NewUUID(),
+			Uuid:  utils.NewUUID(true),
 			Cmd:   cmd,
 			Quit:  utils.NewQuit(),
 		},
@@ -60,7 +60,7 @@ func (h *handler) Handle(t enums.BotType) {
 func (h *handler) HandleParsingError(e parse.ParseError) {
 	log.Printf(
 		"[error] %s\n",
-		parse.ErrMsg[e],
+		parse.ErrMsgs[e],
 	)
 }
 

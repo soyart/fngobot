@@ -28,7 +28,7 @@ func New(
 	cmd *parse.BotCommand,
 	conf Config,
 ) _handler.Handler {
-	uuid := utils.NewUUID()
+	uuid := utils.NewUUID(true)
 	m := c.Message()
 	// Log every new handler
 	log.Printf(
@@ -52,7 +52,6 @@ func New(
 
 func (h *handler) UUID() string              { return h.Uuid }
 func (h *handler) QuitChan() chan struct{}   { return h.Quit }
-func (h *handler) isRunning() bool           { return !h.IsDone }
 func (h *handler) GetCmd() *parse.BotCommand { return h.Cmd }
 func (h *handler) Done()                     { h.IsDone = true }
 func (h *handler) IsRunning() bool           { return !h.IsDone }

@@ -6,11 +6,12 @@ import (
 	"github.com/google/uuid"
 )
 
-func NewUUID() string {
-	// @TODO: Proper UUID
-	return strings.Split(
-		uuid.NewString(), "-",
-	)[0]
+func NewUUID(short bool) string {
+	s := uuid.NewString()
+	if short {
+		return strings.Split(s, "-")[0]
+	}
+	return s
 }
 
 func NewQuit() chan struct{} {

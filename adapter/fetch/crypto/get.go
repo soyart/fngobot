@@ -6,6 +6,7 @@ import (
 	"github.com/piquette/finance-go/crypto"
 
 	"github.com/artnoi43/fngobot/adapter/fetch/common"
+	"github.com/artnoi43/fngobot/internal/enums"
 	"github.com/artnoi43/fngobot/usecase"
 )
 
@@ -23,5 +24,6 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 	q.Last = _q.RegularMarketPrice
 	q.Bid = _q.Bid
 	q.Ask = _q.Ask
+	q.Src = enums.YahooCrypto
 	return &q, nil
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/artnoi43/fngobot/adapter/fetch/common"
+	"github.com/artnoi43/fngobot/internal/enums"
 	"github.com/artnoi43/fngobot/usecase"
 )
 
@@ -81,5 +82,7 @@ func (f *fetcher) Get(tick string) (usecase.Quoter, error) {
 	if len(errs) > 0 {
 		return nil, errors.Errorf("%v", strings.Join(errs, ", "))
 	}
+
+	q.Src = enums.Binance
 	return &q, nil
 }

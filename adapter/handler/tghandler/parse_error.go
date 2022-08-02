@@ -14,7 +14,7 @@ func (h *handler) HandleParsingError(e parse.ParseError) {
 func formString(e parse.ParseError) string {
 	signals := []string{
 		"failed to parse command:",
-		parse.ErrMsg[e],
+		parse.ErrMsgs[e].Error(),
 	}
 	return strings.Join(signals, "\n")
 }

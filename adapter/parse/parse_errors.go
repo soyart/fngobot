@@ -1,5 +1,7 @@
 package parse
 
+import "errors"
+
 type ParseError int
 
 const (
@@ -14,11 +16,12 @@ const (
 	ErrInvalidQuoteTypeLast
 )
 
-var ErrMsg = map[ParseError]string{
-	ErrParseInt:            "Failed to parse integer. For /track, you must supply the tracking rounds (last argumemt) in integer",
-	ErrParseFloat:          "Failed to parse float. For /alert, you must supply the target price (last argument) in floating point number",
-	ErrInvalidSign:         "Failed to parse comparison sign. For /alert, you may only supply '>' or '<' before the target price as comparison condition",
-	ErrInvalidBidAskSwitch: "Failed to parse bid/ask switch. For /alert with bid/ask price, you may only supply 'bid' or 'ask' before the comparison sign",
-	ErrInvalidQuoteTypeBid: "This source does not support bid price. Omit the bid keyword",
-	ErrInvalidQuoteTypeAsk: "This source does not support ask price. Omit the ask keyword",
+var ErrMsgs = map[ParseError]error{
+	ErrParseInt:             errors.New("failed to parse integer. For /track, you must supply the tracking rounds (last argumemt) in integer"),
+	ErrParseFloat:           errors.New("failed to parse float. For /alert, you must supply the target price (last argument) in floating point number"),
+	ErrInvalidSign:          errors.New("failed to parse comparison sign. For /alert, you may only supply '>' or '<' before the target price as comparison condition"),
+	ErrInvalidBidAskSwitch:  errors.New("failed to parse bid/ask switch. For /alert with bid/ask price, you may only supply 'bid' or 'ask' before the comparison sign"),
+	ErrInvalidQuoteTypeBid:  errors.New("source does not support bid price. Omit the bid keyword"),
+	ErrInvalidQuoteTypeAsk:  errors.New("source does not support ask price. Omit the ask keyword"),
+	ErrInvalidQuoteTypeLast: errors.New("source does not support last price. Add either 'bid' or 'ask' keyword before the comparison sign"),
 }
