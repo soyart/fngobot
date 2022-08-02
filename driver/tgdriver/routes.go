@@ -57,10 +57,14 @@ func (tg *tgDriver) InitAndStartBot() error {
 		log.Println("error sending Telegram message to recipient")
 	}
 
-	tg.bot.Handle("/help", tg.handleFunc(fngobot, "/help"))
-	tg.bot.Handle("/quote", tg.handleFunc(fngobot, "/quote"))
-	tg.bot.Handle("/track", tg.handleFunc(fngobot, "/track"))
-	tg.bot.Handle("/alert", tg.handleFunc(fngobot, "/alert"))
+	commands := []string{"/help", "/quote", "/track", "/alert"}
+	for _, command := range commands {
+		tg.bot.Handle(
+			command,
+			// This call will return a handler function for telegram
+			tg.handleFunc(fngobot, enums.InputCommand(command)),
+		)
+	}
 
 	// Welcome/Greeting
 	tg.bot.Handle("/start", func(ctx tb.Context) error {
