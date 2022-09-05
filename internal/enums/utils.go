@@ -1,7 +1,7 @@
 package enums
 
 import (
-	"github.com/artnoi43/mgl/str"
+	"github.com/artnoi43/gsl/gslutils"
 )
 
 type enum interface {
@@ -43,7 +43,7 @@ func (t Src) IsValid() bool {
 // Note: BotType values are capitalized
 func (t BotType) IsValid() bool {
 	return isValid(
-		str.ToUpper(t),
+		gslutils.ToUpper(t),
 		validBotTypes,
 	)
 }
@@ -52,7 +52,7 @@ func (t BotType) IsValid() bool {
 // Note: QuoteType values are capitalized
 func (t QuoteType) IsValid() bool {
 	return isValid(
-		str.ToUpper(t),
+		gslutils.ToUpper(t),
 		validQuoteTypes,
 	)
 }
@@ -61,7 +61,7 @@ func (t QuoteType) IsValid() bool {
 // Note: Condition values are capitalized
 func (t Condition) IsValid() bool {
 	return isValid(
-		str.ToUpper(t),
+		gslutils.ToUpper(t),
 		validConditions,
 	)
 }

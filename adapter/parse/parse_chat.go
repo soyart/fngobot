@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/artnoi43/mgl/str"
+	"github.com/artnoi43/gsl/gslutils"
 
 	"github.com/artnoi43/fngobot/adapter/fetch"
 	"github.com/artnoi43/fngobot/internal/enums"
@@ -45,7 +45,7 @@ type (
 // getSrc returns the source and from enums.SwitchSrcMap,
 // and if it's not available, returns 1, enums.Yahoo
 func getSrc(sw string) (src enums.Src, startIdx int) {
-	target, exists := enums.SwitchSrcMap[enums.Switch(str.ToUpper(sw))]
+	target, exists := enums.SwitchSrcMap[enums.Switch(gslutils.ToUpper(sw))]
 	if !exists {
 		return enums.Yahoo, 1
 	}
@@ -63,7 +63,7 @@ func (cmd *quoteCommand) appendSecurities(ticks []string, src enums.Src) {
 	for _, tick := range ticks {
 		var s usecase.Security
 		s.Fetcher = fetch.New(src)
-		s.Tick = str.ToUpper(tick)
+		s.Tick = gslutils.ToUpper(tick)
 		s.Src = src
 		cmd.Securities = append(cmd.Securities, s)
 	}
@@ -82,7 +82,7 @@ func (c UserCommand) Parse() (cmd BotCommand, e ParseError) {
 	lenChat := len(chat)
 	var sw string
 	if targetBot != enums.HelpBot {
-		sw = str.ToUpper(chat[1])
+		sw = gslutils.ToUpper(chat[1])
 	}
 	src, startIdx := getSrc(sw)
 	switch targetBot {
@@ -98,7 +98,7 @@ func (c UserCommand) Parse() (cmd BotCommand, e ParseError) {
 		}
 		cmd.Track.TrackTimes = r
 	case enums.AlertBot:
-		cmd.Alert.Security.Tick = str.ToUpper(chat[startIdx])
+		cmd.Alert.Security.Tick = gslutils.ToUpper(chat[startIdx])
 		cmd.Alert.Security.Src = src
 		cmd.Alert.Security.Fetcher = fetch.New(src)
 
@@ -129,7 +129,7 @@ func (c UserCommand) Parse() (cmd BotCommand, e ParseError) {
 			cmd.Alert.QuoteType = enums.Last
 			// Bid/ask alerts
 		default:
-			bidask := str.ToUpper(chat[startIdx+1])
+			bidask := gslutils.ToUpper(chat[startIdx+1])
 			switch cmd.Alert.Src {
 			// Yahoo Crypto does not support bid/ask price
 			case enums.YahooCrypto:
